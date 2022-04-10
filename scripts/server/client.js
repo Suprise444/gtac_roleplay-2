@@ -210,7 +210,7 @@ function setPlayer2DRendering(client, hudState = false, labelState = false, smal
 
 function syncPlayerProperties(client) {
 	logToConsole(LOG_DEBUG, `[VRR.Client] Sending signal to sync ${getPlayerDisplayForConsole(client)}'s player ped properties`);
-	sendNetworkEventToPlayer("vrr.syncElement", null, client.player.id);
+	sendNetworkEventToPlayer("vrr.syncElement", null, getPlayerPed(client).id);
 }
 
 // ===========================================================================
@@ -1033,7 +1033,7 @@ function makePedStopAnimation(pedId) {
 function forcePedAnimation(ped, animationSlot) {
 	let animationData = getAnimationData(animationSlot);
 
-	removeEntityData(ped, "vrr.animation", animationData[1], animationData[2]);
+	removeEntityData(ped, "vrr.animation", [animationData[1], animationData[2]], true);
 	sendNetworkEventToPlayer("vrr.forcePedAnim", null, ped.id, animationData[1], animationData[2], animationData[3], animationData[4]);
 }
 

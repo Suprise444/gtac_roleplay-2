@@ -1089,7 +1089,7 @@ function isValidEmailAddress(emailAddress) {
 
 // ===========================================================================
 
-function saveAllClientsToDatabase() {
+function savePlayersToDatabase() {
 	logToConsole(LOG_DEBUG, "[VRR.Account]: Saving all clients to database ...");
 	getClients().forEach(function(client) {
 		savePlayerToDatabase(client);
@@ -1114,7 +1114,7 @@ function savePlayerToDatabase(client) {
 	if(getPlayerData(client).currentSubAccount != -1) {
 		//let subAccountData = getPlayerCurrentSubAccount(client);
 
-		if(client.player != null) {
+		if(getPlayerPed(client) != null) {
 			if(getPlayerData(client).returnToPosition != null) {
 				getPlayerCurrentSubAccount(client).spawnPosition = getPlayerData(client).returnToPosition;
 				getPlayerCurrentSubAccount(client).spawnHeading = getPlayerData(client).returnToHeading.z;

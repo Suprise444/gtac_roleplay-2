@@ -26,8 +26,8 @@ function getPlayerPosition(client) {
 	if(!areServerElementsSupported()) {
 		return getPlayerData(client).syncPosition;
 	} else {
-		if(client.player != null) {
-			return client.player.position;
+		if(getPlayerPed(client) != null) {
+			return getPlayerPed(client).position;
 		}
 	}
 }
@@ -45,8 +45,8 @@ function getPlayerHeading(client) {
 	if(!areServerElementsSupported()) {
 		return getPlayerData(client).syncHeading;
 	} else {
-		if(client.player != null) {
-			return client.player.heading;
+		if(getPlayerPed(client) != null) {
+			return getPlayerPed(client).heading;
 		}
 	}
 }
@@ -64,8 +64,8 @@ function getPlayerVehicle(client) {
 	if(!areServerElementsSupported())  {
 		return getPlayerData().syncVehicle;
 	} else {
-		if(client.player.vehicle) {
-			return client.player.vehicle;
+		if(getPlayerPed(client).vehicle) {
+			return getPlayerPed(client).vehicle;
 		}
 	}
 	return false;
@@ -77,8 +77,8 @@ function getPlayerDimension(client) {
 	if(!areServerElementsSupported()) {
 		return getPlayerData(client).syncDimension;
 	} else {
-		if(client.player != null) {
-			return client.player.dimension;
+		if(getPlayerPed(client) != null) {
+			return getPlayerPed(client).dimension;
 		}
 	}
 }
@@ -96,8 +96,8 @@ function setPlayerDimension(client, dimension) {
 	if(!areServerElementsSupported()) {
 		getPlayerData(client).syncDimension = dimension;
 	} else {
-		if(client.player != null) {
-			client.player.dimension = dimension;
+		if(getPlayerPed(client) != null) {
+			getPlayerPed(client).dimension = dimension;
 		}
 	}
 }
@@ -118,7 +118,7 @@ function isPlayerInAnyVehicle(client) {
 	if(!areServerElementsSupported())  {
 		return (getPlayerData().syncVehicle != null);
 	} else {
-		return (client.player.vehicle != null);
+		return (getPlayerPed(client).vehicle != null);
 	}
 }
 
@@ -133,7 +133,7 @@ function getPlayerVehicleSeat(client) {
 		return getPlayerData().syncVehicleSeat;
 	} else {
 		for(let i = 0 ; i <= 8 ; i++) {
-			if(getPlayerVehicle(client).getOccupant(i) == client.player) {
+			if(getPlayerVehicle(client).getOccupant(i) == getPlayerPed(client)) {
 				return i;
 			}
 		}
@@ -172,13 +172,20 @@ function setVehicleHeading(vehicle, heading) {
 // ===========================================================================
 
 function getElementTransient(element) {
-    return element.transient;
+	if(typeof element.transient != "undefined") {
+		return element.transient;
+	}
+    return false;
 }
 
 // ===========================================================================
 
 function setElementTransient(element, state) {
-    return element.transient = state;
+	if(typeof element.transient != "undefined") {
+		element.transient = state;
+		return true;
+	}
+    return false;
 }
 
 // ===========================================================================
@@ -233,7 +240,7 @@ function setPlayerSkin(client, skinIndex) {
 	if(getGame() == VRR_GAME_GTA_IV) {
 		triggerNetworkEvent("vrr.localPlayerSkin", client, getGameConfig().skins[getGame()][skinIndex][0]);
 	} else {
-		client.player.modelIndex = getGameConfig().skins[getGame()][skinIndex][0];
+		getPlayerPed(client).modelIndex = getGameConfig().skins[getGame()][skinIndex][0];
 	}
 }
 
@@ -268,7 +275,11 @@ function setPlayerArmour(client, armour) {
 // ===========================================================================
 
 function getPlayerArmour(client) {
-	return client.player.armour;
+	if(areServerElementsSupported(client)) {
+		return getPlayerPed(client).armour;
+	} else {
+		return getPlayerData(client).syncArmour;
+	}
 }
 
 // ===========================================================================
@@ -333,23 +344,23 @@ function getElementSyncer(element) {
 // ===========================================================================
 
 function getPlayerWeaponAmmo(client) {
-	return client.player.weaponAmmunition;
+	return getPlayerPed(client).weaponAmmunition;
 }
 
 // ===========================================================================
 
 function setPlayerVelocity(client, velocity) {
 	logToConsole(LOG_DEBUG, `Setting ${getPlayerDisplayForConsole(client)}'s velocity to ${velocity.x}, ${velocity.y}, ${velocity.z}`);
-	if(typeof client.player.velocity != "undefined") {
-		client.player.velocity = velocity;
+	if(typeof cgetPlayerPed(client).velocity != "undefined") {
+		getPlayerPed(client).velocity = velocity;
 	}
 }
 
 // ===========================================================================
 
-function getPlayerVelocity(client, velocity) {
-	if(typeof client.player.velocity != "undefined") {
-		return client.player.velocity;
+function getPlayerVelocity(client) {
+	if(typeof getPlayerPed(client).velocity != "undefined") {
+		return getPlayerPed(client).velocity;
 	}
 	return toVector3(0.0, 0.0, 0.0);
 }
@@ -717,7 +728,11 @@ function givePlayerWeaponAmmo(client, ammo) {
 // ===========================================================================
 
 function getPlayerWeapon(client) {
-	return client.player.weapon;
+	if(areServerElementsSupported(client)) {
+		return getPlayerPed(client).weapon;;
+	} else {
+		return getPlayerData(client).syncWeapon;
+	}
 }
 
 // ===========================================================================
@@ -1079,6 +1094,32 @@ function givePlayerWeapon(client, weaponId, ammo, active = true) {
 function setPlayerWantedLevel(client, wantedLevel) {
 	sendNetworkEventToPlayer("vrr.wantedLevel", client, wantedLevel);
 	return true;
+}
+
+// ===========================================================================
+
+function setElementStreamInDistance(element, distance) {
+	if(typeof element.streamInDistance != "undefined") {
+		element.streamInDistance = distance;
+	}
+}
+
+// ===========================================================================
+
+function setElementStreamOutDistance(element, distance) {
+	if(typeof element.streamOutDistance != "undefined") {
+		element.streamOutDistance = distance;
+	}
+}
+
+// ===========================================================================
+
+function getPlayerPed(client) {
+	if(getGame() == VRR_GAME_GTA_IV) {
+		return getPlayerData(client).ped;
+	} else {
+		return client.player;
+	}
 }
 
 // ===========================================================================

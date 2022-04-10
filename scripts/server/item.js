@@ -10,7 +10,9 @@
 function initItemScript() {
 	logToConsole(LOG_INFO, "[VRR.Item]: Initializing item script ...");
 	getServerData().itemTypes = loadItemTypesFromDatabase();
-	getServerData().items = loadItemsFromDatabase();
+	if(!getServerConfig().devServer) {
+		getServerData().items = loadItemsFromDatabase();
+	}
 
 	setItemTypeDataIndexes();
 	setItemDataIndexes();
@@ -798,7 +800,7 @@ function playerUseItem(client, hotBarSlot) {
 			break;
 
 		case VRR_ITEM_USETYPE_ROPE:
-			closestPlayer = getClosestPlayer(getPlayerPosition(client), client.player);
+			closestPlayer = getClosestPlayer(getPlayerPosition(client), getPlayerPed(client));
 
 			if(!getPlayerData(closestPlayer)) {
 				messagePlayerError(client, "There isn't anyone close enough to tie up!");
@@ -1684,7 +1686,11 @@ function getItemTypeData(itemTypeId) {
 
 // ===========================================================================
 
-function saveAllItemsToDatabase() {
+function saveItemsToDatabase() {
+	if(getServerConfig().devServer) {
+		return false;
+	}
+
 	for(let i in getServerData().items) {
 		saveItemToDatabase(i);
 	}
@@ -1692,7 +1698,11 @@ function saveAllItemsToDatabase() {
 
 // ===========================================================================
 
-function saveAllItemTypesToDatabase() {
+function saveItemTypesToDatabase() {
+	if(getServerConfig().devServer) {
+		return false;
+	}
+
 	for(let i in getServerData().itemTypes) {
 		saveItemTypeToDatabase(i);
 	}

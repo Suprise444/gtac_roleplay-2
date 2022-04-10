@@ -51,8 +51,8 @@ function updatePlayerNameTag(clientName, characterName, colour, paused, ping) {
 	if(game.game == VRR_GAME_GTA_IV) {
 		let client = getPlayerFromParams(clientName);
 		if(client != false) {
-			if(client.player != null) {
-				client.player.setNametag(characterName, colour);
+			if(getPlayerPed(client) != null) {
+				getPlayerPed(client).setNametag(characterName, colour);
 			}
 		}
 	}
@@ -205,7 +205,7 @@ function updateNametags(element) {
 
 function getClientFromPlayer(player) {
 	getClients().forEach(function(client) {
-		if(client.player == player) {
+		if(getPlayerPed(client) == player) {
 			return client;
 		}
 	});

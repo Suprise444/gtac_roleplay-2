@@ -617,7 +617,7 @@ function stopWorking(client) {
 
 	let jobVehicle = getPlayerData(client).lastJobVehicle;
 	if(jobVehicle) {
-		if(client.player.vehicle) {
+		if(getPlayerVehicle(client) == jobVehicle) {
 			removePlayerFromVehicle(client);
 			//client.player.removeFromVehicle();
 		}
@@ -2236,7 +2236,7 @@ function saveJobUniformToDatabase(jobUniformData) {
 
 // ===========================================================================
 
-function saveAllJobsToDatabase() {
+function saveJobsToDatabase() {
 	for(let i in getServerData().jobs) {
 		saveJobToDatabase(getServerData().jobs[i]);
 

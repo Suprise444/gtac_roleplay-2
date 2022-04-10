@@ -44,9 +44,11 @@ function toggleMouseCameraCommand(command, params, client) {
 // ===========================================================================
 
 function setNewCharacterSpawnPositionCommand(command, params, client) {
-	let position = client.player.position;
+	let position = getPlayerPosition(client);
+	let heading = getPlayerHeading(client);
+
 	getServerConfig().newCharacter.spawnPosition = position;
-	getServerConfig().newCharacter.spawnHeading = client.player.heading;
+	getServerConfig().newCharacter.spawnHeading = heading;
 	getServerConfig().needsSaved = true;
 
 	messagePlayerNormal(client, `The new character spawn position has been set to ${position.x.toFixed(2)}, ${position.y.toFixed(2)}, ${position.z.toFixed(2)}`)

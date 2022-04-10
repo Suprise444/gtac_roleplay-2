@@ -56,7 +56,7 @@ function stopPlayerAnimationCommand(command, params, client) {
 	}
 
 	setPlayerPosition(client, getPlayerData(client).currentAnimationPositionReturnTo);
-	makePedStopAnimation(getPlayerData(client).ped);
+	makePedStopAnimation(getPlayerPed(client));
 
 	getPlayerData(client).currentAnimation = -1;
 	getPlayerData(client).currentAnimationPositionOffset = false;
@@ -106,7 +106,7 @@ function makePlayerPlayAnimation(client, animationSlot, offsetPosition = 1) {
 	getPlayerData(client).animationStart = getCurrentUnixTimestamp();
 	getPlayerData(client).animationForced = false;
 
-	makePedPlayAnimation(getPlayerData(client).ped, animationSlot, offsetPosition);
+	makePedPlayAnimation(getPlayerPed(client), animationSlot, offsetPosition);
 	setEntityData(ped, "vrr.anim", [animationData[1], animationData[2]]);
 	//if(getAnimationData(animationSlot)[9] != VRR_ANIMMOVE_NONE) {
 	//	if(getGame() < VRR_GAME_GTA_SA) {
@@ -125,14 +125,14 @@ function forcePlayerPlayAnimation(client, animationSlot, offsetPosition = 1) {
 	getPlayerData(client).animationForced = true;
 
 	setPlayerControlState(client, false);
-   	forcePedAnimation(getPlayerData(client).ped, animationSlot, offsetPosition);
+   	forcePedAnimation(getPlayerPed(client), animationSlot, offsetPosition);
 }
 
 // ===========================================================================
 
 function makePlayerStopAnimation(client) {
 	//setPlayerPosition(client, getPlayerData(client).currentAnimationPositionReturnTo);
-	makePedStopAnimation(getPlayerData(client).ped);
+	makePedStopAnimation(getPlayerPed(client));
 
 	getPlayerData(client).currentAnimation = -1;
 	getPlayerData(client).currentAnimationPositionOffset = false;

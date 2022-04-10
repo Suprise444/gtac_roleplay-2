@@ -8,10 +8,12 @@
 // ===========================================================================
 
 function initNPCScript() {
-	getServerData().npcs = loadNPCsFromDatabase();
-	setAllNPCDataIndexes();
+	if(!getServerConfig().devServer) {
+		getServerData().npcs = loadNPCsFromDatabase();
+	}
 
-	spawnAllNPCs();
+	setNPCDataIndexes();
+	spawnNPCs();
 }
 
 // ===========================================================================
@@ -44,15 +46,8 @@ function createNPCCommand(client, command, params) {
 
 	let position = getPosInFrontOfPos(getPlayerPosition(client), getPlayerHeading(client), 3);
 
-	let tempNPCData = new NPCData(false);
-	tempNPCData.position = position;
-	tempNPCData.heading = getPlayerHeading(client);
-	tempNPCData.skin = skinId;
-
-	let npcIndex = getServerData().npcs.push(tempNPCData);
-
-	spawnNPC(npcIndex-1);
-	setAllNPCDataIndexes();
+	let npcId = createNPC(skinId, position, getPlayerHeading(client));
+	messageAdmins(`${client.name}{MAINCOLOUR} created a ${getSkinNameFromIndex(getNPCData(npcId).skin)} NPC!`);
 }
 
 // ===========================================================================
@@ -156,7 +151,11 @@ function loadNPCTriggerResponsesFromDatabase(npcTriggerDatabaseId) {
 
 // ===========================================================================
 
-function saveAllNPCsToDatabase() {
+function saveNPCsToDatabase() {
+	if(getServerConfig().devServer) {
+		return false;
+	}
+
 	for(let i in getServerData().npcs) {
 		saveNPCToDatabase(i);
 	}
@@ -250,7 +249,7 @@ function saveNPCToDatabase(npcDataId) {
 
 // ===========================================================================
 
-function setAllNPCDataIndexes() {
+function setNPCDataIndexes() {
 	for(let i in getServerData().npcs) {
 		getServerData().npcs[i].index = i;
 
@@ -277,14 +276,16 @@ function spawnNPC(npcIndex) {
 	let civilian = createGameCivilian(getNPCData(npcIndex).model, getNPCData(npcIndex).spawnPosition, getNPCData(npcIndex).spawnRotation);
 	if(civilian) {
 		civilian.setData("vrr.dataIndex", npcIndex);
-		civilian.setData("vrr.animation", getNPCData(npcIndex).animationName);
+		if(getNPCData(npcIndex).animationName != "") {
+			civilian.setData("vrr.animation", getNPCData(npcIndex).animationName);
+		}
 		getNPCData(npcIndex).ped = civilian;
 	}
 }
 
 // ===========================================================================
 
-function spawnAllNPCs() {
+function spawnNPCs() {
 	for(let i in getServerData().npcs) {
 		spawnNPC(npcIndex);
 	}
@@ -308,7 +309,7 @@ function deleteNPCCommand(command, params, client) {
 	let npcName = getNPCData(closestNPC).name;
 
 	deleteNPC(closestNPC);
-	messageAdmins(`${client.name}{MAINCOLOUR} deleted NPC {npcPink}${npcName}`)
+	messageAdmins(`${client.name}{MAINCOLOUR} deleted NPC {npcPink}${npcName}`);
 }
 
 // ===========================================================================
@@ -323,7 +324,7 @@ function deleteNPC(npcId) {
 		getServerData().npcs.splice(npcId, 1);
 	}
 
-	setAllNPCDataIndexes();
+	setNPCDataIndexes();
 }
 
 // ===========================================================================
@@ -360,10 +361,9 @@ function setNPCAnimationCommand(command, params, client) {
 	makePedPlayAnimation(getNPCData(closestNPC).ped, animationId, animationPositionOffset);
 }
 
-
 // ===========================================================================
 
-function getClosestHospital(position) {
+function getClosestNPC(position) {
 	let npcs = getServerData().npcs;
 	let closest = 0;
 	for(let i in npcs) {
@@ -373,6 +373,23 @@ function getClosestHospital(position) {
 	}
 
 	return closest;
+}
+
+// ===========================================================================
+
+function createNPC(skinIndex, position, heading) {
+	let tempNPCData = new NPCData(false);
+	tempNPCData.position = position;
+	tempNPCData.heading = heading;
+	tempNPCData.skin = skinIndex;
+	tempNPCData.animationName = "";
+
+	let npcIndex = getServerData().npcs.push(tempNPCData);
+
+	spawnNPC(npcIndex-1);
+	setNPCDataIndexes();
+
+	return npcIndex-1;
 }
 
 // ===========================================================================

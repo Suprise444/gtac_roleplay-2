@@ -9,7 +9,9 @@
 
 function initBusinessScript() {
 	logToConsole(LOG_INFO, "[VRR.Business]: Initializing business script ...");
-	getServerData().businesses = loadBusinessesFromDatabase();
+	if(!getServerConfig().devServer) {
+		getServerData().businesses = loadBusinessesFromDatabase();
+	}
 
 	createAllBusinessPickups();
 	createAllBusinessBlips();
@@ -151,7 +153,7 @@ function createBusinessCommand(command, params, client) {
 	let businessId = getServerData().businesses.push(tempBusinessData);
 	setAllBusinessIndexes();
 
-	saveAllBusinessesToDatabase();
+	saveBusinessesToDatabase();
 
 	createBusinessEntrancePickup(businessId-1);
 	createBusinessExitPickup(businessId-1);
@@ -1571,7 +1573,11 @@ function getPlayerBusiness(client) {
  * @return {Boolean} Whether or not the businesses were saved
  *
  */
-function saveAllBusinessesToDatabase() {
+function saveBusinessesToDatabase() {
+	if(getServerConfig().devServer) {
+		return false;
+	}
+
 	for(let i in getServerData().businesses) {
 		if(getServerData().businesses[i].needsSaved) {
 			saveBusinessToDatabase(i);
@@ -1722,11 +1728,19 @@ function createBusinessEntrancePickup(businessId) {
 		logToConsole(LOG_VERBOSE, `[VRR.Job]: Creating entrance pickup for business ${getBusinessData(businessId).name} (model ${pickupModelId})`);
 
 		if(areServerElementsSupported()) {
-			getBusinessData(businessId).entrancePickup = createGamePickup(pickupModelId, getBusinessData(businessId).entrancePosition, getGameConfig().pickupTypes[getServerGame()].business);
-			setElementOnAllDimensions(getBusinessData(businessId).entrancePickup, false);
-			setElementDimension(getBusinessData(businessId).entrancePickup, getBusinessData(businessId).entranceDimension);
-			updateBusinessPickupLabelData(businessId);
-			addToWorld(getBusinessData(businessId).entrancePickup);
+			let entrancePickup = createGamePickup(pickupModelId, getBusinessData(businessId).entrancePosition, getGameConfig().pickupTypes[getServerGame()].business);
+			if(entrancePickup != null) {
+				setElementOnAllDimensions(entrancePickup, false);
+				setElementDimension(entrancePickup, getBusinessData(businessId).entranceDimension);
+				setElementOnAllDimensions(entrancePickup, false);
+				setElementStreamInDistance(entrancePickup, getGlobalConfig().houseBlipStreamInDistance);
+				setElementStreamOutDistance(entrancePickup, getGlobalConfig().houseBlipStreamOutDistance);
+				setElementTransient(entrancePickup, false);
+				addToWorld(entrancePickup);
+
+				getBusinessData(businessId).entrancePickup = entrancePickup;
+				updateBusinessPickupLabelData(businessId);
+			}
 		} else {
 			sendBusinessToPlayer(null, businessId, getBusinessData(businessId), getBusinessData(businessId).entrancePosition, getBusinessData(businessId).entranceBlipModel, getBusinessData(businessId).entrancePickupModel, getBusinessData(businessId).hasInterior, false);
 		}
@@ -1765,10 +1779,20 @@ function createBusinessEntranceBlip(businessId) {
 		logToConsole(LOG_VERBOSE, `[VRR.Job]: Creating entrance blip for business ${getBusinessData(businessId).name} (model ${blipModelId})`);
 
 		if(areServerElementsSupported()) {
-			getBusinessData(businessId).entranceBlip = createGameBlip(getBusinessData(businessId).entrancePosition, blipModelId, 1, getColourByName("businessBlue"));
-			setElementOnAllDimensions(getBusinessData(businessId).entranceBlip, false);
-			setElementDimension(getBusinessData(businessId).entranceBlip, getBusinessData(businessId).entranceDimension);
-			addToWorld(getBusinessData(businessId).entranceBlip);
+			let entranceBlip = createGameBlip(getBusinessData(businessId).entrancePosition, blipModelId, 1, getColourByName("businessBlue"));
+			if(entranceBlip != null) {
+				setElementOnAllDimensions(entranceBlip, false);
+				setElementDimension(entranceBlip, getBusinessData(businessId).entranceDimension);
+				setElementDimension(entranceBlip, getBusinessData(businessId).entranceDimension);
+				setElementOnAllDimensions(entranceBlip, false);
+				setElementStreamInDistance(entranceBlip, getGlobalConfig().businessBlipStreamInDistance);
+				setElementStreamOutDistance(entranceBlip, getGlobalConfig().businessBlipStreamOutDistance);
+				setElementTransient(entranceBlip, false);
+				addToWorld(entranceBlip);
+
+				getBusinessData(businessId).entranceBlip = entranceBlip;
+			}
+
 		} else {
 			sendBusinessToPlayer(null, businessId, getBusinessData(businessId).name, getBusinessData(businessId).entrancePosition, blipModelId, getBusinessData(businessId).entrancePickupModel, getBusinessData(businessId).hasInterior, false);
 		}
@@ -1800,11 +1824,18 @@ function createBusinessExitPickup(businessId) {
 			logToConsole(LOG_VERBOSE, `[VRR.Job]: Creating exit pickup for business ${getBusinessData(businessId).name} (model ${pickupModelId})`);
 
 			if(areServerElementsSupported()) {
-				getBusinessData(businessId).exitPickup = createGamePickup(pickupModelId, getBusinessData(businessId).exitPosition, getGameConfig().pickupTypes[getServerGame()].business);
-				setElementDimension(getBusinessData(businessId).exitPickup, getBusinessData(businessId).exitDimension);
-				setElementOnAllDimensions(getBusinessData(businessId).exitPickup, false);
-				updateBusinessPickupLabelData(businessId);
-				addToWorld(getBusinessData(businessId).exitPickup);
+				let exitPickup = createGamePickup(pickupModelId, getBusinessData(businessId).exitPosition, getGameConfig().pickupTypes[getServerGame()].business);
+				if(exitPickup != null) {
+					setElementDimension(exitPickup, getBusinessData(businessId).exitDimension);
+					setElementOnAllDimensions(exitPickup, false);
+					setElementStreamInDistance(exitPickup, getGlobalConfig().businessPickupStreamInDistance);
+					setElementStreamOutDistance(exitPickup, getGlobalConfig().businessPickupStreamOutDistance);
+					setElementTransient(exitPickup, false);
+					addToWorld(exitPickup);
+
+					getBusinessData(businessId).exitPickup = exitPickup;
+					updateBusinessPickupLabelData(businessId);
+				}
 			}
 		}
 	}
@@ -1835,13 +1866,17 @@ function createBusinessExitBlip(businessId) {
 			if(areServerElementsSupported()) {
 				logToConsole(LOG_VERBOSE, `[VRR.Job]: Creating exit blip for business ${getBusinessData(businessId).name} (model ${blipModelId})`);
 
-				getBusinessData(businessId).exitBlip = createGameBlip(getBusinessData(businessId).exitPosition, blipModelId, 1, getColourByName("businessBlue"));
-				setElementDimension(getBusinessData(businessId).exitBlip, getBusinessData(businessId).entranceDimension);
-				setElementOnAllDimensions(getBusinessData(businessId).exitBlip, false);
-				//getBusinessData(businessId).exitBlip.interior = getBusinessData(businessId).exitInterior;
-				//setEntityData(getBusinessData(businessId).exitBlip, "vrr.owner.type", VRR_BLIP_BUSINESS_EXIT, false);
-				//setEntityData(getBusinessData(businessId).exitBlip, "vrr.owner.id", businessId, false);
-				addToWorld(getBusinessData(businessId).exitBlip);
+				let exitBlip = createGameBlip(getBusinessData(businessId).exitPosition, blipModelId, 1, getColourByName("businessBlue"));
+				if(exitBlip != null) {
+					setElementDimension(exitBlip, getBusinessData(businessId).exitDimension);
+					setElementOnAllDimensions(exitBlip, false);
+					setElementStreamInDistance(exitBlip, getGlobalConfig().businessBlipStreamInDistance);
+					setElementStreamOutDistance(exitBlip, getGlobalConfig().businessBlipStreamOutDistance);
+					setElementTransient(exitBlip, false);
+					addToWorld(exitBlip);
+
+					getBusinessData(businessId).exitBlip = exitBlip;
+				}
 			}
 		}
 	}
@@ -2255,7 +2290,7 @@ function buyFromBusinessCommand(command, params, client) {
 		let keyData = getPlayerKeyBindForCommand("inv");
 		messagePlayerNewbieTip(client, getLocaleString(client, "ViewInventoryKeyPressTip", `{ALTCOLOUR}${getKeyNameFromId(keyData.key)}{MAINCOLOUR}`));
 	} else {
-		messagePlayerNewbieTip(client, getLocaleString(client, "ViewInventoryKeyPressTip", `{ALTCOLOUR}/inv{MAINCOLOUR}`));
+		messagePlayerNewbieTip(client, getLocaleString(client, "ViewInventoryCommandTip", `{ALTCOLOUR}/inv{MAINCOLOUR}`));
 	}
 }
 

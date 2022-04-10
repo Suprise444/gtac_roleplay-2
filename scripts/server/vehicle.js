@@ -9,7 +9,10 @@
 
 function initVehicleScript() {
 	logToConsole(LOG_INFO, "[VRR.Vehicle]: Initializing vehicle script ...");
-	getServerData().vehicles = loadVehiclesFromDatabase();
+	if(!getServerConfig().devServer) {
+		getServerData().vehicles = loadVehiclesFromDatabase();
+	}
+
 	spawnAllVehicles();
 	setAllVehicleIndexes();
 	logToConsole(LOG_INFO, "[VRR.Vehicle]: Vehicle script initialized successfully!");
@@ -42,7 +45,11 @@ function loadVehiclesFromDatabase() {
 
 // ===========================================================================
 
-function saveAllVehiclesToDatabase() {
+function saveVehiclesToDatabase() {
+	if(getServerConfig().devServer) {
+		return false;
+	}
+
 	logToConsole(LOG_INFO, "[VRR.Vehicle]: Saving all server vehicles to database ...");
 	let vehicles = getServerData().vehicles;
 	for(let i in vehicles) {
@@ -1263,7 +1270,7 @@ function spawnVehicle(vehicleData) {
 
 	if(typeof vehicle.locked != "undefined") {
 		setVehicleLocked(vehicle, intToBool(vehicleData.locked));
-		logToConsole(LOG_VERBOSE, `[VRR.Vehicle]: Setting vehicle ${vehicle.id}'s lock state to ${toUpperCase(getOnOffFromBool(getVehicleLockState(vehicle)))}`);
+		logToConsole(LOG_VERBOSE, `[VRR.Vehicle]: Setting vehicle ${vehicle.id}'s lock state to ${toUpperCase(getOnOffFromBool(getVehicleLocked(vehicle)))}`);
 	}
 
 	setElementDimension(vehicle.dimension, vehicleData.dimension);

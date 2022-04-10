@@ -9,7 +9,10 @@
 
 function initRadioScript() {
 	logToConsole(LOG_INFO, "[VRR.Radio]: Initializing radio script ...");
-	getServerData().radioStations = loadRadioStationsFromDatabase();
+	if(!getServerConfig().devServer) {
+		getServerData().radioStations = loadRadioStationsFromDatabase();
+	}
+
 	setRadioStationIndexes();
 	logToConsole(LOG_INFO, "[VRR.Radio]: Radio script initialized successfully!");
 	return true;

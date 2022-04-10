@@ -71,6 +71,18 @@ let globalConfig = {
 	locales: [],
 	accents: [],
 	useServerSideVehiclePurchaseCheck: false,
+	businessPickupStreamInDistance: 100,
+	businessPickupStreamOutDistance: 120,
+	housePickupStreamInDistance: 100,
+	housePickupStreamOutDistance: 120,
+	jobPickupStreamInDistance: 100,
+	jobPickupStreamOutDistance: 120,
+	businessBlipStreamInDistance: 200,
+	businessBlipStreamOutDistance: 220,
+	houseBlipStreamInDistance: 200,
+	houseBlipStreamOutDistance: 220,
+	jobBlipStreamInDistance: 200,
+	jobBlipStreamOutDistance: 220,
 };
 
 // ===========================================================================
@@ -98,6 +110,8 @@ function initConfigScript() {
 	getServerConfig().createHouseBlips = intToBool(toInteger(server.getCVar("vrr_houseblips")));
 	getServerConfig().useRealTime = intToBool(toInteger(server.getCVar("vrr_realtime")));
 	getServerConfig().antiCheat.enabled = intToBool(toInteger(server.getCVar("vrr_anticheat")));
+
+	getServerConfig().devServer = intToBool(toInteger(server.getCVar("vrr_devserver")));
 
 	applyConfigToServer(serverConfig);
 	logToConsole(LOG_DEBUG, "[VRR.Config]: Server config applied successfully!");

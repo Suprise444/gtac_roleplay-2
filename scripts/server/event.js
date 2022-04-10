@@ -97,18 +97,22 @@ function onPlayerQuit(event, client, quitReasonId) {
 	logToConsole(LOG_INFO, `👋 Client ${getPlayerDisplayForConsole(client)} disconnected (${disconnectReasons[quitReasonId]}[${quitReasonId}])`);
 	updateConnectionLogOnQuit(client, quitReasonId);
 
+
+
 	if(isPlayerLoggedIn(client)) {
 		let reasonText = disconnectReasons[quitReasonId];
 		if(getPlayerData(client).customDisconnectReason != "") {
 			reasonText = getPlayerData(client).customDisconnectReason;
 		}
 		messagePlayerNormal(null, `👋 ${getPlayerName(client)} has left the server (${reasonText})`, getColourByName("softYellow"));
+		messageDiscordEventChannel(`👋 ${client.name} has left the server (${reasonText})`);
+
 		savePlayerToDatabase(client);
 		resetClientStuff(client);
 		getServerData().clients[client.index] = null;
+	} else {
+		messageDiscordEventChannel(`👋 ${client.name} has left the server (${disconnectReasons[quitReasonId]}[${quitReasonId}])`);
 	}
-
-	messageDiscordEventChannel(`👋 ${getPlayerDisplayForConsole(client)} has left the server.`);
 
 	clearTemporaryVehicles();
 	clearTemporaryPeds();
@@ -207,7 +211,7 @@ function onResourceStop(event, resource) {
 	}
 
 	if(resource == thisResource) {
-		saveAllServerDataToDatabase();
+		saveServerDataToDatabase();
 		clearArray(getServerData().vehicles);
 		clearArray(getServerData().clients);
 		clearArray(getServerData().businesses);
@@ -249,13 +253,13 @@ async function onPlayerEnteredVehicle(client, clientVehicle, seat) {
 	if(getGame() == VRR_GAME_GTA_IV) {
 		vehicle = getVehicleFromIVNetworkId(clientVehicle);
 	} else {
-		if(client.player == null) {
+		if(getPlayerPed(client) == null) {
 			return false;
 		}
 
-		await waitUntil(() => client != null && client.player != null && client.player.vehicle != null);
+		await waitUntil(() => client != null && getPlayerPed(client) != null && getPlayerVehicle(client) != null);
 
-		vehicle = client.player.vehicle;
+		vehicle = getPlayerVehicle(client);
 	}
 
 	if(!getVehicleData(vehicle)) {
@@ -454,7 +458,7 @@ function onPedSpawn(ped) {
 
 function onPlayerSpawn(client) {
 	logToConsole(LOG_DEBUG, `[VRR.Event] Checking for ${getPlayerDisplayForConsole(client)}'s player ped`);
-	//if(client.player == null) {
+	//if(getPlayerPed(client) == null) {
 	//    logToConsole(LOG_DEBUG, `[VRR.Event] ${getPlayerDisplayForConsole(client)}'s player element not set yet. Rechecking ...`);
 	//    setTimeout(onPlayerSpawn, 500, client);
 	//    return false;
@@ -487,12 +491,12 @@ function onPlayerSpawn(client) {
 
 	if(getServerGame() == VRR_GAME_GTA_IV) {
 		logToConsole(LOG_DEBUG, `[VRR.Event] Setting ${getPlayerDisplayForConsole(client)}'s ped body parts and props`);
-		setEntityData(client.player, "vrr.bodyParts", getPlayerCurrentSubAccount(client).bodyParts, true);
-		setEntityData(client.player, "vrr.bodyProps", getPlayerCurrentSubAccount(client).bodyProps, true);
+		setEntityData(getPlayerPed(client), "vrr.bodyParts", getPlayerCurrentSubAccount(client).bodyParts, true);
+		setEntityData(getPlayerPed(client), "vrr.bodyProps", getPlayerCurrentSubAccount(client).bodyProps, true);
 	}
 
 	logToConsole(LOG_DEBUG, `[VRR.Event] Setting ${getPlayerDisplayForConsole(client)}'s ped scale (${getPlayerCurrentSubAccount(client).pedScale})`);
-	setEntityData(client.player, "vrr.scale", getPlayerCurrentSubAccount(client).pedScale, true);
+	setEntityData(getPlayerPed(client), "vrr.scale", getPlayerCurrentSubAccount(client).pedScale, true);
 
 	if(isPlayerSwitchingCharacter(client) || isPlayerCreatingCharacter(client)) {
 		logToConsole(LOG_DEBUG, `[VRR.Event] ${getPlayerDisplayForConsole(client)}'s ped is being used for character selection/creation. No further spawn processing needed'`);
@@ -505,7 +509,7 @@ function onPlayerSpawn(client) {
 
 	logToConsole(LOG_DEBUG, `[VRR.Event] Storing ${getPlayerDisplayForConsole(client)} ped in client data `);
 	if(areServerElementsSupported()) {
-		getPlayerData(client).ped = client.player;
+		getPlayerData(client).ped = getPlayerPed(client);
 	}
 
 	logToConsole(LOG_DEBUG, `[VRR.Event] Sending ${getPlayerDisplayForConsole(client)} the 'now playing as' message`);
@@ -545,7 +549,7 @@ function onPlayerSpawn(client) {
 
 	if(areServerElementsSupported() && getServerGame() == VRR_GAME_GTA_SA) {
 		logToConsole(LOG_DEBUG, `[VRR.Event] Setting player walk and fightstyle for ${getPlayerDisplayForConsole(client)}`);
-		setEntityData(client.player, "vrr.walkStyle", getPlayerCurrentSubAccount(client).walkStyle, true);
+		setEntityData(getPlayerPed(client), "vrr.walkStyle", getPlayerCurrentSubAccount(client).walkStyle, true);
 
 		setPlayerFightStyle(client, getPlayerCurrentSubAccount(client).fightStyle);
 	}
@@ -573,20 +577,20 @@ function onPlayerSpawn(client) {
 	sendPlayerLocaleStrings(client);
 
 	//if(isGTAIV()) {
-	//    setEntityData(client.player, "vrr.bodyPartHair", getPlayerCurrentSubAccount(client).bodyParts.hair, true);
-	//    setEntityData(client.player, "vrr.bodyPartHead", getPlayerCurrentSubAccount(client).bodyParts.head, true);
-	//    setEntityData(client.player, "vrr.bodyPartUpper", getPlayerCurrentSubAccount(client).bodyParts.upper, true);
-	//    setEntityData(client.player, "vrr.bodyPartLower", getPlayerCurrentSubAccount(client).bodyParts.lower, true);
-	//    setEntityData(client.player, "vrr.bodyPropHair", getPlayerCurrentSubAccount(client).bodyProps.hair, true);
-	//    setEntityData(client.player, "vrr.bodyPropEyes", getPlayerCurrentSubAccount(client).bodyProps.eyes, true);
-	//    setEntityData(client.player, "vrr.bodyPartHead", getPlayerCurrentSubAccount(client).bodyProps.head, true);
-	//    setEntityData(client.player, "vrr.bodyPartLeftHand", getPlayerCurrentSubAccount(client).bodyProps.leftHand, true);
-	//    setEntityData(client.player, "vrr.bodyPartRightHand", getPlayerCurrentSubAccount(client).bodyProps.rightHand, true);
-	//    setEntityData(client.player, "vrr.bodyPartLeftWrist", getPlayerCurrentSubAccount(client).bodyProps.leftWrist, true);
-	//    setEntityData(client.player, "vrr.bodyPartRightWrist", getPlayerCurrentSubAccount(client).bodyProps.rightWrist, true);
-	//    setEntityData(client.player, "vrr.bodyPartHip", getPlayerCurrentSubAccount(client).bodyProps.hip, true);
-	//    setEntityData(client.player, "vrr.bodyPartLeftFoot", getPlayerCurrentSubAccount(client).bodyProps.leftFoot, true);
-	//    setEntityData(client.player, "vrr.bodyPartRightFoot", getPlayerCurrentSubAccount(client).bodyProps.rightFoot, true);
+	//    setEntityData(getPlayerPed(client), "vrr.bodyPartHair", getPlayerCurrentSubAccount(client).bodyParts.hair, true);
+	//    setEntityData(getPlayerPed(client), "vrr.bodyPartHead", getPlayerCurrentSubAccount(client).bodyParts.head, true);
+	//    setEntityData(getPlayerPed(client), "vrr.bodyPartUpper", getPlayerCurrentSubAccount(client).bodyParts.upper, true);
+	//    setEntityData(getPlayerPed(client), "vrr.bodyPartLower", getPlayerCurrentSubAccount(client).bodyParts.lower, true);
+	//    setEntityData(getPlayerPed(client), "vrr.bodyPropHair", getPlayerCurrentSubAccount(client).bodyProps.hair, true);
+	//    setEntityData(getPlayerPed(client), "vrr.bodyPropEyes", getPlayerCurrentSubAccount(client).bodyProps.eyes, true);
+	//    setEntityData(getPlayerPed(client), "vrr.bodyPartHead", getPlayerCurrentSubAccount(client).bodyProps.head, true);
+	//    setEntityData(getPlayerPed(client), "vrr.bodyPartLeftHand", getPlayerCurrentSubAccount(client).bodyProps.leftHand, true);
+	//    setEntityData(getPlayerPed(client), "vrr.bodyPartRightHand", getPlayerCurrentSubAccount(client).bodyProps.rightHand, true);
+	//    setEntityData(getPlayerPed(client), "vrr.bodyPartLeftWrist", getPlayerCurrentSubAccount(client).bodyProps.leftWrist, true);
+	//    setEntityData(getPlayerPed(client), "vrr.bodyPartRightWrist", getPlayerCurrentSubAccount(client).bodyProps.rightWrist, true);
+	//    setEntityData(getPlayerPed(client), "vrr.bodyPartHip", getPlayerCurrentSubAccount(client).bodyProps.hip, true);
+	//    setEntityData(getPlayerPed(client), "vrr.bodyPartLeftFoot", getPlayerCurrentSubAccount(client).bodyProps.leftFoot, true);
+	//    setEntityData(getPlayerPed(client), "vrr.bodyPartRightFoot", getPlayerCurrentSubAccount(client).bodyProps.rightFoot, true);
 	//}
 
 	if(isGTAIV()) {

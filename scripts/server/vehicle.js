@@ -1229,6 +1229,9 @@ function respawnVehicle(vehicle) {
 function spawnVehicle(vehicleData) {
 	logToConsole(LOG_DEBUG, `[VRR.Vehicle]: Spawning ${getVehicleNameFromModel(vehicleData.model)} at ${vehicleData.spawnPosition.x}, ${vehicleData.spawnPosition.y}, ${vehicleData.spawnPosition.z} with heading ${vehicleData.spawnRotation}`);
 	let vehicle = createGameVehicle(vehicleData.model, vehicleData.spawnPosition, vehicleData.spawnRotation);
+	setVehicleHeading(vehicle, vehicleData.spawnRotation);
+	setElementTransient(vehicle, false);
+	addToWorld(vehicle);
 
 	if(!vehicle) {
 		return false;
@@ -1255,17 +1258,15 @@ function spawnVehicle(vehicleData) {
 		setVehicleEngine(vehicle, false);
 		logToConsole(LOG_VERBOSE, `[VRR.Vehicle]: Setting vehicle ${vehicle.id}'s engine to OFF`);
 	} else {
-		setVehicleEngine(vehicle, intToBool(vehicleData.engine));
-		logToConsole(LOG_VERBOSE, `[VRR.Vehicle]: Setting vehicle ${vehicle.id}'s engine to ${toUpperCase(getOnOffFromBool(getVehicleEngine(vehicle)))}`);
+		setVehicleEngine(vehicle, intToBool(vehicleData.engine));logToConsole(LOG_VERBOSE, `[VRR.Vehicle]: Setting vehicle ${vehicle.id}'s engine to ${toUpperCase(getOnOffFromBool(getVehicleEngine(vehicle)))}`);
 	}
 
 	if(typeof vehicle.locked != "undefined") {
 		setVehicleLocked(vehicle, intToBool(vehicleData.locked));
-		logToConsole(LOG_VERBOSE, `[VRR.Vehicle]: Setting vehicle ${vehicle.id}'s lock state to ${toUpperCase(getOnOffFromBool(getVehicleLocked(vehicle)))}`);
+		logToConsole(LOG_VERBOSE, `[VRR.Vehicle]: Setting vehicle ${vehicle.id}'s lock state to ${toUpperCase(getOnOffFromBool(getVehicleLockState(vehicle)))}`);
 	}
 
-	setElementDimension(vehicle, vehicleData.dimension);
-
+	setElementDimension(vehicle.dimension, vehicleData.dimension);
 	//setVehicleHealth(vehicle, 1000);
 	repairVehicle(vehicle);
 

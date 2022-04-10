@@ -39,7 +39,7 @@ function loadJobsFromDatabase() {
 					tempJobData.locations = loadJobLocationsFromDatabase(tempJobData.databaseId);
 					tempJobData.equipment = loadJobEquipmentsFromDatabase(tempJobData.databaseId);
 					tempJobData.uniforms = loadJobUniformsFromDatabase(tempJobData.databaseId);
-					tempJobData.routes = loadJobRoutesFromDatabase(tempJobData.databaseId);
+					//tempJobData.routes = loadJobRoutesFromDatabase(tempJobData.databaseId);
 					tempJobs.push(tempJobData);
 					logToConsole(LOG_DEBUG, `[VRR.Job]: Job '${tempJobData.name}' loaded from database successfully!`);
 				}

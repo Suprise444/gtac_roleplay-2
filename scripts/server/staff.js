@@ -585,7 +585,7 @@ function gotoJobLocationCommand(command, params, client) {
 		return false;
 	}
 
-	client.player.velocity = toVector3(0.0, 0.0, 0.0);
+	setPlayerVelocity(client, toVector3(0.0, 0.0, 0.0));
 	setPlayerPosition(client, getJobData(jobId).locations[jobLocationId].position);
 	setPlayerInterior(client, getJobData(jobId).locations[jobLocationId].interior);
 	setPlayerDimension(client, getJobData(jobId).locations[jobLocationId].dimension);
@@ -606,7 +606,7 @@ function gotoJobLocationCommand(command, params, client) {
  *
  */
 function gotoNewPlayerSpawnCommand(command, params, client) {
-	client.player.velocity = toVector3(0.0, 0.0, 0.0);
+	setPlayerVelocity(client, toVector3(0.0, 0.0, 0.0));
 	setPlayerPosition(client, getServerConfig().newCharacter.spawnPosition);
 	setPlayerInterior(client, 0);
 	setPlayerDimension(client, 0);
@@ -639,7 +639,7 @@ function gotoPositionCommand(command, params, client) {
 	let int = getParam(params, " ", 4);
 	let vw = getParam(params, " ", 5);
 
-	client.player.velocity = toVector3(0.0, 0.0, 0.0);
+	setPlayerVelocity(client, toVector3(0.0, 0.0, 0.0));
 	setPlayerInterior(client, toInteger(int));
 	setPlayerDimension(client, toInteger(vw));
 	setPlayerPosition(client, toVector3(toFloat(x), toFloat(y), toFloat(z)));

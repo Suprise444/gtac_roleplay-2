@@ -9,7 +9,10 @@
 
 function initClanScript() {
 	logToConsole(LOG_INFO, "[VRR.Clan]: Initializing clans script ...");
-	getServerData().clans = loadClansFromDatabase();
+	if(!getServerConfig().devServer) {
+		getServerData().clans = loadClansFromDatabase();
+	}
+
 	setAllClanDataIndexes();
 	logToConsole(LOG_INFO, "[VRR.Clan]: Clan script initialized successfully!");
 	return true;
@@ -114,7 +117,7 @@ function createClanRank(clanId, rankId, rankName) {
 	let rankIndex = getClanData(clanId).ranks.push(tempClanRankData);
 	setAllClanDataIndexes();
 
-	saveAllClanRanksToDatabase(clanId);
+	saveClanRanksToDatabase(clanId);
 	return rankIndex;
 }
 
@@ -927,12 +930,20 @@ function doesClanIdExist(clanId) {
 // ===========================================================================
 
 function reloadAllClans() {
+	if(getServerConfig().devServer) {
+		return false;
+	}
+
 	getServerData().clans = loadClansFromDatabase();
 }
 
 // ===========================================================================
 
-function saveAllClanRanksToDatabase(clanId) {
+function saveClanRanksToDatabase(clanId) {
+	if(getServerConfig().devServer) {
+		return false;
+	}
+
 	let ranks = getServerData().clans[clanId].ranks;
 	for(let i in ranks) {
 		saveClanRankToDatabase(clanId, i);
@@ -986,7 +997,7 @@ function saveClanToDatabase(clanId) {
 			disconnectFromDatabase(dbConnection);
 		}
 
-		saveAllClanRanksToDatabase(clanId);
+		saveClanRanksToDatabase(clanId);
 		return true;
 	}
 
@@ -1075,7 +1086,11 @@ function setClanRankTitle(clanId, rankId, title) {
 
 // ===========================================================================
 
-function saveAllClansToDatabase() {
+function saveClansToDatabase() {
+	if(getServerConfig().devServer) {
+		return false;
+	}
+
 	for(let i in getServerData().clans) {
 		saveClanToDatabase(i);
 	}

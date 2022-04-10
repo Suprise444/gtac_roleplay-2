@@ -127,49 +127,6 @@ let bindableKeys = {
 
 // ===========================================================================
 
-let weekDays = [
-	"Sunday",
-	"Monday",
-	"Tuesday",
-	"Wednesday",
-	"Thursday",
-	"Friday",
-	"Saturday"
-];
-
-// ===========================================================================
-
-let months = [
-	"January",
-	"February",
-	"March",
-	"April",
-	"May",
-	"June",
-	"July",
-	"August",
-	"September",
-	"October",
-	"November",
-	"December"
-];
-
-// ===========================================================================
-
-let cardinalDirections = [
-	"North",
-	"Northeast",
-	"East",
-	"Southeast",
-	"South",
-	"Southwest",
-	"West",
-	"Northwest",
-	"Unknown"
-];
-
-// ===========================================================================
-
 let serverColours = {
 	hex: {
 		byType: {
@@ -189,6 +146,7 @@ let serverColours = {
 			clanOrange: "FF9900",
 			vehiclePurple: "960096",
 			jobYellow: "FFFF00",
+			npcPink: "DB7093",
 		},
 		byName: {
 			white: "FFFFFF",
@@ -264,6 +222,7 @@ let serverColours = {
 		businessBlue: toColour(0, 153, 255, 255),
 		houseGreen: toColour(17, 204, 17, 255),
 		clanOrange: toColour(255, 153, 0, 255),
+		npcPink: toColour(219, 112, 147, 255),
 	},
 };
 
@@ -1727,6 +1686,16 @@ function getSkinNameFromModel(model, gameId = getGame()) {
 	}
 
 	return false;
+}
+
+// ===========================================================================
+
+function getSkinNameFromIndex(index, gameId = getGame()) {
+	if(typeof getGameConfig().skins[gameId][index] != "undefined") {
+		return getGameConfig().skins[gameId][index][1];
+	}
+
+	return "Unknown";
 }
 
 // ===========================================================================

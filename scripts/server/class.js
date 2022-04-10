@@ -59,6 +59,7 @@ class ServerData {
 		this.inflationMultiplier = 1;
 		this.testerOnly = false;
 		this.settings = 0;
+		this.devServer = false;
 
 		this.antiCheat = {
 			enabled: false,
@@ -87,9 +88,6 @@ class ServerData {
 		this.realTimeZone = 0;
 
 		this.discordConfig = {
-			eventChannelWebHookURL: "",
-			chatChannelWebHookURL: "",
-			adminChannelWebHookURL: "",
 			sendEvents: true,
 			sendChat: true,
 			sendAdminEvents: true,
@@ -124,8 +122,6 @@ class ServerData {
 			this.realTimeZone = dbAssoc["svr_time_realtime_timezone"];
 
 			this.discord = {
-				logChannelWebhookURL: dbAssoc["svr_discord_event_webhook"],
-				adminChannelWebHookURL: dbAssoc["svr_discord_admin_webhook"],
 				sendEvents: true,
 				sendChat: true,
 				sendAdmin: true,

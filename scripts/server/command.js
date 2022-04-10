@@ -196,7 +196,7 @@ function loadCommands() {
 			new CommandData("scode", executeServerCodeCommand, "<code>", getStaffFlagValue("Developer"), true, true, "Execute serverside code"),
 			new CommandData("ccode", executeClientCodeCommand, "<code>", getStaffFlagValue("Developer"), true, true, "Execute clientside code for a player"),
 			new CommandData("gmx", restartGameModeCommand, "", getStaffFlagValue("Developer"), true, true, "Restart this gamemode"),
-			new CommandData("saveall", saveAllServerDataCommand, "", getStaffFlagValue("Developer"), true, true, "Immediately save all data to database"),
+			new CommandData("saveall", saveServerDataCommand, "", getStaffFlagValue("Developer"), true, true, "Immediately save all data to database"),
 			new CommandData("docmd", simulateCommandForPlayerCommand, "<player name/id> <command> [params]", getStaffFlagValue("Developer"), true, true, "Force a player to use a command"),
 			new CommandData("docmdall", simulateCommandForAllPlayersCommand, "<command> [params]", getStaffFlagValue("Developer"), true, true, "Force all players to use a command"),
 			new CommandData("addloglevel", addLogLevelCommand, "<log level name>", getStaffFlagValue("Developer"), true, true, "Adds a log level"),

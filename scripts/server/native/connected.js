@@ -446,7 +446,9 @@ function createGameObject(modelIndex, position) {
 
 function setElementOnAllDimensions(element, state) {
 	if(!isNull(element) && element != false) {
-		element.onAllDimensions = state;
+		if(typeof element.netFlags.onAllDimensions != "undefined") {
+			element.netFlags.onAllDimensions = state;
+		}
 	}
 }
 

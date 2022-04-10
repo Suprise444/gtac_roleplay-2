@@ -388,7 +388,7 @@ function loadCommands() {
 		npc: [
 			new CommandData("addnpc", createNPCCommand, "<skin id/name>", getStaffFlagValue("ManageNPCs"), true, false, "Creates an NPC with the specified skin"),
 			new CommandData("delnpc", deleteNPCCommand, "", getStaffFlagValue("ManageNPCs"), true, false, "Deletes the nearest NPC"),
-			new CommandData("npcinfo", getNPCInfoCommand, "", getStaffFlagValue("ManageNPCs"), true, false, "Shows info about the nearest NPC"),
+			//new CommandData("npcinfo", getNPCInfoCommand, "", getStaffFlagValue("ManageNPCs"), true, false, "Shows info about the nearest NPC"),
 			new CommandData("npcanim", setNPCAnimationCommand, "<animation name>", getStaffFlagValue("ManageNPCs"), true, false, "Plays the specified animation on the nearest NPC"),
 			//new CommandData("npcrespawnall", respawnAllNPCsCommand, "", getStaffFlagValue("ManageNPCs"), true, false, "Respawns all NPCs"),
 			//new CommandData("npcrespawn", respawnNPCCommand, "", getStaffFlagValue("ManageNPCs"), true, false, "Respawns the nearest NPC"),

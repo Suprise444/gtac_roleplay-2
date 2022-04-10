@@ -395,22 +395,22 @@ function getClientFromSyncerId(syncerId) {
 
 // ===========================================================================
 
-async function triggerWebHook(webHookURL, messageString) {
-	return new Promise(resolve => {
-		let tempURL = getGlobalConfig().discord.webhook.baseURL;
-		tempURL = tempURL.replace("{0}", messageString);
-		tempURL = tempURL.replace("{1}", webHookURL);
+function triggerWebHook(messageString, serverId = getServerId(), type = VRR_DISCORD_WEBHOOK_LOG) {
+	let tempURL = getGlobalConfig().discord.webhook.webhookBaseURL;
+	tempURL = tempURL.replace("{0}", encodeURI(messageString));
+	tempURL = tempURL.replace("{1}", serverId);
+	tempURL = tempURL.replace("{2}", type);
+	tempURL = tempURL.replace("{3}", getGlobalConfig().discord.webhook.pass);
 
-		httpGet(
-			tempURL,
-			"",
-			function(data) {
-				//console.warn(JSON.parse(data));
-			},
-			function(data) {
-			}
-		);
-	});
+	httpGet(
+		tempURL,
+		"",
+		function(data) {
+
+		},
+		function(data) {
+		}
+	);
 }
 
 // ===========================================================================

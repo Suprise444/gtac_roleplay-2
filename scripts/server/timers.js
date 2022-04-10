@@ -11,7 +11,7 @@ let serverTimers = {};
 
 // ===========================================================================
 
-function saveAllServerDataToDatabase() {
+function saveServerDataToDatabase() {
 	if(getServerConfig().pauseSavingToDatabase) {
 		return false;
 	}
@@ -19,55 +19,49 @@ function saveAllServerDataToDatabase() {
 	logToConsole(LOG_DEBUG, "[VRR.Utilities]: Saving all server data to database ...");
 
 	try {
-		saveAllClientsToDatabase();
+		saveClientsToDatabase();
 	} catch(error) {
 		logToConsole(LOG_ERROR, `Could not save clients to database: ${error}`);
 	}
 
 	try {
-		saveAllClansToDatabase();
+		saveClansToDatabase();
 	} catch(error) {
 		logToConsole(LOG_ERROR, `Could not save clans to database: ${error}`);
 	}
 
 	try {
-		saveAllHousesToDatabase();
+		saveHousesToDatabase();
 	} catch(error) {
 		logToConsole(LOG_ERROR, `Could not save houses to database: ${error}`);
 	}
 
 	try {
-		saveAllBusinessesToDatabase();
+		saveBusinessesToDatabase();
 	} catch(error) {
 		logToConsole(LOG_ERROR, `Could not save businesses to database: ${error}`);
 	}
 
 	try {
-		saveServerConfigToDatabase();
-	} catch(error) {
-		logToConsole(LOG_ERROR, `Could not save server config to database: ${error}`);
-	}
-
-	try {
-		saveAllVehiclesToDatabase();
+		saveVehiclesToDatabase();
 	} catch(error) {
 		logToConsole(LOG_ERROR, `Could not save vehicles to database: ${error}`);
 	}
 
 	try {
-		saveAllItemTypesToDatabase();
+		saveItemTypesToDatabase();
 	} catch(error) {
 		logToConsole(LOG_ERROR, `Could not save item types to database: ${error}`);
 	}
 
 	try {
-		saveAllItemsToDatabase();
+		saveItemsToDatabase();
 	} catch(error) {
 		logToConsole(LOG_ERROR, `Could not save items to database: ${error}`);
 	}
 
 	try {
-		saveAllJobsToDatabase();
+		saveJobsToDatabase();
 	} catch(error) {
 		logToConsole(LOG_ERROR, `Could not save jobs to database: ${error}`);
 	}
@@ -112,7 +106,7 @@ function oneMinuteTimerFunction() {
 
 function tenMinuteTimerFunction() {
 	showRandomTipToAllPlayers();
-	saveAllServerDataToDatabase();
+	saveServerDataToDatabase();
 	checkInactiveVehicleRespawns();
 }
 

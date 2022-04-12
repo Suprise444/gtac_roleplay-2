@@ -152,7 +152,7 @@ function addLogLevelCommand(command, params, client) {
 
 	sendPlayerLogLevel(null, logLevel);
 
-	announceAdminAction(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}enabled log level {ALTCOLOUR}${toLowerCase(params)}`);
+	messageAdmins(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}enabled log level {ALTCOLOUR}${toLowerCase(params)}`);
 
 	return true;
 }
@@ -222,7 +222,7 @@ function removeLogLevelCommand(command, params, client) {
 
 	sendPlayerLogLevel(null, logLevel);
 
-	announceAdminAction(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}disabled log level {ALTCOLOUR}${toLowerCase(params)}`);
+	messageAdmins(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}disabled log level {ALTCOLOUR}${toLowerCase(params)}`);
 
 	return true;
 }
@@ -380,7 +380,7 @@ function setPlayerTesterStatusCommand(command, params, client) {
 
 	let enabled = hasBitFlag(getPlayerData(targetClient).accountData.flags.moderation, getModerationFlagValue("IsTester"));
 
-	announceAdminAction(`{ALTCOLOUR}${client.name} ${getBoolRedGreenInlineColour(enabled)}${toUpperCase(getEnabledDisabledFromBool(enabled))} {ALTCOLOUR}${targetClient.name}'s {MAINCOLOUR}tester status`)
+	messageAdmins(`{ALTCOLOUR}${client.name} ${getBoolRedGreenInlineColour(enabled)}${toUpperCase(getEnabledDisabledFromBool(enabled))} {ALTCOLOUR}${targetClient.name}'s {MAINCOLOUR}tester status`)
 	return true;
 }
 

@@ -937,13 +937,13 @@ function checkRegistration(client, password, confirmPassword = "", emailAddress 
 		} else {
 			messagePlayerError(client, "Password doesn't meet requirements!");
 		}
-		return false
+		return false;
 	}
 
 	if(doesServerHaveGUIEnabled() && doesPlayerHaveGUIEnabled(client)) {
 		if(!isValidEmailAddress(emailAddress)) {
 			showPlayerRegistrationFailedGUI(client, getLocaleString(client, "RegistrationFailedInvalidEmail"));
-			return false
+			return false;
 		}
 	}
 
@@ -1104,7 +1104,7 @@ function savePlayerToDatabase(client) {
 		return false;
 	}
 
-	if(!getPlayerData(client).loggedIn) {
+	if(!isPlayerLoggedIn(client)) {
 		return false;
 	}
 

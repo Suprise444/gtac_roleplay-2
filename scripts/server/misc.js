@@ -333,7 +333,7 @@ function checkPlayerSpawning() {
 	for(let i in clients) {
 		if(!isConsole(clients[i])) {
 			if(getPlayerData(clients[i])) {
-				if(getPlayerData(clients[i]).loggedIn) {
+				if(isPlayerLoggedIn(clients[i])) {
 					if(!getPlayerData(clients[i]).ped) {
 						if(clients[i].player != null) {
 							//getPlayerData(clients[i]).ped = clients[i].player;

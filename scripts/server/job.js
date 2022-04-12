@@ -619,7 +619,7 @@ function stopWorking(client) {
 	if(jobVehicle) {
 		if(getPlayerVehicle(client) == jobVehicle) {
 			removePlayerFromVehicle(client);
-			//client.player.removeFromVehicle();
+			//getPlayerPed(client).removeFromVehicle();
 		}
 
 		respawnVehicle(jobVehicle);

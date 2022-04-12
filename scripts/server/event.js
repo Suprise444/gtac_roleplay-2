@@ -474,7 +474,7 @@ function onPlayerSpawn(client) {
 	}
 
 	logToConsole(LOG_DEBUG, `[VRR.Event] Checking ${getPlayerDisplayForConsole(client)}'s login status`);
-	if(!getPlayerData(client).loggedIn) {
+	if(!isPlayerLoggedIn(client)) {
 		logToConsole(LOG_DEBUG, `[VRR.Event] ${getPlayerDisplayForConsole(client)} is NOT logged in. Despawning their player.`);
 		client.disconnect();
 		return false;

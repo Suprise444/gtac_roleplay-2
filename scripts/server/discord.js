@@ -104,7 +104,7 @@ function messageDiscordChatChannel(messageString) {
 // ===========================================================================
 
 function messageDiscordEventChannel(messageString) {
-	if(getServerConfig().devServer) {
+	if(getServerConfig().devServer == true) {
 		return false;
 	}
 
@@ -119,7 +119,7 @@ function messageDiscordEventChannel(messageString) {
 // ===========================================================================
 
 function messageDiscordAdminChannel(messageString) {
-	if(getServerConfig().devServer) {
+	if(getServerConfig().devServer == true) {
 		return false;
 	}
 

@@ -387,7 +387,11 @@ function setElementDimension(element, dimension) {
 // ===========================================================================
 
 function setElementRotation(element, rotation) {
-	return element.rotation = rotation;
+	if(typeof element.setRotation != "undefined") {
+		element.setRotation(rotation);
+	} else {
+		return element.rotation = rotation;
+	}
 }
 
 // ===========================================================================
@@ -469,8 +473,14 @@ function createGameObject(modelIndex, position) {
 
 function setElementOnAllDimensions(element, state) {
 	if(!isNull(element) && element != false) {
-		if(typeof element.netFlags.onAllDimensions != "undefined") {
-			element.netFlags.onAllDimensions = state;
+		if(typeof element.netFlags != "undefined") {
+			if(typeof element.netFlags.onAllDimensions != "undefined") {
+				element.netFlags.onAllDimensions = state;
+			}
+		} else {
+			if(typeof element.onAllDimensions != "undefined") {
+				element.onAllDimensions = state;
+			}
 		}
 	}
 }
@@ -1099,16 +1109,24 @@ function setPlayerWantedLevel(client, wantedLevel) {
 // ===========================================================================
 
 function setElementStreamInDistance(element, distance) {
-	if(typeof element.streamInDistance != "undefined") {
-		element.streamInDistance = distance;
+	if(!isNull(element) && element != false) {
+		if(typeof element == "Entity") {
+			if(typeof element.streamInDistance != "undefined") {
+				element.streamInDistance = distance;
+			}
+		}
 	}
 }
 
 // ===========================================================================
 
 function setElementStreamOutDistance(element, distance) {
-	if(typeof element.streamOutDistance != "undefined") {
-		element.streamOutDistance = distance;
+	if(!isNull(element) && element != false) {
+		if(typeof element == "Entity") {
+			if(typeof element.streamOutDistance != "undefined") {
+				element.streamOutDistance = distance;
+			}
+		}
 	}
 }
 

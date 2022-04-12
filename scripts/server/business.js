@@ -2149,7 +2149,7 @@ function reloadAllBusinessesCommand(command, params, client) {
 	setAllBusinessIndexes();
 	cacheAllBusinessItems();
 
-	announceAdminAction(`All businesses have been reloaded by an admin!`);
+	announceAdminAction(`AllBusinessesReloaded`);
 }
 
 // ===========================================================================

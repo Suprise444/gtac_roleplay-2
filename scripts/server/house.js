@@ -1297,7 +1297,7 @@ function reloadAllHousesCommand(command, params, client) {
 	createAllHousePickups();
 	createAllHouseBlips();
 
-	announceAdminAction(`All houses have been reloaded by an admin!`);
+	announceAdminAction(`HousesReloaded`);
 }
 
 // ===========================================================================

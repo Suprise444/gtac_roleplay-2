@@ -43,6 +43,21 @@ function getLocaleString(client, stringName, ...args) {
 
 // ===========================================================================
 
+function getLanguageLocaleString(localeId, stringName, ...args) {
+	let tempString = getRawLocaleString(stringName, localeId);
+	if(tempString == "") {
+		submitBugReport(client, `(AUTOMATED REPORT) Locale string "${stringName}" is missing for "${getPlayerLocaleName(client)}"`);
+	}
+
+	for(let i = 1; i <= args.length; i++) {
+		tempString = tempString.replace(`{${i}}`, args[i-1]);
+	}
+
+	return tempString;
+}
+
+// ===========================================================================
+
 function getGroupedLocaleString(client, stringName, index, ...args) {
 	let tempString = getRawGroupedLocaleString(stringName, getPlayerData(client).locale, index);
 

@@ -376,7 +376,7 @@ function setWeatherCommand(command, params, client) {
 
 	getServerConfig().needsSaved = true;
 
-	announceAdminAction("ServerTimeSet", getPlayerName(client), getGameConfig().weatherNames[getServerGame()][toInteger(weatherId)]);
+	announceAdminAction("ServerWeatherSet", getPlayerName(client), getGameConfig().weatherNames[getServerGame()][toInteger(weatherId)]);
 	updateServerRules();
 	return true;
 }
@@ -467,7 +467,7 @@ function toggleServerLogoCommand(command, params, client) {
 
 	updatePlayerShowLogoState(null, getServerConfig().useLogo);
 
-	announceAdminAction(`${getPlayerName(client)}{MAINCOLOUR}${getBoolRedGreenInlineColour(doesServerHaveServerLogoEnabled())}${toUpperCase(getOnOffFromBool(getServerConfig().useLogo))}`);
+	//announceAdminAction(`${getPlayerName(client)}{MAINCOLOUR}${getBoolRedGreenInlineColour(doesServerHaveServerLogoEnabled())}${toUpperCase(getOnOffFromBool(getServerConfig().useLogo))}`);
 	updateServerRules();
 	return true;
 }
@@ -629,7 +629,7 @@ function toggleServerUseRealWorldTimeCommand(command, params, client) {
 
 	getServerConfig().needsSaved = true;
 
-	announceAdminAction(`${getPlayerName(client)}{MAINCOLOUR} turned real-world time ${getServerConfig().useRealTime} for this server (GMT ${addPositiveNegativeSymbol(getServerConfig().realTimeZone)})`);
+	//announceAdminAction(`${getPlayerName(client)}{MAINCOLOUR} turned real-world time ${getServerConfig().useRealTime} for this server (GMT ${addPositiveNegativeSymbol(getServerConfig().realTimeZone)})`);
 	updateServerGameTime();
 	updateServerRules();
 	return true;
@@ -655,7 +655,7 @@ function setServerRealWorldTimeZoneCommand(command, params, client) {
 	getServerConfig().realTimeZone = toInteger(params);
 	getServerConfig().needsSaved = true;
 
-	announceAdminAction(`${getPlayerName(client)} {MAINCOLOUR}set the time zone for in-game's real-world time to GMT ${addPositiveNegativeSymbol(getServerConfig().realTimeZone)}`);
+	//announceAdminAction(`${getPlayerName(client)} {MAINCOLOUR}set the time zone for in-game's real-world time to GMT ${addPositiveNegativeSymbol(getServerConfig().realTimeZone)}`);
 	updateServerGameTime();
 	updateServerRules();
 	return true;

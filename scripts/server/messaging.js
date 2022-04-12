@@ -14,11 +14,14 @@ function initMessagingScript() {
 
 // ===========================================================================
 
-function announceAdminAction(messageText) {
-	messagePlayerNormal(null, `⚠️ ${messageText}`, getColourByName("orange"));
-	if(getServerConfig().discordEnabled) {
-		messageDiscord(`:warning: ${messageText}`);
+function announceAdminAction(localeString, ...args) {
+	let clients = getClients();
+	for(let i in clients) {
+		let messageText = getLocaleString.apply(null, [clients[i], localeString, args]);
+		messagePlayerNormal(clients[i], `⚠️ ${messageText}`, getColourByName("orange"));
 	}
+
+	messageDiscordEventChannel(getLanguageLocaleString.apply(null, [getGlobalConfig().locale.defaultLanguageId, localeString, args]));
 }
 
 // ===========================================================================

@@ -43,7 +43,8 @@ function kickClientCommand(command, params, client) {
 		}
 	}
 
-	announceAdminAction(`${getPlayerName(targetClient)} has been kicked from the server.`);
+	//getPlayerData(targetClient).customDisconnectReason = reason;
+	announceAdminAction(`PlayerKicked`, getPlayerName(targetClient));
 	targetClient.disconnect();
 }
 

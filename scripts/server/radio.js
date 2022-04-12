@@ -258,7 +258,7 @@ function reloadAllRadioStationsCommand(command, params, client) {
 	getServerData().radioStations = loadRadioStationsFromDatabase();
 	setRadioStationIndexes();
 
-	announceAdminAction(`All radio stations have been reloaded by an admin!`);
+	announceAdminAction(`AllRadioStationsReloaded`);
 }
 
 // ===========================================================================

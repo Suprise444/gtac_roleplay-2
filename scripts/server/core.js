@@ -9,7 +9,7 @@
 
 let scriptVersion = "1.0";
 let serverStartTime = 0;
-let logLevel = LOG_INFO;
+let logLevel = LOG_INFO|LOG_DEBUG|LOG_VERBOSE|LOG_WARN|LOG_ERROR;
 
 // ===========================================================================
 
@@ -32,6 +32,7 @@ let serverData = {
 	cachedTranslations: [],
 	cachedTranslationFrom: [],
 	triggers: [],
+	npcs: [],
 };
 
 // ===========================================================================

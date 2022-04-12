@@ -351,7 +351,7 @@ function getPlayerWeaponAmmo(client) {
 
 function setPlayerVelocity(client, velocity) {
 	logToConsole(LOG_DEBUG, `Setting ${getPlayerDisplayForConsole(client)}'s velocity to ${velocity.x}, ${velocity.y}, ${velocity.z}`);
-	if(typeof cgetPlayerPed(client).velocity != "undefined") {
+	if(typeof getPlayerPed(client).velocity != "undefined") {
 		getPlayerPed(client).velocity = velocity;
 	}
 }

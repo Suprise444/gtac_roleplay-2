@@ -534,12 +534,16 @@ function loadCommands() {
 // ===========================================================================
 
 function addAllCommandHandlers() {
+	let commandCount = 0;
 	for(let i in serverCommands) {
 		for(let j in serverCommands[i]) {
-			logToConsole(LOG_VERBOSE, `Adding command handler for ${i}/${j} - ${serverCommands[i][j].command}`);
+			logToConsole(LOG_DEBUG, `[VRR.Command] Adding command handler for ${i} - ${serverCommands[i][j].command}`);
 			addCommandHandler(serverCommands[i][j].command, processPlayerCommand);
+			commandCount++;
 		}
 	}
+
+	logToConsole(LOG_INFO, `[VRR.Command] ${commandCount} command handlers added!`);
 }
 
 // ===========================================================================
@@ -782,7 +786,7 @@ function getAllCommandsInSingleArray() {
 	let tempCommands = [];
 	for(let i in serverCommands) {
 		for(let j in serverCommands[i]) {
-			tempCommands.push(serverCommands[i][j]);
+			tempCommands.push(serverCommands[i][j].command);
 		}
 	}
 
@@ -791,10 +795,12 @@ function getAllCommandsInSingleArray() {
 
 // ===========================================================================
 
-function getAllCommandsInGroupInSingleArray(groupName) {
+function getAllCommandsInGroupInSingleArray(groupName, staffFlag = "None") {
 	let tempCommands = [];
 	for(let i in serverCommands[groupName]) {
-		tempCommands.push(serverCommands[groupName][i]);
+		if(getCommandRequiredPermissions(serverCommands[groupName][i].command) == 0) {
+			tempCommands.push(serverCommands[groupName][i].command);
+		}
 	}
 
 	return tempCommands;
@@ -806,9 +812,9 @@ function getAllCommandsForStaffFlagInSingleArray(staffFlagName) {
 	let tempCommands = [];
 	for(let i in serverCommands) {
 		for(let j in serverCommands[i]) {
-			if(serverCommands[i][j].requiredStaffFlags != "0") {
-				if(hasBitFlag(serverCommands[i][j].requiredStaffFlags, getStaffFlagValue(staffFlagName))) {
-					tempCommands.push(serverCommands[i][j]);
+			if(getCommandRequiredPermissions(serverCommands[i][j].command) != 0) {
+				if(hasBitFlag(getCommandRequiredPermissions(serverCommands[i][j].command), getStaffFlagValue(staffFlagName))) {
+					tempCommands.push(serverCommands[i][j].command);
 				}
 			}
 		}

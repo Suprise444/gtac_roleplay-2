@@ -60,7 +60,7 @@ function onPlayerJoin(event, client) {
 		fadeCamera(client, true, 1.0);
 	}
 
-	messageAdmins(`${client.name} is joining the server ...`);
+	messageDiscordEventChannel(`👋 ${client.name} is connecting to the server ...`);
 	//messageDiscordEventChannel(`👋 ${getPlayerDisplayForConsole(client)} has joined the server.`);
 }
 
@@ -96,8 +96,6 @@ function onElementStreamOut(event, element, client) {
 function onPlayerQuit(event, client, quitReasonId) {
 	logToConsole(LOG_INFO, `👋 Client ${getPlayerDisplayForConsole(client)} disconnected (${disconnectReasons[quitReasonId]}[${quitReasonId}])`);
 	updateConnectionLogOnQuit(client, quitReasonId);
-
-
 
 	if(isPlayerLoggedIn(client)) {
 		let reasonText = disconnectReasons[quitReasonId];
@@ -623,6 +621,8 @@ function onPlayerSpawn(client) {
 	}
 
 	getPlayerData(client).payDayTickStart = sdl.ticks;
+
+	messageDiscordEventChannel(`🧍 ${client.name} spawned as ${getCharacterFullName(client)}`);
 }
 
 // ===========================================================================

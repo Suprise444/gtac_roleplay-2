@@ -442,5 +442,10 @@
 	"StartWorkLabel": "Use {1} to start working",
 	"JobEquipAndUniformLabel": "Use {1} and {2} for job stuff, or {3} to stop working",
 	"NotYourJobLabel": "You already have a different job. Use {1} if you want this one",
-	"JobLabel": "{1} Job"
+	"JobLabel": "{1} Job",
+	"PaydayBonusSet": "{1} set the payday bonus to ${2}",
+	"AllHousesReloaded": "All houses have been reloaded by an admin",
+	"AllRadioStationsReloaded": "All radio stations have been reloaded by an admin!",
+	"PlayerKicked": "{1} has been kicked from the server",
+	"AllBusinessesReloaded": "All businesses have been reloaded by an admin!"
 }

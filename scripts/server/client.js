@@ -1023,9 +1023,9 @@ function makePedPlayAnimation(ped, animationSlot, positionOffset) {
 
 // ===========================================================================
 
-function makePedStopAnimation(pedId) {
+function makePedStopAnimation(ped) {
 	removeEntityData(ped, "vrr.animation");
-	sendNetworkEventToPlayer("vrr.pedStopAnim", null, pedId);
+	sendNetworkEventToPlayer("vrr.pedStopAnim", null, ped.id);
 }
 
 // ===========================================================================

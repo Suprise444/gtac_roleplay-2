@@ -40,7 +40,7 @@ function createNPCCommand(client, command, params) {
 	let skinId = getSkinModelIndexFromParams(params);
 
 	if(!skinId) {
-		messagePlayerError(client, `Invalid skin`);
+		messagePlayerError(client, getLocaleString(client, "InvalidSkin"));
 		return false;
 	}
 

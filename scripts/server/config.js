@@ -70,7 +70,7 @@ let globalConfig = {
 	economy: {},
 	locales: [],
 	accents: [],
-	useServerSideVehiclePurchaseCheck: false,
+	useServerSideVehiclePurchaseCheck: true,
 	businessPickupStreamInDistance: 100,
 	businessPickupStreamOutDistance: 120,
 	housePickupStreamInDistance: 100,

@@ -1429,6 +1429,10 @@ function processVehiclePurchasing() {
 		return false;
 	}
 
+	let clients = getClients();
+	for(let i in clients) {
+		checkVehicleBuying(clients[i]);
+	}
 
 	return false;
 }

@@ -512,8 +512,8 @@ function onPlayerSpawn(client) {
 
 	logToConsole(LOG_DEBUG, `[VRR.Event] Sending ${getPlayerDisplayForConsole(client)} the 'now playing as' message`);
 	messagePlayerAlert(client, `You are now playing as: {businessBlue}${getCharacterFullName(client)}`, getColourByName("white"));
-	messagePlayerNormal(client, "This server is in early development and may restart at any time for updates.", getColourByName("orange"));
-	messagePlayerNormal(client, "Please report any bugs using /bug and suggestions using /idea", getColourByName("yellow"));
+	//messagePlayerNormal(client, "This server is in early development and may restart at any time for updates.", getColourByName("orange"));
+	//messagePlayerNormal(client, "Please report any bugs using /bug and suggestions using /idea", getColourByName("yellow"));
 
 	logToConsole(LOG_DEBUG, `[VRR.Event] Updating spawned state for ${getPlayerDisplayForConsole(client)} to true`);
 	updatePlayerSpawnedState(client, true);

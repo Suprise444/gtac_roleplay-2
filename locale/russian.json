@@ -453,5 +453,24 @@
 	"SetVehicleClanConfirmTitle": "Warning!",
 	"SetItemPriceBelowOrderPriceMessage": "Are you sure you want to set the item price below it's order price? You will lose ${1} every purchase!",
 	"SetItemPriceBelowOrderPriceTitle": "Warning!",
-	"MustOwnVehicle": "You don't own this vehicle!"
+	"MustOwnVehicle": "You don't own this vehicle!",
+	"RandomTips": [
+		"Look for yellow dots on your map for job locations",
+		"You can set custom key binds. Use {1} for details",
+		"Use {1} if you don't want to see tips and extra information",
+		"You can edit your keybinds using {1} and {2}",
+		"Press ℹ️ to see your inventory, and use number keys to select an item",
+		"Use {1} at a business to purchase items",
+		"Found a bug? Report it with {1}",
+		"Have an idea or suggestion for the server? Let the devs know using {1}",
+		"Want to buy a business? Use {1} at one for sale",
+		"Want to buy a house? Use {1} at one for sale",
+		"Want to buy a vehicle? Visit a dealership and enter one for info on how to buy it!",
+		"Switch to any of your characters with {1}",
+		"Use {1} to automatically login when connecting with the same IP",
+		"Use {1} to turn on/off the lights in your house or business",
+		"Use {1} to play an internet radio station in your car, house, or business",
+		"Want to make a clan? Use {1} for details",
+		"Legal weapons can be purchased at any ammunation"
+	]
 }

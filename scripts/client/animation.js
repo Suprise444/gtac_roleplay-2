@@ -7,45 +7,81 @@
 // TYPE: Client (JavaScript)
 // ===========================================================================
 
-function makePedPlayAnimation(pedId, animGroup, animId, animType, animSpeed, loop, loopNoControl, freezeLastFrame, returnToOriginalPosition, freezePlayer) {
-	logToConsole(LOG_DEBUG, `[VRR.Animation] Playing animation ${animGroup}/${animId} for ped ${pedId}`);
+function makePedPlayAnimation(pedId, animationSlot, positionOffset) {
+	let animationData = getAnimationData(animationSlot);
+	logToConsole(LOG_DEBUG, `[VRR.Animation] Playing animation ${animationData[0]} for ped ${pedId}`);
+
+	let freezePlayer = false;
+	switch(animationData.moveType) {
+		case VRR_ANIMMOVE_FORWARD:
+			setElementCollisionsEnabled(ped, false);
+			setElementPosition(ped, getPosInFrontOfPos(getElementPosition(ped), fixAngle(getElementHeading(ped)), positionOffset));
+			freezePlayer = true;
+			break;
+
+		case VRR_ANIMMOVE_BACK:
+			setElementCollisionsEnabled(ped, false);
+			setElementPosition(ped, getPosBehindPos(getElementPosition(ped), fixAngle(getElementHeading(ped)), positionOffset));
+			freezePlayer = true;
+			break;
+
+		case VRR_ANIMMOVE_LEFT:
+			setElementCollisionsEnabled(ped, false);
+			setElementPosition(ped, getPosToLeftOfPos(getElementPosition(ped), fixAngle(getElementHeading(ped)), positionOffset));
+			freezePlayer = true;
+			break;
+
+		case VRR_ANIMMOVE_RIGHT:
+			setElementCollisionsEnabled(ped, false);
+			setElementPosition(ped, getPosToRightOfPos(getElementPosition(ped), fixAngle(getElementHeading(ped)), positionOffset));
+			freezePlayer = true;
+			break;
+
+		default:
+			break;
+	}
+
 	if(getGame() < VRR_GAME_GTA_IV) {
-		if(animType == VRR_ANIMTYPE_NORMAL || animType == VRR_ANIMTYPE_SURRENDER) {
+		if(animationData.animType == VRR_ANIMTYPE_NORMAL || animationData.animType == VRR_ANIMTYPE_SURRENDER) {
 			if(getGame() == VRR_GAME_GTA_VC || getGame() == VRR_GAME_GTA_SA) {
 				getElementFromId(pedId).clearAnimations();
 			} else {
 				getElementFromId(pedId).clearObjective();
 			}
-			getElementFromId(pedId).addAnimation(animGroup, animId);
+			getElementFromId(pedId).addAnimation(animationData.groupId, animationData.animId);
 
 			if(getElementFromId(pedId) == localPlayer && freezePlayer == true) {
 				inAnimation = true;
 				setLocalPlayerControlState(false, false);
 				localPlayer.collisionsEnabled = false;
 			}
-		} else if(animType == VRR_ANIMTYPE_BLEND) {
+		} else if(animationData.animType == VRR_ANIMTYPE_BLEND) {
 			getElementFromId(pedId).position = getElementFromId(pedId).position;
-			getElementFromId(pedId).blendAnimation(animGroup, animId, animSpeed);
+			getElementFromId(pedId).blendAnimation(animationData.groupId, animationData.animId, animationData.animSpeed);
 		}
 	} else {
-		natives.requestAnims(animGroup);
-		natives.taskPlayAnimNonInterruptable(getElementFromId(pedId), animId, animGroup, animSpeed, loop, loopNoControl, freezeLastFrame, returnToOriginalPosition, -1);
+		natives.requestAnims(animationData.groupId);
+		natives.taskPlayAnimNonInterruptable(getElementFromId(pedId), animationData.groupId, animationData.animId, animationData.animSpeed, boolToInt(animationData.infiniteLoop), boolToInt(animationData.infiniteLoopNoMovement), boolToInt(animationData.dontReturnToStartCoords), boolToInt(animationData.freezeLastFrame), -1);
 	}
 }
 
 // ===========================================================================
 
-function forcePedAnimation(pedId, animGroup, animId, animType, animSpeed, loop, loopNoControl, freezeLastFrame, returnToOriginalPosition) {
+function forcePedAnimation(pedId, animSlot) {
+	let animationData = getAnimationData(animSlot);
+
 	if(getGame() < VRR_GAME_GTA_IV) {
-		forcedAnimation = [animGroup, animId];
 		getElementFromId(pedId).position = getElementFromId(pedId).position;
-		getElementFromId(pedId).addAnimation(animGroup, animId);
+		getElementFromId(pedId).addAnimation(animationData.groupId, animationData.animId);
 
 		if(getElementFromId(pedId) == localPlayer) {
 			inAnimation = true;
 			setLocalPlayerControlState(false, false);
 			localPlayer.collisionsEnabled = false;
 		}
+	} else {
+		natives.requestAnims(animationData.groupId);
+		natives.taskPlayAnimNonInterruptable(getElementFromId(pedId), animationData.groupId, animationData.animId, animationData.animSpeed, boolToInt(animationData.infiniteLoop), boolToInt(animationData.infiniteLoopNoMovement), boolToInt(animationData.dontReturnToStartCoords), boolToInt(animationData.freezeLastFrame), -1);
 	}
 }
 
@@ -70,6 +106,16 @@ function makePedStopAnimation(pedId) {
 		}
 		setLocalPlayerControlState(true, false);
 	}
+}
+
+// ===========================================================================
+
+/**
+ * @param {number} animationSlot - The slot index of the animation
+ * @return {Array} The animation's data (array)
+ */
+ function getAnimationData(animationSlot, gameId = getGame()) {
+	return getGameConfig().animations[gameId][animationSlot];
 }
 
 // ===========================================================================

@@ -39,7 +39,7 @@ function playPlayerAnimationCommand(command, params, client) {
 	}
 
 	if(isPlayerHandCuffed(client) || isPlayerTazed(client) || isPlayerInForcedAnimation(client)) {
-		messagePlayerError(client, `You aren't able to do that`);
+		messagePlayerError(client, getLocaleString(client, "UnableToDoThat"));
 		return false;
 	}
 
@@ -51,7 +51,7 @@ function playPlayerAnimationCommand(command, params, client) {
 
 function stopPlayerAnimationCommand(command, params, client) {
 	if(isPlayerHandCuffed(client) || isPlayerTazed(client) || isPlayerInForcedAnimation(client)) {
-		messagePlayerError(client, `You aren't able to do that`);
+		messagePlayerError(client, getLocaleString(client, "UnableToDoThat"));
 		return false;
 	}
 
@@ -70,7 +70,7 @@ function stopPlayerAnimationCommand(command, params, client) {
 // ===========================================================================
 
 function showAnimationListCommand(command, params, client) {
-	let animList = getGameConfig().animations[getServerGame()].map(function(x) { return x[0]; });
+	let animList = getGameConfig().animations[getServerGame()].map(function(x) { return x.name; });
 
 	let chunkedList = splitArrayIntoChunks(animList, 10);
 
@@ -107,7 +107,7 @@ function makePlayerPlayAnimation(client, animationSlot, offsetPosition = 1) {
 	getPlayerData(client).animationForced = false;
 
 	makePedPlayAnimation(getPlayerPed(client), animationSlot, offsetPosition);
-	setEntityData(ped, "vrr.anim", [animationData[1], animationData[2]]);
+	setEntityData(getPlayerPed(client), "vrr.anim", animationSlot, true);
 	//if(getAnimationData(animationSlot)[9] != VRR_ANIMMOVE_NONE) {
 	//	if(getGame() < VRR_GAME_GTA_SA) {
 	//		setPlayerMouseCameraState(client, true);
@@ -144,9 +144,10 @@ function makePlayerStopAnimation(client) {
 // ===========================================================================
 
 function getAnimationFromParams(params) {
+	let animations = getGameConfig().animations[getServerGame()];
 	if(isNaN(params)) {
-		for(let i in getGameConfig().animations[getServerGame()]) {
-			if(toLowerCase(getGameConfig().animations[getServerGame()][i][0]).indexOf(toLowerCase(params)) != -1) {
+		for(let i in animations) {
+			if(toLowerCase(animations[i].name).indexOf(toLowerCase(params)) != -1) {
 				return i;
 			}
 		}

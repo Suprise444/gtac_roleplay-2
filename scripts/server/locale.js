@@ -70,21 +70,21 @@ function getGroupedLocaleString(client, stringName, index, ...args) {
 
 // ===========================================================================
 
-function getRawLocaleString(stringName, localeName) {
-	return getLocaleStrings()[localeName][stringName];
+function getRawLocaleString(stringName, localeId) {
+	return getLocaleStrings()[localeId][stringName];
 }
 
 // ===========================================================================
 
-function getRawGroupedLocaleString(stringName, localeName, index) {
-	return getLocaleStrings()[localeName][stringName][index];
+function getRawGroupedLocaleString(stringName, localeId, index) {
+	return getLocaleStrings()[localeId][stringName][index];
 }
 
 // ===========================================================================
 
 function getPlayerLocaleName(client) {
 	let localeId = getPlayerData(client).locale;
-	return getLocales()[localeId][0];
+	return getLocales()[localeId].englishName;
 }
 
 // ===========================================================================
@@ -95,7 +95,7 @@ function loadAllLocaleStrings() {
 	let locales = getGlobalConfig().locale.locales;
 	for(let i in locales) {
 		let localeData = locales[i];
-		let localeFile = JSON.parse(loadTextFile(`locale/${localeData[1]}.json`));
+		let localeFile = JSON.parse(loadTextFile(`locale/${localeData.stringsFile}`));
 		tempLocaleStrings[i] = localeFile;
 	}
 
@@ -114,11 +114,11 @@ function getLocaleFromParams(params) {
 	let locales = getLocales();
 	if(isNaN(params)) {
 		for(let i in locales) {
-			if(toLowerCase(locales[i][2]).indexOf(toLowerCase(params)) != -1) {
+			if(toLowerCase(locales[i].isoCode).indexOf(toLowerCase(params)) != -1) {
 				return i;
 			}
 
-			if(toLowerCase(locales[i][0]).indexOf(toLowerCase(params)) != -1) {
+			if(toLowerCase(locales[i].englishName).indexOf(toLowerCase(params)) != -1) {
 				return i;
 			}
 		}
@@ -203,13 +203,13 @@ async function translateMessage(messageText, translateFrom = getGlobalConfig().l
 
 		for(let i in cachedTranslations[translateFrom][translateTo]) {
 			if(cachedTranslations[translateFrom][translateTo][i][0] == messageText) {
-				logToConsole(LOG_DEBUG, `[Translate]: Using existing translation for ${getGlobalConfig().locale.locales[translateFrom][0]} to ${getGlobalConfig().locale.locales[translateTo][0]} - (${messageText}), (${cachedTranslations[translateFrom][translateTo][i][1]})`);
+				logToConsole(LOG_DEBUG, `[Translate]: Using existing translation for ${getGlobalConfig().locale.locales[translateFrom].englishName} to ${getGlobalConfig().locale.locales[translateTo].englishName} - (${messageText}), (${cachedTranslations[translateFrom][translateTo][i][1]})`);
 				resolve(cachedTranslations[translateFrom][translateTo][i][1]);
 				return true;
 			}
 		}
 
-		let thisTranslationURL = translateURL.format(encodeURI(messageText), toUpperCase(getGlobalConfig().locale.locales[translateFrom][2]), toUpperCase(getGlobalConfig().locale.locales[translateTo][2]), getGlobalConfig().locale.apiEmail);
+		let thisTranslationURL = translateURL.format(encodeURI(messageText), toUpperCase(getGlobalConfig().locale.locales[translateFrom].isoCode), toUpperCase(getGlobalConfig().locale.locales[translateTo].isoCode), getGlobalConfig().locale.apiEmail);
 		httpGet(
 			thisTranslationURL,
 			"",

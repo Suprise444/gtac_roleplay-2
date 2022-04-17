@@ -2,12 +2,54 @@
     "apiEmail": "example@example.com",
     "defaultLanguage": "en",
     "locales": [
-        ["English", "english", "en", "gb", ["gb", "us", "au", "bz", "ca", "ie", "jm", "nz", "za", "tt"]],
-        ["Russian", "russian", "ru", "ru", ["ru", "ua"]],
-        ["Polish", "polish", "pl", "pl", ["pl"]],
-        ["Spanish", "spanish", "es", "es", ["es", "ar", "bo", "cl", "co", "cr", "do", "ec", "sv", "gt", "hn", "mx", "ni", "pa", "py", "pe", "pr", "uy", "ve"]],
-		["Chinese", "chinese", "zh", "cn", ["cn", "hk", "sg", "tw"]],
-		["Arabic", "arabic", "ar", "sa", ["dz", "bh", "eg",	"iq", "jo", "kw", "lb", "ly", "ma", "om", "qa", "sa", "sy", "tn", "ae", "ye"]]
+        {
+			"englishName": "English",
+			"stringsFile": "english.json",
+			"isoCode": "en",
+			"flagImageFile": "gb.png",
+			"countries": ["gb", "us", "au", "bz", "ca", "ie", "jm", "nz", "za", "tt"],
+			"requiresUnicode": false
+		},
+        {
+			"englishName": "Russian",
+			"stringsFile": "russian.json",
+			"isoCode": "ru",
+			"flagImageFile": "ru",
+			"countries": ["ru", "ua"],
+			"requiresUnicode": false
+		},
+		{
+			"englishName": "Polish",
+			"stringsFile": "polish.json",
+			"isoCode": "pl",
+			"flagImageFile": "pl",
+			"countries": ["pl"],
+			"requiresUnicode": false
+		},
+		{
+			"englishName": "Spanish",
+			"stringsFile": "spanish.json",
+			"isoCode": "es",
+			"flagImageFile": "es",
+			"countries": ["es", "ar", "bo", "cl", "co", "cr", "do", "ec", "sv", "gt", "hn", "mx", "ni", "pa", "py", "pe", "pr", "uy", "ve"],
+			"requiresUnicode": false
+		},
+		{
+			"englishName": "Chinese",
+			"stringsFile": "chinese.json",
+			"isoCode": "zh",
+			"flagImageFile": "cn",
+			"countries": ["cn", "hk", "sg", "tw"],
+			"requiresUnicode": true
+		},
+		{
+			"englishName": "Arabic",
+			"stringsFile": "arabic.json",
+			"isoCode": "ar",
+			"flagImageFile": "sa",
+			"countries": ["dz", "bh", "eg",	"iq", "jo", "kw", "lb", "ly", "ma", "om", "qa", "sa", "sy", "tn", "ae", "ye"],
+			"requiresUnicode": true
+		}
     ],
 	"sendStringsToClient": [
 		"PropertyEnterCommandLabel",

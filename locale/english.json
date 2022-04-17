@@ -448,5 +448,11 @@
 	"AllHousesReloaded": "🏘️ All houses have been reloaded by an admin",
 	"AllRadioStationsReloaded": "📻 All radio stations have been reloaded by an admin!",
 	"PlayerKicked": "🦶 {1} has been kicked from the server",
-	"AllBusinessesReloaded": "🏢 All businesses have been reloaded by an admin!"
+	"AllBusinessesReloaded": "🏢 All businesses have been reloaded by an admin!",
+	"UnableToDoThat": "You aren't able to do that",
+	"SetVehicleClanConfirmMessage": "Are you sure you want to give this vehicle to your clan?",
+	"SetVehicleClanConfirmTitle": "Warning!",
+	"SetItemPriceBelowOrderPriceMessage": "Are you sure you want to set the item price below it's order price? You will lose ${1} every purchase!",
+	"SetItemPriceBelowOrderPriceTitle": "Warning!",
+	"MustOwnVehicle": "You don't own this vehicle!"
 }

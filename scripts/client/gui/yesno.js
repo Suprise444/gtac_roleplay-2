@@ -78,11 +78,14 @@ function initYesNoDialogGUI() {
 
 // ===========================================================================
 
-function showYesNoPromptGUI(promptMessage, promptTitle) {
+function showYesNoPromptGUI(promptMessage, promptTitle, yesButtonText, noButtonText) {
 	closeAllWindows();
 	logToConsole(LOG_DEBUG, `[VRR.GUI] Showing prompt window. Prompt: ${promptTitle} - ${promptMessage}`);
 	mexui.setInput(true);
 	yesNoDialog.messageLabel.text = promptMessage;
+	yesNoDialog.yesButton.text = yesButtonText;
+	yesNoDialog.noButton.text = noButtonText;
+	yesNoDialog.window.title = promptTitle;
 	yesNoDialog.window.shown = true;
 }
 

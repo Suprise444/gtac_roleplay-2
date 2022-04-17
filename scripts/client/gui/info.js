@@ -70,11 +70,13 @@ function closeInfoDialog() {
 
 // ===========================================================================
 
-function showInfo(infoMessage, infoTitle) {
+function showInfo(infoMessage, infoTitle, buttonText) {
 	closeAllWindows();
 	logToConsole(LOG_DEBUG, `[VRR.GUI] Showing info dialog window. Info: ${infoTitle} - ${infoMessage}`);
 	mexui.setInput(true);
 	infoDialog.messageLabel.text = infoMessage;
+	infoDialog.okayButton.text = buttonText;
+	infoDialog.window.title = infoTitle;
 	infoDialog.window.shown = true;
 }
 

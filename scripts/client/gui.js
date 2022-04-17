@@ -29,12 +29,6 @@ let textInputAlpha = 180;
 
 let guiReady = false;
 
-let guiSubmitKey = false;
-let guiLeftKey = false;
-let guiRightKey = false;
-let guiUpKey = false;
-let guiDownKey = false;
-
 // ===========================================================================
 
 let characterData = [];
@@ -170,23 +164,23 @@ addNetworkEventHandler("vrr.switchCharacterSelect", function(firstName, lastName
 
 // ===========================================================================
 
-addNetworkEventHandler("vrr.showError", function(errorMessage, errorTitle) {
+addNetworkEventHandler("vrr.showError", function(errorMessage, errorTitle, buttonText) {
 	logToConsole(LOG_DEBUG, `[VRR.GUI] Received request from server to show error window`);
-	showError(errorMessage, errorTitle);
+	showError(errorMessage, errorTitle, buttonText);
 });
 
 // ===========================================================================
 
-addNetworkEventHandler("vrr.showPrompt", function(promptMessage, promptTitle) {
+addNetworkEventHandler("vrr.showPrompt", function(promptMessage, promptTitle, yesButtonText, noButtonText) {
 	logToConsole(LOG_DEBUG, `[VRR.GUI] Received request from server to show prompt window`);
-	showYesNoPromptGUI(promptMessage, promptTitle);
+	showYesNoPromptGUI(promptMessage, promptTitle, yesButtonText, noButtonText);
 });
 
 // ===========================================================================
 
-addNetworkEventHandler("vrr.showInfo", function(infoMessage) {
+addNetworkEventHandler("vrr.showInfo", function(infoMessage, buttonText) {
 	logToConsole(LOG_DEBUG, `[VRR.GUI] Received request from server to show info dialog`);
-	showInfo(infoMessage);
+	showInfo(infoMessage, buttonText);
 });
 
 // ===========================================================================
@@ -277,29 +271,42 @@ function hideAllGUI() {
 // ===========================================================================
 
 function processGUIKeyPress(keyCode) {
+	logToConsole(LOG_DEBUG, `[VRR.GUI] Processing key press: ${keyCode}`);
+
 	if(!isAnyGUIActive()) {
+		logToConsole(LOG_DEBUG, `[VRR.GUI] GUI is not active. Cancelling keypress processing.`);
 		return false;
 	}
 
 	if(keyCode == SDLK_RETURN || keyCode == SDLK_RETURN2) {
+		logToConsole(LOG_DEBUG, `[VRR.GUI] Key press is submit (${guiSubmitKey})`);
 		if(guiSubmitKey != false) {
-			guiSubmitKey();
+			logToConsole(LOG_DEBUG, `[VRR.GUI] Calling submit key function`);
+			guiSubmitKey.call();
 		}
 	} else if(keyCode == getKeyIdFromParams("left") || keyCode == getKeyIdFromParams("a")) {
+		logToConsole(LOG_DEBUG, `[VRR.GUI] Key press is left (${guiLeftKey})`);
 		if(guiLeftKey != false) {
-			guiLeftKey();
+			logToConsole(LOG_DEBUG, `[VRR.GUI] Calling left key function`);
+			guiLeftKey.call();
 		}
 	} else if(keyCode == getKeyIdFromParams("right") || keyCode == getKeyIdFromParams("d")) {
+		logToConsole(LOG_DEBUG, `[VRR.GUI] Key press is right (${guiRightKey})`);
 		if(guiRightKey != false) {
-			guiRightKey();
+			logToConsole(LOG_DEBUG, `[VRR.GUI] Calling right key function`);
+			guiRightKey.call();
 		}
 	} else if(keyCode == getKeyIdFromParams("down") || keyCode == getKeyIdFromParams("s")) {
+		logToConsole(LOG_DEBUG, `[VRR.GUI] Key press is down (${guiDownKey})`);
 		if(guiDownKey != false) {
-			guiDownKey();
+			logToConsole(LOG_DEBUG, `[VRR.GUI] Calling down key function`);
+			guiDownKey.call();
 		}
 	} else if(keyCode == getKeyIdFromParams("up") || keyCode == getKeyIdFromParams("w")) {
+		logToConsole(LOG_DEBUG, `[VRR.GUI] Key press is up (${guiUpKey})`);
 		if(guiUpKey != false) {
-			guiUpKey();
+			logToConsole(LOG_DEBUG, `[VRR.GUI] Calling up key function`);
+			guiUpKey.call();
 		}
 	}
 }

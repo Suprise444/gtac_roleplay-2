@@ -15,6 +15,8 @@ let gameConfig = false;
 // ===========================================================================
 
 let globalConfig = {
+	keyBind: [],
+	economy: {},
 	accountPasswordHash: "SHA512",
 	npcFarProximity: 100,
 	npcMediumProximity: 40,
@@ -31,7 +33,6 @@ let globalConfig = {
 	stopWorkingDistance: 10,
 	spawnCarDistance: 5,
 	payAndSprayDistance: 5,
-	keyBind: [],
 	exitPropertyDistance: 3.0,
 	enterPropertyDistance: 3.0,
 	businessDimensionStart: 5000,
@@ -67,9 +68,6 @@ let globalConfig = {
 	],
 	vehicleInactiveRespawnDelay: 1800000, // 20 minutes
 	chatSectionHeaderLength: 96,
-	economy: {},
-	locales: [],
-	accents: [],
 	useServerSideVehiclePurchaseCheck: true,
 	businessPickupStreamInDistance: 100,
 	businessPickupStreamOutDistance: 120,
@@ -111,8 +109,6 @@ function initConfigScript() {
 	getServerConfig().useRealTime = intToBool(toInteger(server.getCVar("vrr_realtime")));
 	getServerConfig().antiCheat.enabled = intToBool(toInteger(server.getCVar("vrr_anticheat")));
 
-	getServerConfig().devServer = intToBool(toInteger(server.getCVar("vrr_devserver")));
-
 	applyConfigToServer(serverConfig);
 	logToConsole(LOG_DEBUG, "[VRR.Config]: Server config applied successfully!");
 
@@ -139,7 +135,7 @@ function loadServerConfigFromGameAndPort(gameId, port, mpMod) {
 		if(dbQuery) {
 			if(dbQuery.numRows > 0) {
 				let dbAssoc = fetchQueryAssoc(dbQuery);
-				let tempServerConfigData = new ServerData(dbAssoc);
+				let tempServerConfigData = new ServerConfigData(dbAssoc);
 				freeDatabaseQuery(dbQuery);
 				return tempServerConfigData;
 			}
@@ -159,7 +155,7 @@ function loadServerConfigFromId(tempServerId) {
 		if(dbQuery) {
 			if(dbQuery.numRows > 0) {
 				let dbAssoc = fetchQueryAssoc(dbQuery);
-				let tempServerConfigData = new ServerData(dbAssoc);
+				let tempServerConfigData = new ServerConfigData(dbAssoc);
 				freeDatabaseQuery(dbQuery);
 				return tempServerConfigData;
 			}
@@ -193,7 +189,7 @@ function saveServerConfigToDatabase() {
 		let dbConnection = connectToDatabase();
 		if(dbConnection) {
 			let data = [
-				["svr_settings", toInteger(getServerConfig().settings)],
+				//["svr_settings", toInteger(getServerConfig().settings)],
 				["svr_start_time_hour", getServerConfig().hour],
 				["svr_start_time_min", getServerConfig().minute],
 				["svr_start_weather", getServerConfig().weather],
@@ -248,7 +244,7 @@ function saveServerConfigToDatabase() {
 
 /**
  *
- * @return {ServerData} - Server configuration data
+ * @return {ServerConfigData} - Server configuration data
  *
  */
 function getServerConfig() {

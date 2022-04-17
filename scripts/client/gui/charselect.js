@@ -163,6 +163,10 @@ function showCharacterSelectGUI(firstName, lastName, cash, clan, lastPlayed, ski
 	characterSelect.lastPlayedText.text = `Last Played: ${lastPlayed}`;
 	characterSelect.skinImage = characterSelect.window.image(310, 32, 100, 90, "files/images/skins/none.png");
 	characterSelect.window.shown = true;
+
+	guiSubmitKey = selectThisCharacter;
+	guiLeftKey = selectPreviousCharacter;
+	guiRightKey = selectNextCharacter;
 }
 
 // ===========================================================================
@@ -211,6 +215,7 @@ function switchCharacterSelectGUI(firstName, lastName, cash, clan, lastPlayed, s
 	characterSelect.skinImage = (getGame() == VRR_GAME_GTA_III) ? characterSelect.window.image(310, 32, 100, 90, `files/images/skins/gta3/${getSkinImage(skinId)}.png`) : characterSelect.window.image(310, 32, 100, 90, "files/images/skins/none.png");
 
 	characterSelect.window.shown = true;
+
 	guiSubmitKey = selectThisCharacter;
 	guiLeftKey = selectPreviousCharacter;
 	guiRightKey = selectNextCharacter;

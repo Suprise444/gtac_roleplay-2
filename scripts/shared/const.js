@@ -3,7 +3,7 @@
 // https://github.com/VortrexFTW/gtac_roleplay
 // ===========================================================================
 // FILE: const.js
-// DESC: Provides constants
+// DESC: Provides shared constants
 // TYPE: Shared (JavaScript)
 // ===========================================================================
 
@@ -80,6 +80,8 @@ const VRR_ANIMMOVE_RIGHT = 4;
 const VRR_MPMOD_NONE = 0;
 const VRR_MPMOD_GTAC = 1;
 const VRR_MPMOD_MAFIAC = 2;
+const VRR_MPMOD_OAKWOOD = 3;
+const VRR_MPMOD_RAGEMP = 4;
 
 // Business/House Game Script States
 //const VRR_GAMESCRIPT_NONE = 0;
@@ -93,3 +95,18 @@ const VRR_VEHBUYSTATE_TESTDRIVE = 1;
 const VRR_VEHBUYSTATE_EXITVEH = 2;
 const VRR_VEHBUYSTATE_FARENOUGH = 3;
 const VRR_VEHBUYSTATE_WRONGVEH = 4;
+
+// Body Parts for Skin Select
+const VRR_SKINSELECT_NONE = 0;
+const VRR_SKINSELECT_SKIN = 1;
+const VRR_SKINSELECT_HAT = 2;
+const VRR_SKINSELECT_HAIR = 3;
+const VRR_SKINSELECT_EYES = 5;
+const VRR_SKINSELECT_UPPER = 6;
+const VRR_SKINSELECT_LOWER = 7;
+const VRR_SKINSELECT_SHOES = 8;
+const VRR_SKINSELECT_LEFTWRIST = 9;
+const VRR_SKINSELECT_RIGHTWRIST = 10;
+const VRR_SKINSELECT_LEFTHAND = 11;
+const VRR_SKINSELECT_RIGHTHAND = 12;
+const VRR_SKINSELECT_HEAD = 13;

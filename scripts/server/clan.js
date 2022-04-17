@@ -9,7 +9,10 @@
 
 function initClanScript() {
 	logToConsole(LOG_INFO, "[VRR.Clan]: Initializing clans script ...");
-	getServerData().clans = loadClansFromDatabase();
+	if(!getServerConfig().devServer) {
+		getServerData().clans = loadClansFromDatabase();
+	}
+
 	setAllClanDataIndexes();
 	logToConsole(LOG_INFO, "[VRR.Clan]: Clan script initialized successfully!");
 	return true;
@@ -114,7 +117,7 @@ function createClanRank(clanId, rankId, rankName) {
 	let rankIndex = getClanData(clanId).ranks.push(tempClanRankData);
 	setAllClanDataIndexes();
 
-	saveAllClanRanksToDatabase(clanId);
+	saveClanRanksToDatabase(clanId);
 	return rankIndex;
 }
 
@@ -927,12 +930,20 @@ function doesClanIdExist(clanId) {
 // ===========================================================================
 
 function reloadAllClans() {
+	if(getServerConfig().devServer) {
+		return false;
+	}
+
 	getServerData().clans = loadClansFromDatabase();
 }
 
 // ===========================================================================
 
-function saveAllClanRanksToDatabase(clanId) {
+function saveClanRanksToDatabase(clanId) {
+	if(getServerConfig().devServer) {
+		return false;
+	}
+
 	let ranks = getServerData().clans[clanId].ranks;
 	for(let i in ranks) {
 		saveClanRankToDatabase(clanId, i);
@@ -948,9 +959,13 @@ function saveClanToDatabase(clanId) {
 		return false;
 	}
 
-    if(!tempClanData.needsSaved) {
-        return false;
-    }
+	if(tempClanData.databaseId == -1) {
+		return false;
+	}
+
+	if(!tempClanData.needsSaved) {
+		return false;
+	}
 
 	let dbConnection = connectToDatabase();
 	if(dbConnection) {
@@ -982,7 +997,7 @@ function saveClanToDatabase(clanId) {
 			disconnectFromDatabase(dbConnection);
 		}
 
-		saveAllClanRanksToDatabase(clanId);
+		saveClanRanksToDatabase(clanId);
 		return true;
 	}
 
@@ -994,41 +1009,41 @@ function saveClanToDatabase(clanId) {
 function saveClanRankToDatabase(clanId, rankId) {
 	let tempClanRankData = getClanRankData(clanId, rankId);
 
-    if(!tempClanRankData.needsSaved) {
-        return false;
-    }
+	if(!tempClanRankData.needsSaved) {
+		return false;
+	}
 
 	let dbConnection = connectToDatabase();
 	if(dbConnection) {
-        let safeName = escapeDatabaseString(dbConnection, tempClanRankData.name);
-        let safeTag = escapeDatabaseString(dbConnection, tempClanRankData.customTag);
-        //let safeTitle = escapeDatabaseString(dbConnection, tempClanRankData.name);
+		let safeName = escapeDatabaseString(dbConnection, tempClanRankData.name);
+		let safeTag = escapeDatabaseString(dbConnection, tempClanRankData.customTag);
+		//let safeTitle = escapeDatabaseString(dbConnection, tempClanRankData.name);
 
-        let data = [
-            ["clan_rank_name", safeName],
-            ["clan_rank_clan", tempClanRankData.clan],
-            ["clan_rank_custom_tag", safeTag],
-            //["clan_rank_title", safeTitle],
-            ["clan_rank_flags", tempClanRankData.flags],
-            ["clan_rank_level", tempClanRankData.level],
-            ["clan_rank_enabled", boolToInt(tempClanRankData.enabled)],
-        ];
+		let data = [
+			["clan_rank_name", safeName],
+			["clan_rank_clan", tempClanRankData.clan],
+			["clan_rank_custom_tag", safeTag],
+			//["clan_rank_title", safeTitle],
+			["clan_rank_flags", tempClanRankData.flags],
+			["clan_rank_level", tempClanRankData.level],
+			["clan_rank_enabled", boolToInt(tempClanRankData.enabled)],
+		];
 
-        let dbQuery = null;
-        if(tempClanRankData.databaseId == 0) {
-            let queryString = createDatabaseInsertQuery("clan_rank", data);
-            dbQuery = queryDatabase(dbConnection, queryString);
-            getClanRankData(clanId, rankId).databaseId = getDatabaseInsertId(dbConnection);
-            getClanRankData(clanId, rankId).needsSaved = false;
-        } else {
-            let queryString = createDatabaseUpdateQuery("clan_rank", data, `clan_rank_id=${tempClanRankData.databaseId} LIMIT 1`);
-            dbQuery = queryDatabase(dbConnection, queryString);
-            getClanRankData(clanId, rankId).needsSaved = false;
-        }
+		let dbQuery = null;
+		if(tempClanRankData.databaseId == 0) {
+			let queryString = createDatabaseInsertQuery("clan_rank", data);
+			dbQuery = queryDatabase(dbConnection, queryString);
+			getClanRankData(clanId, rankId).databaseId = getDatabaseInsertId(dbConnection);
+			getClanRankData(clanId, rankId).needsSaved = false;
+		} else {
+			let queryString = createDatabaseUpdateQuery("clan_rank", data, `clan_rank_id=${tempClanRankData.databaseId} LIMIT 1`);
+			dbQuery = queryDatabase(dbConnection, queryString);
+			getClanRankData(clanId, rankId).needsSaved = false;
+		}
 
-        freeDatabaseQuery(dbQuery);
-        disconnectFromDatabase(dbConnection);
-        return true;
+		freeDatabaseQuery(dbQuery);
+		disconnectFromDatabase(dbConnection);
+		return true;
 	}
 
 	return false;
@@ -1071,7 +1086,11 @@ function setClanRankTitle(clanId, rankId, title) {
 
 // ===========================================================================
 
-function saveAllClansToDatabase() {
+function saveClansToDatabase() {
+	if(getServerConfig().devServer) {
+		return false;
+	}
+
 	for(let i in getServerData().clans) {
 		saveClanToDatabase(i);
 	}
@@ -1134,6 +1153,11 @@ function getClanRankIdFromDatabaseId(clanId, databaseId) {
 
 // ===========================================================================
 
+/**
+ * @param {number} clanId - The data index of the clan
+ * @param {number} clanRankId - The data index of the clan rank
+ * @return {ClanRankData} The clan rank's data (class instance)
+ */
 function getClanRankData(clanId, rankId) {
 	return getServerData().clans[clanId].ranks[rankId];
 }
@@ -1213,6 +1237,10 @@ let rankId = getClanRankFromParams(clanId, getParam(params, " ", 1));
 }
 */
 
+/**
+ * @param {String} params - The params to search for
+ * @return {Number} The data index of a matching clan
+ */
 function getClanFromParams(params) {
 	if(isNaN(params)) {
 		for(let i in getServerData().clans) {
@@ -1231,6 +1259,11 @@ function getClanFromParams(params) {
 
 // ===========================================================================
 
+/**
+ * @param {Number} clanId - The clan ID to search ranks for
+ * @param {String} params - The params to search for
+ * @return {Number} The data index of a matching clan
+ */
 function getClanRankFromParams(clanId, params) {
 	if(isNaN(params)) {
 		for(let i in getClanData(clanId).ranks) {

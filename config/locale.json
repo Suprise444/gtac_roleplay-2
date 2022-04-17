@@ -2,9 +2,70 @@
     "apiEmail": "example@example.com",
     "defaultLanguage": "en",
     "locales": [
-        ["English", "english", "en"],
-        ["Russian", "russian", "ru"],
-        ["Polish", "polish", "pl"],
-        ["Spanish", "spanish", "es"]
-    ]
+        {
+			"englishName": "English",
+			"stringsFile": "english.json",
+			"isoCode": "en",
+			"flagImageFile": "gb.png",
+			"countries": ["gb", "us", "au", "bz", "ca", "ie", "jm", "nz", "za", "tt"],
+			"requiresUnicode": false
+		},
+        {
+			"englishName": "Russian",
+			"stringsFile": "russian.json",
+			"isoCode": "ru",
+			"flagImageFile": "ru",
+			"countries": ["ru", "ua"],
+			"requiresUnicode": false
+		},
+		{
+			"englishName": "Polish",
+			"stringsFile": "polish.json",
+			"isoCode": "pl",
+			"flagImageFile": "pl",
+			"countries": ["pl"],
+			"requiresUnicode": false
+		},
+		{
+			"englishName": "Spanish",
+			"stringsFile": "spanish.json",
+			"isoCode": "es",
+			"flagImageFile": "es",
+			"countries": ["es", "ar", "bo", "cl", "co", "cr", "do", "ec", "sv", "gt", "hn", "mx", "ni", "pa", "py", "pe", "pr", "uy", "ve"],
+			"requiresUnicode": false
+		},
+		{
+			"englishName": "Chinese",
+			"stringsFile": "chinese.json",
+			"isoCode": "zh",
+			"flagImageFile": "cn",
+			"countries": ["cn", "hk", "sg", "tw"],
+			"requiresUnicode": true
+		},
+		{
+			"englishName": "Arabic",
+			"stringsFile": "arabic.json",
+			"isoCode": "ar",
+			"flagImageFile": "sa",
+			"countries": ["dz", "bh", "eg",	"iq", "jo", "kw", "lb", "ly", "ma", "om", "qa", "sa", "sy", "tn", "ae", "ye"],
+			"requiresUnicode": true
+		}
+    ],
+	"sendStringsToClient": [
+		"PropertyEnterCommandLabel",
+		"PropertyEnterKeyPressLabel",
+		"BusinessBuyItemsLabel",
+		"PropertyForSaleLabel",
+		"PropertyForRentLabel",
+		"VehicleDealershipLabel",
+		"TakeJobLabel",
+		"StartWorkLabel",
+		"JobEquipAndUniformLabel",
+		"NotYourJobLabel",
+		"Locked",
+		"Unlocked",
+		"Closed",
+		"Open",
+		"JobLabel"
+	]
 }

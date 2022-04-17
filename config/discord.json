@@ -1,0 +1,10 @@
+{
+	"sendChat": "true",
+	"sendConnectEvents": "true",
+	"sendVehicleEvents": "true",
+	"sendDeathEvents": "true",
+	"webhook": {
+		"enabled": "true",
+		"webhookBaseURL": "https://example.com/something.php?message={0}&url={1}"
+	}
+}

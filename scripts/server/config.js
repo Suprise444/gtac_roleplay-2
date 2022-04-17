@@ -15,6 +15,8 @@ let gameConfig = false;
 // ===========================================================================
 
 let globalConfig = {
+	keyBind: [],
+	economy: {},
 	accountPasswordHash: "SHA512",
 	npcFarProximity: 100,
 	npcMediumProximity: 40,
@@ -31,7 +33,6 @@ let globalConfig = {
 	stopWorkingDistance: 10,
 	spawnCarDistance: 5,
 	payAndSprayDistance: 5,
-	keyBind: [],
 	exitPropertyDistance: 3.0,
 	enterPropertyDistance: 3.0,
 	businessDimensionStart: 5000,
@@ -67,10 +68,19 @@ let globalConfig = {
 	],
 	vehicleInactiveRespawnDelay: 1800000, // 20 minutes
 	chatSectionHeaderLength: 96,
-	economy: {},
-	locales: [],
-	accents: [],
-	useServerSideVehiclePurchaseCheck: false,
+	useServerSideVehiclePurchaseCheck: true,
+	businessPickupStreamInDistance: 100,
+	businessPickupStreamOutDistance: 120,
+	housePickupStreamInDistance: 100,
+	housePickupStreamOutDistance: 120,
+	jobPickupStreamInDistance: 100,
+	jobPickupStreamOutDistance: 120,
+	businessBlipStreamInDistance: 200,
+	businessBlipStreamOutDistance: 220,
+	houseBlipStreamInDistance: 200,
+	houseBlipStreamOutDistance: 220,
+	jobBlipStreamInDistance: 200,
+	jobBlipStreamOutDistance: 220,
 };
 
 // ===========================================================================
@@ -84,20 +94,20 @@ function initConfigScript() {
 	serverConfig = loadServerConfigFromGameAndPort(server.game, server.port, getMultiplayerMod());
 
 	logToConsole(LOG_INFO, "[VRR.Config]: Applying server config ...");
-	getServerConfig().fallingSnow = intToBool(toInteger(server.getCVar("fallingsnow")));
-	getServerConfig().groundSnow = intToBool(toInteger(server.getCVar("groundsnow")));
-	getServerConfig().useGUI = intToBool(toInteger(server.getCVar("gui")));
+	getServerConfig().fallingSnow = intToBool(toInteger(server.getCVar("vrr_fallingsnow")));
+	getServerConfig().groundSnow = intToBool(toInteger(server.getCVar("vrr_groundsnow")));
+	getServerConfig().useGUI = intToBool(toInteger(server.getCVar("vrr_gui")));
 	getServerConfig().showLogo = false;
-	getServerConfig().testerOnly = intToBool(toInteger(server.getCVar("testeronly")));
+	getServerConfig().testerOnly = intToBool(toInteger(server.getCVar("vrr_testeronly")));
 	getServerConfig().discordEnabled = false;
-	getServerConfig().createJobPickups = intToBool(toInteger(server.getCVar("jobpickups")));
-	getServerConfig().createBusinessPickups = intToBool(toInteger(server.getCVar("businesspickups")));
-	getServerConfig().createHousePickups = intToBool(toInteger(server.getCVar("housepickups")));
-	getServerConfig().createJobBlips = intToBool(toInteger(server.getCVar("jobblips")));
-	getServerConfig().createBusinessBlips = intToBool(toInteger(server.getCVar("businessblips")));
-	getServerConfig().createHouseBlips = intToBool(toInteger(server.getCVar("houseblips")));
-	getServerConfig().useRealTime = intToBool(toInteger(server.getCVar("realtime")));
-	getServerConfig().antiCheat.enabled = intToBool(toInteger(server.getCVar("anticheat")));
+	getServerConfig().createJobPickups = intToBool(toInteger(server.getCVar("vrr_jobpickups")));
+	getServerConfig().createBusinessPickups = intToBool(toInteger(server.getCVar("vrr_businesspickups")));
+	getServerConfig().createHousePickups = intToBool(toInteger(server.getCVar("vrr_housepickups")));
+	getServerConfig().createJobBlips = intToBool(toInteger(server.getCVar("vrr_jobblips")));
+	getServerConfig().createBusinessBlips = intToBool(toInteger(server.getCVar("vrr_businessblips")));
+	getServerConfig().createHouseBlips = intToBool(toInteger(server.getCVar("vrr_houseblips")));
+	getServerConfig().useRealTime = intToBool(toInteger(server.getCVar("vrr_realtime")));
+	getServerConfig().antiCheat.enabled = intToBool(toInteger(server.getCVar("vrr_anticheat")));
 
 	applyConfigToServer(serverConfig);
 	logToConsole(LOG_DEBUG, "[VRR.Config]: Server config applied successfully!");
@@ -112,6 +122,7 @@ function loadGlobalConfig() {
 	getGlobalConfig().economy = loadEconomyConfig();
 	getGlobalConfig().locale = loadLocaleConfig();
 	getGlobalConfig().accents = loadAccentConfig();
+	getGlobalConfig().discord = loadDiscordConfig();
 }
 
 // ===========================================================================
@@ -124,7 +135,7 @@ function loadServerConfigFromGameAndPort(gameId, port, mpMod) {
 		if(dbQuery) {
 			if(dbQuery.numRows > 0) {
 				let dbAssoc = fetchQueryAssoc(dbQuery);
-				let tempServerConfigData = new ServerData(dbAssoc);
+				let tempServerConfigData = new ServerConfigData(dbAssoc);
 				freeDatabaseQuery(dbQuery);
 				return tempServerConfigData;
 			}
@@ -144,7 +155,7 @@ function loadServerConfigFromId(tempServerId) {
 		if(dbQuery) {
 			if(dbQuery.numRows > 0) {
 				let dbAssoc = fetchQueryAssoc(dbQuery);
-				let tempServerConfigData = new ServerData(dbAssoc);
+				let tempServerConfigData = new ServerConfigData(dbAssoc);
 				freeDatabaseQuery(dbQuery);
 				return tempServerConfigData;
 			}
@@ -178,7 +189,7 @@ function saveServerConfigToDatabase() {
 		let dbConnection = connectToDatabase();
 		if(dbConnection) {
 			let data = [
-				["svr_settings", toInteger(getServerConfig().settings)],
+				//["svr_settings", toInteger(getServerConfig().settings)],
 				["svr_start_time_hour", getServerConfig().hour],
 				["svr_start_time_min", getServerConfig().minute],
 				["svr_start_weather", getServerConfig().weather],
@@ -233,7 +244,7 @@ function saveServerConfigToDatabase() {
 
 /**
  *
- * @return {ServerData} - Server configuration data
+ * @return {ServerConfigData} - Server configuration data
  *
  */
 function getServerConfig() {
@@ -283,24 +294,24 @@ function setTimeCommand(command, params, client) {
 	if(hour > 23 || hour < 0) {
 		messagePlayerError(client, "The hour must be between 0 and 23!");
 		return false;
-    }
+	}
 
 	if(minute > 59 || minute < 0) {
 		messagePlayerError(client, "The minute must be between 0 and 59!");
 		return false;
-    }
+	}
 
 	getServerConfig().hour = hour;
 	getServerConfig().minute = minute;
 
-    game.time.hour = getServerConfig().hour;
-    game.time.minute = getServerConfig().minute;
+	game.time.hour = getServerConfig().hour;
+	game.time.minute = getServerConfig().minute;
 
 	//checkServerGameTime();
 
 	getServerConfig().needsSaved = true;
 
-	messageAdminAction(`${getPlayerName(client)} set the time to ${makeReadableTime(hour, minute)}`);
+	announceAdminAction("ServerTimeSet", getPlayerName(client), makeReadableTime(hour, minute));
 	return true;
 }
 
@@ -322,13 +333,13 @@ function setMinuteDurationCommand(command, params, client) {
 		return false;
 	}
 
-    let minuteDuration = toInteger(params);
+	let minuteDuration = toInteger(params);
 	getServerConfig().minuteDuration = minuteDuration;
 	setTimeMinuteDuration(null, minuteDuration);
 
 	getServerConfig().needsSaved = true;
 
-	messageAdminAction(`${getPlayerName(client)} set the minute duration to ${minuteDuration}ms`);
+	announceAdminAction("ServerMinuteDurationSet", getPlayerName(client), makeReadableTime(hour, minute));
 	return true;
 }
 
@@ -354,15 +365,15 @@ function setWeatherCommand(command, params, client) {
 	if(!weatherId) {
 		messagePlayerError(client, `That weather ID or name is invalid!`);
 		return false;
-    }
+	}
 
-    game.forceWeather(toInteger(weatherId));
+	game.forceWeather(toInteger(weatherId));
 	getServerConfig().weather = weatherId;
 
 	getServerConfig().needsSaved = true;
 
-    messageAdminAction(`${getPlayerName(client)} set the weather to {ALTCOLOUR}${getGameConfig().weatherNames[getServerGame()][toInteger(weatherId)]}`);
-    updateServerRules();
+	announceAdminAction("ServerWeatherSet", getPlayerName(client), getGameConfig().weatherNames[getServerGame()][toInteger(weatherId)]);
+	updateServerRules();
 	return true;
 }
 
@@ -384,7 +395,7 @@ function setSnowingCommand(command, params, client) {
 	}
 
 	let splitParams = params.split(" ");
-    let falling = toInteger(getParam(params, " ", 1));
+	let falling = toInteger(getParam(params, " ", 1));
 	let ground = toInteger(getParam(params, " ", 2));
 
 	getServerConfig().fallingSnow = intToBool(falling);
@@ -394,8 +405,8 @@ function setSnowingCommand(command, params, client) {
 
 	getServerConfig().needsSaved = true;
 
-    messageAdminAction(`${getPlayerName(client)} {MAINCOLOUR}turned falling snow ${getBoolRedGreenInlineColour(falling)}${getOnOffFromBool(falling)} {MAINCOLOUR}and ground snow ${getBoolRedGreenInlineColour(ground)}${getOnOffFromBool(ground)}`);
-    updateServerRules();
+	announceAdminAction("ServerSnowSet", getPlayerName(client), `${getBoolRedGreenInlineColour(falling)}${getOnOffFromBool(falling)}`, `${getBoolRedGreenInlineColour(ground)}${getOnOffFromBool(ground)}`);
+	updateServerRules();
 	return true;
 }
 
@@ -417,7 +428,7 @@ function setServerGUIColoursCommand(command, params, client) {
 	}
 
 	let splitParams = params.split(" ");
-    let colourRed = toInteger(getParam(params, " ", 1)) || 255;
+	let colourRed = toInteger(getParam(params, " ", 1)) || 255;
 	let colourGreen = toInteger(getParam(params, " ", 2)) || 255;
 	let colourBlue = toInteger(getParam(params, " ", 3)) || 255;
 
@@ -430,8 +441,8 @@ function setServerGUIColoursCommand(command, params, client) {
 
 	getServerConfig().needsSaved = true;
 
-    //messageAdminAction(`${getPlayerName(client)} ${getInlineChatColourByName("orange")}set the server ${getBoolRedGreenInlineColour(fallingSnow)}${getOnOffFromBool(fallingSnow)} ${getInlineChatColourByName("orange")}and ground snow ${getBoolRedGreenInlineColour(groundSnow)}${getOnOffFromBool(groundSnow)}`);
-    //updateServerRules();
+	//announceAdminAction(`${getPlayerName(client)} ${getInlineChatColourByName("orange")}set the server ${getBoolRedGreenInlineColour(fallingSnow)}${getOnOffFromBool(fallingSnow)} ${getInlineChatColourByName("orange")}and ground snow ${getBoolRedGreenInlineColour(groundSnow)}${getOnOffFromBool(groundSnow)}`);
+	//updateServerRules();
 	return true;
 }
 
@@ -452,8 +463,8 @@ function toggleServerLogoCommand(command, params, client) {
 
 	updatePlayerShowLogoState(null, getServerConfig().useLogo);
 
-    messageAdminAction(`${getPlayerName(client)} {MAINCOLOUR}turned the server logo image ${getBoolRedGreenInlineColour(doesServerHaveServerLogoEnabled())}${toUpperCase(getOnOffFromBool(getServerConfig().useLogo))}`);
-    updateServerRules();
+	//announceAdminAction(`${getPlayerName(client)}{MAINCOLOUR}${getBoolRedGreenInlineColour(doesServerHaveServerLogoEnabled())}${toUpperCase(getOnOffFromBool(getServerConfig().useLogo))}`);
+	updateServerRules();
 	return true;
 }
 
@@ -472,7 +483,7 @@ function toggleServerLogoCommand(command, params, client) {
 	getServerConfig().createJobBlips = !getServerConfig().createJobBlips;
 	getServerConfig().needsSaved = true;
 
-    messageAdminAction(`${getPlayerName(client)} {MAINCOLOUR}turned ${getBoolRedGreenInlineColour(doesServerHaveJobBlipsEnabled())}${toUpperCase(getOnOffFromBool(getServerConfig().createJobBlips))} {MAINCOLOUR}all job blips`);
+	announceAdminAction("ServerJobBlipsSet", `{adminRed}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createJobBlips)}${toUpperCase(getOnOffFromBool(getServerConfig().createJobBlips))}{MAINCOLOUR}`);
 	resetAllJobBlips();
 	return true;
 }
@@ -492,7 +503,7 @@ function toggleServerLogoCommand(command, params, client) {
 	getServerConfig().createJobPickups = !getServerConfig().createJobPickups;
 	getServerConfig().needsSaved = true;
 
-    messageAdminAction(`${getPlayerName(client)} {MAINCOLOUR}turned ${getBoolRedGreenInlineColour(doesServerHaveJobPickupsEnabled())}${toUpperCase(getOnOffFromBool(getServerConfig().createJobPickups))} {MAINCOLOUR}all job pickups`);
+	announceAdminAction("ServerJobPickupsSet", `{adminRed}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createJobPickups)}${toUpperCase(getOnOffFromBool(getServerConfig().createJobPickups))}{MAINCOLOUR}`);
 	resetAllJobPickups();
 	return true;
 }
@@ -509,10 +520,10 @@ function toggleServerLogoCommand(command, params, client) {
  *
  */
  function toggleServerBusinessBlipsCommand(command, params, client) {
-	getServerConfig().createBusinessBlips = !getServerConfig().createBusinessBlips;	
+	getServerConfig().createBusinessBlips = !getServerConfig().createBusinessBlips;
 	getServerConfig().needsSaved = true;
 
-    messageAdminAction(`${getPlayerName(client)} {MAINCOLOUR}turned ${getBoolRedGreenInlineColour(doesServerHaveBusinessBlipsEnabled())}${toUpperCase(getOnOffFromBool(getServerConfig().createBusinessBlips))} {MAINCOLOUR}all business blips`);
+	announceAdminAction("ServerBusinessBlipsSet", `{adminRed}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createBusinessBlips)}${toUpperCase(getOnOffFromBool(getServerConfig().createBusinessBlips))}{MAINCOLOUR}`);
 	resetAllBusinessBlips();
 	return true;
 }
@@ -529,10 +540,10 @@ function toggleServerLogoCommand(command, params, client) {
  *
  */
  function toggleServerBusinessPickupsCommand(command, params, client) {
-	getServerConfig().createBusinessPickups = !getServerConfig().createBusinessPickups;	
+	getServerConfig().createBusinessPickups = !getServerConfig().createBusinessPickups;
 	getServerConfig().needsSaved = true;
 
-    messageAdminAction(`${getPlayerName(client)} {MAINCOLOUR}turned ${getBoolRedGreenInlineColour(doesServerHaveBusinessPickupsEnabled())}${toUpperCase(getOnOffFromBool(getServerConfig().createBusinessPickups))} {MAINCOLOUR}all business pickups`);
+	announceAdminAction("ServerBusinessPickupsSet", `{adminRed}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createBusinessPickups)}${toUpperCase(getOnOffFromBool(getServerConfig().createBusinessPickups))}{MAINCOLOUR}`);
 	resetAllBusinessPickups();
 	return true;
 }
@@ -549,10 +560,10 @@ function toggleServerLogoCommand(command, params, client) {
  *
  */
  function toggleServerHouseBlipsCommand(command, params, client) {
-	getServerConfig().createHouseBlips = !getServerConfig().createHouseBlips;	
+	getServerConfig().createHouseBlips = !getServerConfig().createHouseBlips;
 	getServerConfig().needsSaved = true;
 
-    messageAdminAction(`${getPlayerName(client)} {MAINCOLOUR}turned ${getBoolRedGreenInlineColour(doesServerHaveHouseBlipsEnabled())}${toUpperCase(getOnOffFromBool(getServerConfig().createHouseBlips))} {MAINCOLOUR}all house blips`);
+	announceAdminAction("ServerHouseBlipsSet", `{adminRed}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createHouseBlips)}${toUpperCase(getOnOffFromBool(getServerConfig().createHouseBlips))}{MAINCOLOUR}`);
 	resetAllHouseBlips();
 	return true;
 }
@@ -572,7 +583,7 @@ function toggleServerLogoCommand(command, params, client) {
 	getServerConfig().createHousePickups = !getServerConfig().createHousePickups;
 	getServerConfig().needsSaved = true;
 
-    messageAdminAction(`${getPlayerName(client)} {MAINCOLOUR}turned ${getBoolRedGreenInlineColour(doesServerHaveHousePickupsEnabled())}${toUpperCase(getOnOffFromBool(getServerConfig().createHousePickups))} {MAINCOLOUR}all house pickups`);
+	announceAdminAction("ServerHousePickupsSet", `{adminRed}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createHousePickups)}${toUpperCase(getOnOffFromBool(getServerConfig().createHousePickups))}{MAINCOLOUR}`);
 	resetAllHousePickups();
 	return true;
 }
@@ -593,8 +604,8 @@ function toggleServerGUICommand(command, params, client) {
 
 	getServerConfig().needsSaved = true;
 
-    messageAdminAction(`${getPlayerName(client)} {MAINCOLOUR}turned GUI ${toLowerCase(getOnOffFromBool(doesServerHaveGUIEnabled()))} for this server`);
-    updateServerRules();
+	announceAdminAction(`${getPlayerName(client)}{MAINCOLOUR} turned GUI ${toLowerCase(getOnOffFromBool(getServerConfig().useGUI))} for this server`);
+	updateServerRules();
 	return true;
 }
 
@@ -611,12 +622,12 @@ function toggleServerGUICommand(command, params, client) {
  */
 function toggleServerUseRealWorldTimeCommand(command, params, client) {
 	getServerConfig().useRealTime = !getServerConfig().useRealTime;
-	
+
 	getServerConfig().needsSaved = true;
 
-    messageAdminAction(`${getPlayerName(client)} {MAINCOLOUR}turned real-world time ${getServerConfig().useRealTime} for this server (GMT ${addPositiveNegativeSymbol(getServerConfig().realTimeZone)})`);
+	//announceAdminAction(`${getPlayerName(client)}{MAINCOLOUR} turned real-world time ${getServerConfig().useRealTime} for this server (GMT ${addPositiveNegativeSymbol(getServerConfig().realTimeZone)})`);
 	updateServerGameTime();
-    updateServerRules();
+	updateServerRules();
 	return true;
 }
 
@@ -637,12 +648,12 @@ function setServerRealWorldTimeZoneCommand(command, params, client) {
 		return false;
 	}
 
-    getServerConfig().realTimeZone = toInteger(params);
+	getServerConfig().realTimeZone = toInteger(params);
 	getServerConfig().needsSaved = true;
 
-    messageAdminAction(`${getPlayerName(client)} {MAINCOLOUR}set the time zone for in-game's real-world time to GMT ${addPositiveNegativeSymbol(getServerConfig().realTimeZone)}`);
+	//announceAdminAction(`${getPlayerName(client)} {MAINCOLOUR}set the time zone for in-game's real-world time to GMT ${addPositiveNegativeSymbol(getServerConfig().realTimeZone)}`);
 	updateServerGameTime();
-    updateServerRules();
+	updateServerRules();
 	return true;
 }
 
@@ -662,7 +673,7 @@ function reloadServerConfigurationCommand(command, params, client) {
 	applyConfigToServer(serverConfig);
 	updateServerRules();
 
-    messagePlayerSuccess(client, `You reloaded the server configuration!`);
+	messagePlayerSuccess(client, `You reloaded the server configuration!`);
 	return true;
 }
 
@@ -679,7 +690,7 @@ function reloadServerConfigurationCommand(command, params, client) {
  */
 function reloadEmailConfigurationCommand(command, params, client) {
 	emailConfig = loadEmailConfiguration();
-    messagePlayerSuccess(client, `You reloaded the email configuration!`);
+	messagePlayerSuccess(client, `You reloaded the email configuration!`);
 	return true;
 }
 
@@ -746,6 +757,15 @@ function loadAccentConfig() {
 
 // ===========================================================================
 
+function loadDiscordConfig() {
+	let discordConfig = JSON.parse(loadTextFile(`config/discord.json`));
+	if(discordConfig != null) {
+		return discordConfig;
+	}
+}
+
+// ===========================================================================
+
 function doesServerHaveGUIEnabled() {
 	return getServerConfig().useGUI;
 }
@@ -782,7 +802,7 @@ function doesServerHaveJobPickupsEnabled() {
 
 // ===========================================================================
 
-function doesServerHaveBusinesBlipsEnabled() {
+function doesServerHaveBusinessBlipsEnabled() {
 	return getServerConfig().createBusinessBlips;
 }
 

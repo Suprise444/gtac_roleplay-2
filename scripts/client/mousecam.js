@@ -632,10 +632,10 @@ function update()
 
 addEventHandler("OnCameraProcess", (event) =>
 {
-    if(mouseCameraEnabled) {
-        update();
-        event.preventDefault();
-    }
+	if(mouseCameraEnabled) {
+		update();
+		event.preventDefault();
+	}
 });
 
 function toggleMouseCamera() {

@@ -21,7 +21,6 @@ let serverBitFlags = {
 	npcTriggerTypeFlags: {},
 	npcTriggerConditionTypesFlags: {},
 	npcTriggerResponseTypeFlags: {},
-	serverSettings: {}
 };
 
 // ===========================================================================
@@ -41,6 +40,8 @@ let serverBitFlagKeys = {
 		"ManageWorld",
 		"ManageAntiCheat",
 		"Developer",
+		"ManageNPCs",
+		"ManageRaces",
 	],
 	moderationFlagKeys: [
 		"None",
@@ -119,6 +120,8 @@ let serverBitFlagKeys = {
 		"NoRandomTips",
 		"NoActionTips",
 	],
+
+	// Not going to be used. Use trigger, condition, and response stuff in trigger.js
 	npcTriggerTypeKeys: [
 		"None",
 		"FarProximity",               // Comes within a far distance of NPC
@@ -219,26 +222,6 @@ let serverBitFlagKeys = {
 		"ShowItemsAfterPurchase",
 		"BuyCommandAfterEnterBusiness",
 	],
-	serverSettingsKeys: [
-		"None",
-		"GUI",
-		"ServerLogo",
-		"FallingSnow",
-		"GroundSnow",
-		"Anticheat",
-		"CheckGameScripts",
-		"GameScriptBlackList",
-		"GameScriptWhiteList",
-		"JobBlips",
-		"JobPickups",
-		"BusinessBlips",
-		"BusinessPickups",
-		"HouseBlips",
-		"HousePickups",
-		"DiscordBot",
-		"RealTime",
-		"Testing",
-	],
 };
 
 // ===========================================================================
@@ -255,7 +238,6 @@ function initBitFlagScript() {
 	serverBitFlags.npcTriggerTypes = createBitFlagTable(serverBitFlagKeys.npcTriggerTypeKeys);
 	serverBitFlags.npcTriggerConditionTypes = createBitFlagTable(serverBitFlagKeys.npcTriggerConditionTypeKeys);
 	serverBitFlags.npcTriggerResponseTypes = createBitFlagTable(serverBitFlagKeys.npcTriggerResponseTypeKeys);
-	serverBitFlags.serverSettings = createBitFlagTable(serverBitFlagKeys.serverSettingsKeys);
 	logToConsole(LOG_INFO, "[VRR.BitFlag]: Bit flag script initialized successfully!");
 	return true;
 }
@@ -311,15 +293,15 @@ function doesPlayerHaveStaffPermission(client, requiredFlags) {
 	}
 
 	// -1 is automatic override (having -1 for staff flags is basically god mode admin level)
-    if(staffFlags == getStaffFlagValue("All")) {
-        return true;
-    }
+	if(staffFlags == getStaffFlagValue("All")) {
+		return true;
+	}
 
-    if(hasBitFlag(staffFlags, requiredFlags)) {
-        return true;
-    }
+	if(hasBitFlag(staffFlags, requiredFlags)) {
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 // ===========================================================================
@@ -341,22 +323,22 @@ function doesPlayerHaveClanPermission(client, requiredFlags) {
 	clanFlags = getPlayerCurrentSubAccount(client).clanFlags | getClanRankFlags(getPlayerCurrentSubAccount(client).clanRank);
 
 	// -1 is automatic override (having -1 for staff flags is basically god mode admin level)
-    if(clanFlags == getClanFlagValue("All")) {
-        return true;
-    }
+	if(clanFlags == getClanFlagValue("All")) {
+		return true;
+	}
 
-    if(hasBitFlag(clanFlags, requiredFlags)) {
-        return true;
-    }
+	if(hasBitFlag(clanFlags, requiredFlags)) {
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 // ===========================================================================
 
 function getStaffFlagValue(flagName) {
-    if(flagName == "All") {
-        return -1;
+	if(flagName == "All") {
+		return -1;
 	}
 
 	if(typeof serverBitFlags.staffFlags[flagName] == "undefined") {
@@ -369,8 +351,8 @@ function getStaffFlagValue(flagName) {
 // ===========================================================================
 
 function getClanFlagValue(flagName) {
-    if(flagName == "All") {
-        return -1;
+	if(flagName == "All") {
+		return -1;
 	}
 
 	if(typeof getServerBitFlags().clanFlags[flagName] == "undefined") {
@@ -383,8 +365,8 @@ function getClanFlagValue(flagName) {
 // ===========================================================================
 
 function getAccountSettingsFlagValue(flagName) {
-    if(flagName == "All") {
-        return -1;
+	if(flagName == "All") {
+		return -1;
 	}
 
 	if(typeof serverBitFlags.accountSettingsFlags[flagName] == "undefined") {
@@ -397,8 +379,8 @@ function getAccountSettingsFlagValue(flagName) {
 // ===========================================================================
 
 function getModerationFlagValue(flagName) {
-    if(flagName == "All") {
-        return -1;
+	if(flagName == "All") {
+		return -1;
 	}
 
 	if(typeof serverBitFlags.moderationFlags[flagName] == "undefined") {
@@ -406,20 +388,6 @@ function getModerationFlagValue(flagName) {
 	}
 
 	return serverBitFlags.moderationFlags[flagName];
-}
-
-// ===========================================================================
-
-function getServerSettingsFlagValue(flagName) {
-    if(flagName == "All") {
-        return -1;
-	}
-
-	if(typeof serverBitFlags.serverSettings[flagName] == "undefined") {
-		return false;
-	}
-
-	return serverBitFlags.serverSettings[flagName];
 }
 
 // ===========================================================================

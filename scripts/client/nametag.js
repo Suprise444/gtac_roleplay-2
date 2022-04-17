@@ -51,8 +51,8 @@ function updatePlayerNameTag(clientName, characterName, colour, paused, ping) {
 	if(game.game == VRR_GAME_GTA_IV) {
 		let client = getPlayerFromParams(clientName);
 		if(client != false) {
-			if(client.player != null) {
-				client.player.setNametag(characterName, colour);
+			if(getPlayerPed(client) != null) {
+				getPlayerPed(client).setNametag(characterName, colour);
 			}
 		}
 	}
@@ -74,11 +74,11 @@ function drawNametag(x, y, health, armour, text, ping, alpha, distance, colour, 
 	alpha *= 0.75;
 	let width = nametagWidth;
 	health = Math.max(0.0, Math.min(1.0, health));
-    armour = Math.max(0.0, Math.min(1.0, armour));
+	armour = Math.max(0.0, Math.min(1.0, armour));
 
-    // Starts at bottom and works it's way up
-    // -------------------------------------------
-    // Health Bar
+	// Starts at bottom and works it's way up
+	// -------------------------------------------
+	// Health Bar
 
 	if(getMultiplayerMod() == VRR_MPMOD_GTAC) {
 		if(game.game == VRR_GAME_GTA_III) {
@@ -104,7 +104,7 @@ function drawNametag(x, y, health, armour, text, ping, alpha, distance, colour, 
 		graphics.drawRectangle(null, [hx+2, hy+2], [(width-4)*health, 10-6], colour, colour, colour, colour);
 	}
 
-    // Armour Bar
+	// Armour Bar
 	if (armour > 0.0)
 	{
 		// Go up 10 pixels to draw the next part
@@ -119,16 +119,16 @@ function drawNametag(x, y, health, armour, text, ping, alpha, distance, colour, 
 
 	y -= 20;
 
-    // Nametag
+	// Nametag
 	if(nametagFont != null) {
 		let size = nametagFont.measure(text, game.width, 0.0, 0.0, nametagFont.size, false, false);
 		nametagFont.render(text, [x-size[0]/2, y-size[1]/2], game.width, 0.0, 0.0, nametagFont.size, colour, false, false, false, true);
 	}
 
-    // Go up another 10 pixels for the next part
-    y -= 20;
+	// Go up another 10 pixels for the next part
+	y -= 20;
 
-    // AFK Status
+	// AFK Status
 	if(afkStatusFont != null) {
 		if(afk) {
 			let size = afkStatusFont.measure("PAUSED", game.width, 0.0, 0.0, afkStatusFont.size, false, false);
@@ -147,7 +147,7 @@ function updateNametags(element) {
 	if(localPlayer != null) {
 		let playerPos = localPlayer.position;
 		let elementPos = element.position;
-        let client = getClientFromPlayerElement(element);
+		let client = getClientFromPlayerElement(element);
 
 		elementPos[2] += 0.9;
 
@@ -173,26 +173,26 @@ function updateNametags(element) {
 				}
 
 				if(element.type == ELEMENT_PLAYER) {
-                    let name = element.name;
-                    let colour = COLOUR_WHITE;
+					let name = element.name;
+					let colour = COLOUR_WHITE;
 					let paused = false;
 					let ping = -1;
 
-                    if(typeof playerNames[element.name] != "undefined") {
-                        name = playerNames[element.name];
-                    }
-
-                    if(typeof playerPaused[element.name] != "undefined") {
-                        paused = playerPaused[element.name];
-                    }
-
-                    if(typeof playerColours[element.name] != "undefined") {
-                        colour = playerColours[element.name];
+					if(typeof playerNames[element.name] != "undefined") {
+						name = playerNames[element.name];
 					}
 
-                    if(typeof playerPing[element.name] != "undefined") {
-                        ping = playerPing[element.name];
-                    }
+					if(typeof playerPaused[element.name] != "undefined") {
+						paused = playerPaused[element.name];
+					}
+
+					if(typeof playerColours[element.name] != "undefined") {
+						colour = playerColours[element.name];
+					}
+
+					if(typeof playerPing[element.name] != "undefined") {
+						ping = playerPing[element.name];
+					}
 
 					drawNametag(screenPos[0], screenPos[1], health, armour, name, ping, 1.0-distance/nametagDistance, distance, colour, paused, element.skin);
 				}
@@ -205,7 +205,7 @@ function updateNametags(element) {
 
 function getClientFromPlayer(player) {
 	getClients().forEach(function(client) {
-		if(client.player == player) {
+		if(getPlayerPed(client) == player) {
 			return client;
 		}
 	});

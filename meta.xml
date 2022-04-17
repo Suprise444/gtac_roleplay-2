@@ -56,19 +56,6 @@
 	<script src="scripts/server/core.js" type="server" language="javascript" />
 	<script src="scripts/server/command.js" type="server" language="javascript" />
 
-	<!-- Server Business Scripts -->
-	<script src="scripts/server/business/bakery.js" type="server" language="javascript" />
-	<script src="scripts/server/business/bar.js" type="server" language="javascript" />
-	<script src="scripts/server/business/burger.js" type="server" language="javascript" />
-	<script src="scripts/server/business/clothing.js" type="server" language="javascript" />
-	<script src="scripts/server/business/club.js" type="server" language="javascript" />
-	<script src="scripts/server/business/fuel.js" type="server" language="javascript" />
-	<script src="scripts/server/business/mechanic.js" type="server" language="javascript" />
-	<script src="scripts/server/business/pizza.js" type="server" language="javascript" />
-	<script src="scripts/server/business/restaurant.js" type="server" language="javascript" />
-	<script src="scripts/server/business/vehicle.js" type="server" language="javascript" />
-	<script src="scripts/server/business/weapon.js" type="server" language="javascript" />
-
 	<!-- Server Job Scripts -->
 	<script src="scripts/server/job/bus.js" type="server" language="javascript" />
 	<script src="scripts/server/job/drug.js" type="server" language="javascript" />
@@ -124,6 +111,7 @@
 	<script src="scripts/client/job.js" type="client" language="javascript" />
 	<script src="scripts/client/keybind.js" type="client" language="javascript" />
 	<script src="scripts/client/label.js" type="client" language="javascript" />
+	<script src="scripts/client/locale.js" type="client" language="javascript" />
 	<script src="scripts/client/logo.js" type="client" language="javascript" />
 	<script src="scripts/client/main.js" type="client" language="javascript" />
 	<script src="scripts/client/messaging.js" type="client" language="javascript" />
@@ -135,7 +123,8 @@
 	<script src="scripts/client/skin-select.js" type="client" language="javascript" />
 	<script src="scripts/client/sync.js" type="client" language="javascript" />
 	<script src="scripts/client/utilities.js" type="client" language="javascript" />
-	
+	<script src="scripts/client/vehicle.js" type="client" language="javascript" />
+
 	<!-- MexUI -->
 	<file type="client" src="third-party/mexui/Images/down-arrow.png" />
 	<script language="javascript" type="client" src="third-party/mexui/mexui.js" />

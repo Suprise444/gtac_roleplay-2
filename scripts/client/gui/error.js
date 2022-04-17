@@ -63,12 +63,14 @@ function initErrorDialogGUI() {
 
 // ===========================================================================
 
-function showErrorGUI(errorMessage, errorTitle) {
+function showErrorGUI(errorMessage, errorTitle, buttonText) {
 	closeAllWindows();
 	logToConsole(LOG_DEBUG, `[VRR.GUI] Showing error window. Error: ${errorTitle} - ${errorMessage}`);
 	setChatWindowEnabled(false);
 	mexui.setInput(true);
 	errorDialog.messageLabel.text = errorMessage;
+	errorDialog.okayButton.text = buttonText;
+	errprDialog.window.title = errorTitle;
 	errorDialog.window.shown = true;
 }
 

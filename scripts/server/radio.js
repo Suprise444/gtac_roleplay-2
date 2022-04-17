@@ -9,7 +9,10 @@
 
 function initRadioScript() {
 	logToConsole(LOG_INFO, "[VRR.Radio]: Initializing radio script ...");
-    getServerData().radioStations = loadRadioStationsFromDatabase();
+	if(!getServerConfig().devServer) {
+		getServerData().radioStations = loadRadioStationsFromDatabase();
+	}
+
 	setRadioStationIndexes();
 	logToConsole(LOG_INFO, "[VRR.Radio]: Radio script initialized successfully!");
 	return true;
@@ -41,6 +44,15 @@ function loadRadioStationsFromDatabase() {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function playStreamingRadioCommand(command, params, client) {
 	if(areParamsEmpty(params)) {
 		messagePlayerSyntax(client, getCommandSyntaxText(command));
@@ -145,6 +157,15 @@ function playStreamingRadioCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function setStreamingRadioVolumeCommand(command, params, client) {
 	if(areParamsEmpty(params)) {
 		messagePlayerSyntax(client, getCommandSyntaxText(command));
@@ -185,6 +206,15 @@ function getPlayerStreamingRadioVolume(client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function showRadioStationListCommand(command, params, client) {
 	let stationList = getServerData().radioStations.map(function(x) { return `{ALTCOLOUR}${toInteger(x.index)+1}: {MAINCOLOUR}${x.name}`; });
 
@@ -213,13 +243,22 @@ function getRadioStationData(radioStationId) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function reloadAllRadioStationsCommand(command, params, client) {
 	stopRadioStreamForPlayer(null);
 	clearArray(getServerData().radioStations);
 	getServerData().radioStations = loadRadioStationsFromDatabase();
 	setRadioStationIndexes();
 
-	messageAdminAction(`All radio stations have been reloaded by an admin!`);
+	announceAdminAction(`AllRadioStationsReloaded`);
 }
 
 // ===========================================================================

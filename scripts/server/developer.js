@@ -152,7 +152,7 @@ function addLogLevelCommand(command, params, client) {
 
 	sendPlayerLogLevel(null, logLevel);
 
-	messageAdminAction(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}enabled log level {ALTCOLOUR}${toLowerCase(params)}`);
+	messageAdmins(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}enabled log level {ALTCOLOUR}${toLowerCase(params)}`);
 
 	return true;
 }
@@ -222,7 +222,7 @@ function removeLogLevelCommand(command, params, client) {
 
 	sendPlayerLogLevel(null, logLevel);
 
-	messageAdminAction(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}disabled log level {ALTCOLOUR}${toLowerCase(params)}`);
+	messageAdmins(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}disabled log level {ALTCOLOUR}${toLowerCase(params)}`);
 
 	return true;
 }
@@ -380,15 +380,72 @@ function setPlayerTesterStatusCommand(command, params, client) {
 
 	let enabled = hasBitFlag(getPlayerData(targetClient).accountData.flags.moderation, getModerationFlagValue("IsTester"));
 
-	messageAdminAction(`{ALTCOLOUR}${client.name} ${getBoolRedGreenInlineColour(enabled)}${toUpperCase(getEnabledDisabledFromBool(enabled))} {ALTCOLOUR}${targetClient.name}'s {MAINCOLOUR}tester status`)
+	messageAdmins(`{ALTCOLOUR}${client.name} ${getBoolRedGreenInlineColour(enabled)}${toUpperCase(getEnabledDisabledFromBool(enabled))} {ALTCOLOUR}${targetClient.name}'s {MAINCOLOUR}tester status`)
 	return true;
 }
 
 // ===========================================================================
 
-function saveAllServerDataCommand(command, params, client) {
+function testPromptGUICommand(command, params, client) {
+	if(areParamsEmpty(params)) {
+		messagePlayerSyntax(client, getCommandSyntaxText(command));
+		return false;
+	}
+
+	let targetClient = getPlayerFromParams(params);
+
+	if(!targetClient) {
+		messagePlayerError(client, getLocaleString(client, "InvalidPlayer"));
+		return false;
+	}
+
+	showPlayerPromptGUI(targetClient, "Testing the two button prompt GUI", "Testing", "Yes", "No")
+	return true;
+}
+
+// ===========================================================================
+
+function testInfoGUICommand(command, params, client) {
+	if(areParamsEmpty(params)) {
+		messagePlayerSyntax(client, getCommandSyntaxText(command));
+		return false;
+	}
+
+	let targetClient = getPlayerFromParams(params);
+
+	if(!targetClient) {
+		messagePlayerError(client, getLocaleString(client, "InvalidPlayer"));
+		return false;
+	}
+
+	showPlayerInfoGUI(targetClient, "Testing the info dialog GUI", "Testing", "Ok");
+	return true;
+}
+
+// ===========================================================================
+
+function testErrorGUICommand(command, params, client) {
+	if(areParamsEmpty(params)) {
+		messagePlayerSyntax(client, getCommandSyntaxText(command));
+		return false;
+	}
+
+	let targetClient = getPlayerFromParams(params);
+
+	if(!targetClient) {
+		messagePlayerError(client, getLocaleString(client, "InvalidPlayer"));
+		return false;
+	}
+
+	showPlayerErrorGUI(targetClient, "Testing the error dialog GUI", "Testing", "Ok");
+	return true;
+}
+
+// ===========================================================================
+
+function saveServerDataCommand(command, params, client) {
 	messageAdmins(`{clanOrange}Vortrex has forced a manual save of all data. Initiating ...`);
-	saveAllServerDataToDatabase();
+	saveServerDataToDatabase();
 	messageAdmins(`{clanOrange}All server data saved to database successfully!`);
 	return true;
 }
@@ -572,9 +629,9 @@ function streamAudioNameToAllPlayersCommand(command, params, client) {
 // ===========================================================================
 
 function fixAllServerBlipsCommand(command, params, client) {
-    deleteAllBusinessBlips();
-    deleteAllJobBlips();
-    deleteAllHouseBlips();
+	deleteAllBusinessBlips();
+	deleteAllJobBlips();
+	deleteAllHouseBlips();
 
 	let blips = getElementsByType(ELEMENT_BLIP);
 	blips.forEach((blip) => {

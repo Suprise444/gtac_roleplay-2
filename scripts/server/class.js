@@ -19,7 +19,7 @@ function initClassScript() {
 /**
  * @class Representing data for server configuration
  */
-class ServerData {
+class ServerConfigData {
 	constructor(dbAssoc = false) {
 		this.databaseId = 0;
 		this.needsSaved = false;
@@ -58,7 +58,7 @@ class ServerData {
 		this.showLogo = true;
 		this.inflationMultiplier = 1;
 		this.testerOnly = false;
-		this.settings = 0;
+		this.devServer = false;
 
 		this.antiCheat = {
 			enabled: false,
@@ -87,9 +87,6 @@ class ServerData {
 		this.realTimeZone = 0;
 
 		this.discordConfig = {
-			eventChannelWebHookURL: "",
-			chatChannelWebHookURL: "",
-			adminChannelWebHookURL: "",
 			sendEvents: true,
 			sendChat: true,
 			sendAdminEvents: true,
@@ -104,7 +101,6 @@ class ServerData {
 				bank: dbAssoc["svr_newchar_bank"],
 				skin: dbAssoc["svr_newchar_skin"],
 			},
-			this.settings = toInteger(dbAssoc["svr_settings"]);
 
 			this.connectCameraPosition = toVector3(dbAssoc["svr_connectcam_pos_x"], dbAssoc["svr_connectcam_pos_y"], dbAssoc["svr_connectcam_pos_z"]);
 			this.connectCameraLookAt = toVector3(dbAssoc["svr_connectcam_lookat_x"], dbAssoc["svr_connectcam_lookat_y"], dbAssoc["svr_connectcam_lookat_z"]);
@@ -113,6 +109,21 @@ class ServerData {
 			this.minute = toInteger(dbAssoc["svr_start_time_min"]);
 			this.minuteDuration = toInteger(dbAssoc["svr_time_min_duration"]);
 			this.weather = toInteger(dbAssoc["svr_start_weather"]);
+			//this.fallingSnow = intToBool(toInteger(dbAssoc["svr_start_snow_falling"]));
+			//this.groundSnow = intToBool(toInteger(dbAssoc["svr_start_snow_ground"]));
+			//this.useGUI = intToBool(toInteger(dbAssoc["svr_gui_enabled"]));
+			//this.showLogo = intToBool(toInteger(dbAssoc["svr_logo_enabled"]));
+			//this.testerOnly = intToBool(toInteger(dbAssoc["svr_tester_only"]));
+
+			/*
+			this.createJobPickups = intToBool(toInteger(dbAssoc["svr_job_pickups_enabled"]));
+			this.createBusinessPickups = intToBool(toInteger(dbAssoc["svr_biz_pickups_enabled"]));
+			this.createHousePickups = intToBool(toInteger(dbAssoc["svr_house_pickups_enabled"]));
+			this.createJobBlips = intToBool(toInteger(dbAssoc["svr_job_blips_enabled"]));
+			this.createBusinessBlips = intToBool(toInteger(dbAssoc["svr_biz_blips_enabled"]));
+			this.createHouseBlips = intToBool(toInteger(dbAssoc["svr_house_blips_enabled"]));
+			*/
+
 			this.guiColourPrimary = [toInteger(dbAssoc["svr_gui_col1_r"]), toInteger(dbAssoc["svr_gui_col1_g"]), toInteger(dbAssoc["svr_gui_col1_b"])];
 			this.guiColourSecondary = [toInteger(dbAssoc["svr_gui_col2_r"]), toInteger(dbAssoc["svr_gui_col2_g"]), toInteger(dbAssoc["svr_gui_col2_b"])];
 			this.guiTextColourPrimary = [toInteger(dbAssoc["svr_gui_textcol1_r"]), toInteger(dbAssoc["svr_gui_textcol1_g"]), toInteger(dbAssoc["svr_gui_textcol1_b"])];
@@ -121,15 +132,14 @@ class ServerData {
 
 			this.discordBotToken = intToBool(dbAssoc["svr_discord_bot_token"]);
 			this.introMusicURL = dbAssoc["svr_intro_music"];
-			this.realTimeZone = dbAssoc["svr_time_realtime_timezone"];
 
-			this.discordConfig = {
-				eventChannelWebHookURL: dbAssoc["svr_discord_event_webhook"],
-				chatChannelWebHookURL: dbAssoc["svr_discord_chat_webhook"],
-				adminChannelWebHookURL: dbAssoc["svr_discord_admin_webhook"],
+			//this.useRealTime = intToBool(toInteger(dbAssoc["svr_real_time_enabled"]));
+			//this.realTimeZone = dbAssoc["svr_real_time_timezone"];
+
+			this.discord = {
 				sendEvents: true,
 				sendChat: true,
-				sendAdminEvents: true,
+				sendAdmin: true,
 			};
 		}
 	}
@@ -239,6 +249,10 @@ class ClientData {
 		this.locale = 0;
 
 		this.enteringVehicle = null;
+
+		this.customDisconnectReason = "";
+
+		this.interiorCutscene = "";
 	}
 };
 
@@ -271,6 +285,7 @@ class AccountData {
 		this.twoFactorAuthVerificationCode = "";
 
 		this.chatScrollLines = 1;
+		this.chatAutoHideDelay = 0;
 
 		this.streamingRadioVolume = 20;
 		this.locale = 0;
@@ -300,6 +315,7 @@ class AccountData {
 			this.emailVerificationCode = dbAssoc["acct_code_verifyemail"];
 			this.twoFactorAuthVerificationCode = dbAssoc["acct_code_2fa"];
 			this.chatScrollLines = toInteger(dbAssoc["acct_svr_chat_scroll_lines"]);
+			this.chatAutoHideDelay = toInteger(dbAssoc["acct_svr_chat_auto_hide_delay"]);
 			this.streamingRadioVolume = toInteger(dbAssoc["acct_streaming_radio_volume"]);
 			this.locale = toInteger(dbAssoc["acct_locale"]);
 		}
@@ -524,6 +540,7 @@ class BusinessData {
 		this.entranceBlipModel = -1;
 		this.entrancePickup = null;
 		this.entranceBlip = null;
+		this.entranceCutscene = "";
 
 		this.exitPosition = false;
 		this.exitRotation = 0.0;
@@ -533,6 +550,7 @@ class BusinessData {
 		this.exitBlipModel = -1;
 		this.exitPickup = null;
 		this.exitBlip = null;
+		this.exitCutscene = "";
 
 		this.entranceFee = 0;
 		this.till = 0;
@@ -540,6 +558,8 @@ class BusinessData {
 		this.streamingRadioStation = -1;
 
 		this.labelHelpType = VRR_PROPLABEL_INFO_NONE;
+
+		this.triggers = [];
 
 		if(dbAssoc) {
 			this.databaseId = toInteger(dbAssoc["biz_id"]);
@@ -557,6 +577,7 @@ class BusinessData {
 			this.entranceDimension = toInteger(dbAssoc["biz_entrance_vw"]);
 			this.entrancePickupModel = toInteger(dbAssoc["biz_entrance_pickup"]);
 			this.entranceBlipModel = toInteger(dbAssoc["biz_entrance_blip"]);
+			this.entranceCutscene = toString(dbAssoc["biz_entrance_cutscene"]);
 
 			this.exitPosition = toVector3(dbAssoc["biz_exit_pos_x"], dbAssoc["biz_exit_pos_y"], dbAssoc["biz_exit_pos_z"]);
 			this.exitRotation = toInteger(dbAssoc["biz_exit_rot_z"]);
@@ -564,12 +585,14 @@ class BusinessData {
 			this.exitDimension = toInteger(dbAssoc["biz_exit_vw"]);
 			this.exitPickupModel = toInteger(dbAssoc["biz_exit_pickup"]);
 			this.exitBlipModel = toInteger(dbAssoc["biz_exit_blip"]);
+			this.exitCutscene = toString(dbAssoc["biz_exit_cutscene"]);
 
 			this.entranceFee = toInteger(dbAssoc["biz_entrance_fee"]);
 			this.till = toInteger(dbAssoc["biz_till"]);
 
 			this.labelHelpType = toInteger(dbAssoc["biz_label_help_type"]);
 			this.streamingRadioStation = toInteger(dbAssoc["biz_radiostation"]);
+
 		}
 	};
 };
@@ -658,6 +681,7 @@ class HouseData {
 		this.entranceBlipModel = -1;
 		this.entrancePickup = null;
 		this.entranceBlip = null;
+		this.entranceCutscene = "";
 
 		this.exitPosition = false;
 		this.exitRotation = 0.0;
@@ -667,8 +691,11 @@ class HouseData {
 		this.exitBlipModel = -1;
 		this.exitPickup = null;
 		this.exitBlip = null;
+		this.exitCutscene = "";
 
 		this.streamingRadioStation = -1;
+
+		this.triggers = [];
 
 		if(dbAssoc) {
 			this.databaseId = toInteger(dbAssoc["house_id"]);
@@ -688,6 +715,7 @@ class HouseData {
 			this.entranceDimension = toInteger(dbAssoc["house_entrance_vw"]);
 			this.entrancePickupModel = toInteger(dbAssoc["house_entrance_pickup"]);
 			this.entranceBlipModel = toInteger(dbAssoc["house_entrance_blip"]);
+			this.entranceCutscene = toString(dbAssoc["house_entrance_cutscene"]);
 
 			this.exitPosition = toVector3(toFloat(dbAssoc["house_exit_pos_x"]), toFloat(dbAssoc["house_exit_pos_y"]), toFloat(dbAssoc["house_exit_pos_z"]));
 			this.exitRotation = toFloat(dbAssoc["house_exit_rot_z"]);
@@ -695,6 +723,7 @@ class HouseData {
 			this.exitDimension = toInteger(dbAssoc["house_exit_vw"]);
 			this.exitPickupModel = toInteger(dbAssoc["house_exit_pickup"]);
 			this.exitBlipModel = toInteger(dbAssoc["house_exit_blip"]);
+			this.exitCutscene = toString(dbAssoc["house_exit_cutscene"]);
 		}
 	}
 };
@@ -934,6 +963,8 @@ class VehicleData {
 
 		this.lastActiveTime = false;
 
+		this.triggers = [];
+
 		if(dbAssoc) {
 			// General Info
 			this.databaseId = toInteger(dbAssoc["veh_id"]);
@@ -1003,7 +1034,7 @@ class VehicleData {
 };
 
 /**
- * @class Representing a command's data. Loaded and saved in the database
+ * @class Representing a command's data.
  */
 class CommandData {
 	enable() {
@@ -1018,7 +1049,7 @@ class CommandData {
 		this.enabled = !this.enabled;
 	}
 
-	constructor(command, handlerFunction, syntaxString, requiredStaffFlags, requireLogin, allowOnDiscord, helpDescription) {
+	constructor(command, handlerFunction, syntaxString = "", requiredStaffFlags = 0, requireLogin = true, allowOnDiscord = false, helpDescription = "") {
 		this.command = command;
 		this.handlerFunction = handlerFunction;
 		this.syntaxString = syntaxString;
@@ -1302,49 +1333,6 @@ class KeyBindData {
 	}
 };
 
-class BlackListedGameScriptData {
-	constructor(dbAssoc = false) {
-		this.databaseId = 0;
-		this.enabled = false
-		this.serverId = 0;
-		this.scriptName = "";
-		this.index = -1;
-		this.needsSaved = false;
-
-		if(dbAssoc) {
-			this.databaseId = dbAssoc["ac_script_bl_id"];
-			this.enabled = intToBool(dbAssoc["ac_script_bl_enabled"]);
-			this.serverId = dbAssoc["ac_script_bl_server"];
-			this.scriptName = dbAssoc["ac_script_bl_name"];
-		}
-	}
-};
-
-class WhiteListedGameScriptData {
-	constructor(dbAssoc = false) {
-		this.databaseId = 0;
-		this.enabled = false
-		this.serverId = 0;
-		this.scriptName = "";
-		this.index = -1;
-		this.needsSaved = false;
-
-		if(dbAssoc) {
-			this.databaseId = dbAssoc["ac_script_wl_id"];
-			this.enabled = intToBool(dbAssoc["ac_script_wl_enabled"]);
-			this.serverId = dbAssoc["ac_script_wl_server"];
-			this.scriptName = dbAssoc["ac_script_wl_name"];
-		}
-	}
-};
-
-class InteriorTemplateData {
-	constructor(exitPosition, exitInterior) {
-		this.exitPosition = exitPosition;
-		this.exitInterior = exitInterior;
-	}
-};
-
 class RadioStationData {
 	constructor(dbAssoc = false) {
 		this.databaseId = 0;
@@ -1486,6 +1474,7 @@ class ItemTypeData {
 		}
 	}
 };
+
 class NPCData {
 	constructor(dbAssoc = false) {
 		this.databaseId = 0;
@@ -1495,8 +1484,10 @@ class NPCData {
 		this.middleName = "Q";
 		this.skin = 0;
 		this.cash = 0;
-		this.spawnPosition = toVector3(0.0, 0.0, 0.0);
-		this.spawnHeading = 0.0;
+		this.position = toVector3(0.0, 0.0, 0.0);
+		this.rotation = toVector3(0.0, 0.0, 0.0);
+		this.scale = toVector3(1.0, 1.0, 1.0);
+		this.heading = 0.0;
 		this.clan = 0;
 		this.isWorking = false;
 		this.jobUniform = this.skin;
@@ -1505,13 +1496,16 @@ class NPCData {
 		this.weapons = [];
 		this.interior = 0;
 		this.dimension = 0;
-		this.pedScale = toVector3(1.0, 1.0, 1.0);
 		this.walkStyle = 0;
 		this.fightStyle = 0;
 		this.health = 100;
 		this.armour = 100;
 		this.currentAction = VRR_NPCACTION_NONE;
 		this.triggers = [];
+		this.typeFlags = 0;
+		this.heedThreats = false;
+		this.threats = 0;
+		this.invincible = false;
 
 		this.bodyParts = {
 			hair: [0,0],
@@ -1533,6 +1527,8 @@ class NPCData {
 			rightFoot: [0,0],
 		};
 
+		this.triggers = [];
+
 		if(dbAssoc) {
 			this.databaseId = toInteger(dbAssoc["npc_id"]);
 			this.serverId = toInteger(dbAssoc["npc_server"]);
@@ -1541,21 +1537,24 @@ class NPCData {
 			this.middleName = dbAssoc["npc_name_middle"] || "";
 			this.skin = toInteger(dbAssoc["npc_skin"]);
 			this.cash = toInteger(dbAssoc["npc_cash"]);
-			this.spawnPosition = toVector3(toFloat(dbAssoc["npc_pos_x"]), toFloat(dbAssoc["npc_pos_y"]), toFloat(dbAssoc["npc_pos_z"]));
-			this.spawnHeading = toFloat(dbAssoc["npc_angle"]);
+			this.position = toVector3(toFloat(dbAssoc["npc_pos_x"]), toFloat(dbAssoc["npc_pos_y"]), toFloat(dbAssoc["npc_pos_z"]));
+			this.rotation = toVector3(toFloat(dbAssoc["npc_rot_x"]), toFloat(dbAssoc["npc_rot_y"]), toFloat(dbAssoc["npc_rot_z"]));
+			this.scale = toVector3(toFloat(dbAssoc["npc_scale_x"]), toFloat(dbAssoc["npc_scale_y"]), toFloat(dbAssoc["npc_scale_z"]));
+			this.heading = toFloat(dbAssoc["npc_rot_z"]);
 			this.lastLogin = toInteger(dbAssoc["npc_when_lastlogin"]);
-			this.clan = toInteger(dbAssoc["npc_clan"]);
-			this.clanFlags = toInteger(dbAssoc["npc_clan_flags"]);
-			this.clanRank = toInteger(dbAssoc["npc_clan_rank"]);
-			this.clanTitle = toInteger(dbAssoc["npc_clan_title"]);
+			this.rank = toInteger(dbAssoc["npc_rank"]);
+			this.title = toInteger(dbAssoc["npc_title"]);
 			this.job = toInteger(dbAssoc["npc_job"]);
 			this.interior = toInteger(dbAssoc["npc_int"]);
 			this.dimension = toInteger(dbAssoc["npc_vw"]);
-			this.pedScale = toVector3(toFloat(dbAssoc["npc_scale_x"]), toFloat(dbAssoc["npc_scale_y"]), toFloat(dbAssoc["npc_scale_z"]));
 			this.walkStyle = toInteger(dbAssoc["npc_walkstyle"]);
 			this.fightStyle = toInteger(dbAssoc["npc_fightstyle"]);
 			this.health = toInteger(dbAssoc["npc_health"]);
 			this.armour = toInteger(dbAssoc["npc_armour"]);
+			this.typeFlags = toInteger(dbAssoc["npc_type_flags"]);
+			this.heedThreats = intToBool(dbAssoc["npc_headthreats"]);
+			this.threats = toInteger(dbAssoc["npc_threats"]);
+			this.invincible = intToBool(dbAssoc["npc_invincible"]);
 
 			this.bodyParts = {
 				hair: [toInteger(dbAssoc["npc_hd_part_hair_model"]) || 0, toInteger(dbAssoc["npc_hd_part_hair_texture"]) || 0],
@@ -1656,28 +1655,6 @@ class BanData {
 	}
 }
 
-class DeckCardData {
-	constructor(imageName, value) {
-		this.imageName = imageName,
-		this.value = value;
-	}
-}
-
-class DeckCardGameData {
-	constructor() {
-		this.gameType = VRR_DECKCARD_GAME_NONE;
-		this.playedCards = [];
-		this.remainingCards = [];
-	}
-}
-
-class DeckCardHandData {
-	constructor() {
-		this.cards = [];
-		this.total = 0;
-	}
-}
-
 class JobRouteData {
 	constructor(dbAssoc = false) {
 		this.databaseId = 0;
@@ -1708,7 +1685,7 @@ class JobRouteData {
 			this.pay = toInteger(dbAssoc["job_route_pay"]);
 			this.startMessage = toString(dbAssoc["job_route_start_msg"]);
 			this.finishMessage = toString(dbAssoc["job_route_finish_msg"]);
-            this.locationArriveMessage = toString(dbAssoc["job_route_loc_arrive_msg"]);
+			this.locationArriveMessage = toString(dbAssoc["job_route_loc_arrive_msg"]);
 			this.locationNextMessage = toString(dbAssoc["job_route_loc_next_msg"]);
 			this.vehicleColour1 = toInteger(dbAssoc["job_route_veh_colour1"]);
 			this.vehicleColour2 = toInteger(dbAssoc["job_route_veh_colour2"]);
@@ -1724,7 +1701,7 @@ class JobRouteLocationData {
 		this.routeId = 0;
 		this.enabled = false;
 		this.index = -1;
-        this.jobIndex = -1;
+		this.jobIndex = -1;
 		this.routeIndex = -1;
 		this.needsSaved = false;
 		this.position = toVector3(0.0, 0.0, 0.0);

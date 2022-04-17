@@ -9,9 +9,9 @@
 
 function initBusinessScript() {
 	logToConsole(LOG_INFO, "[VRR.Business]: Initializing business script ...");
-	getServerData().businesses = loadBusinessesFromDatabase();
-
-
+	if(!getServerConfig().devServer) {
+		getServerData().businesses = loadBusinessesFromDatabase();
+	}
 
 	createAllBusinessPickups();
 	createAllBusinessBlips();
@@ -138,13 +138,22 @@ function loadBusinessGameScriptsFromDatabase(businessId) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function createBusinessCommand(command, params, client) {
-	let tempBusinessData = createBusiness(params, getPlayerPosition(client), toVector3(0.0, 0.0, 0.0), getGameConfig().pickupModels[getServerGame()].Business, getGameConfig().blipSprites[getServerGame()].Business, getPlayerInterior(client), getPlayerDimension(client));
+	let tempBusinessData = createBusiness(params, getPlayerPosition(client), toVector3(0.0, 0.0, 0.0), getGameConfig().pickupModels[getServerGame()].Business, getGameConfig().blipSprites[getServerGame()].Business, getPlayerInterior(client), getPlayerDimension(client), getPlayerData(client).interiorCutscene);
 	tempBusinessData.needsSaved = true;
 	let businessId = getServerData().businesses.push(tempBusinessData);
 	setAllBusinessIndexes();
 
-	saveAllBusinessesToDatabase();
+	saveBusinessesToDatabase();
 
 	createBusinessEntrancePickup(businessId-1);
 	createBusinessExitPickup(businessId-1);
@@ -156,6 +165,15 @@ function createBusinessCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function createBusinessLocationCommand(command, params, client) {
 	if(!isPlayerSpawned(client)) {
 		messagePlayerError(client, "You must be spawned to use this command!");
@@ -182,7 +200,7 @@ function createBusinessLocationCommand(command, params, client) {
 
 // ===========================================================================
 
-function createBusiness(name, entrancePosition, exitPosition, entrancePickupModel = -1, entranceBlipModel = -1, entranceInteriorId = 0, entranceVirtualWorld = 0, exitInteriorId = -1, exitVirtualWorld = -1, exitPickupModel = -1, exitBlipModel = -1) {
+function createBusiness(name, entrancePosition, exitPosition, entrancePickupModel = -1, entranceBlipModel = -1, entranceInteriorId = 0, entranceVirtualWorld = 0, exitInteriorId = -1, exitVirtualWorld = -1, exitPickupModel = -1, exitBlipModel = -1, entranceCutscene = "") {
 	let tempBusinessData = new BusinessData(false);
 	tempBusinessData.name = name;
 
@@ -192,6 +210,7 @@ function createBusiness(name, entrancePosition, exitPosition, entrancePickupMode
 	tempBusinessData.entranceBlipModel = entranceBlipModel;
 	tempBusinessData.entranceInterior = entranceInteriorId;
 	tempBusinessData.entranceDimension = entranceVirtualWorld;
+	tempBusinessData.entranceCutscene = entranceCutscene;
 
 	tempBusinessData.exitPosition = exitPosition;
 	tempBusinessData.exitRotation = 0.0;
@@ -205,6 +224,15 @@ function createBusiness(name, entrancePosition, exitPosition, entrancePickupMode
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function deleteBusinessCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -223,6 +251,15 @@ function deleteBusinessCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function deleteBusinessLocationCommand(command, params, client) {
 	//let businessId = toInteger(getParam(params, " ", 2));
 	//deleteBusinessLocation(businessId);
@@ -231,6 +268,15 @@ function deleteBusinessLocationCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function setBusinessNameCommand(command, params, client) {
 	let newBusinessName = toString(params);
 
@@ -242,7 +288,7 @@ function setBusinessNameCommand(command, params, client) {
 	}
 
 	if(!canPlayerManageBusiness(client, businessId)) {
-		messagePlayerError(client, "You can't change the name of this business!");
+		messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
 		return false;
 	}
 
@@ -255,6 +301,15 @@ function setBusinessNameCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function setBusinessOwnerCommand(command, params, client) {
 	if(areParamsEmpty(params)) {
 		messagePlayerSyntax(client, getCommandSyntaxText(command));
@@ -275,7 +330,7 @@ function setBusinessOwnerCommand(command, params, client) {
 	}
 
 	if(!canPlayerManageBusiness(client, businessId)) {
-		messagePlayerError(client, "You can't change the owner of this business!");
+		messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
 		return false;
 	}
 
@@ -288,6 +343,15 @@ function setBusinessOwnerCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function setBusinessJobCommand(command, params, client) {
 	if(areParamsEmpty(params)) {
 		messagePlayerSyntax(client, getCommandSyntaxText(command));
@@ -308,7 +372,7 @@ function setBusinessJobCommand(command, params, client) {
 	}
 
 	if(!canPlayerManageBusiness(client, businessId)) {
-		messagePlayerError(client, "You can't change the owner of this business!");
+		messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
 		return false;
 	}
 
@@ -321,6 +385,15 @@ function setBusinessJobCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function setBusinessClanCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -337,7 +410,7 @@ function setBusinessClanCommand(command, params, client) {
 	}
 
 	if(!canPlayerManageBusiness(client, businessId)) {
-		messagePlayerError(client, "You can't give this business to a clan!");
+		messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
 		return false;
 	}
 
@@ -350,6 +423,15 @@ function setBusinessClanCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function setBusinessRankCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -361,7 +443,7 @@ function setBusinessRankCommand(command, params, client) {
 	let rankId = params;
 
 	if(!canPlayerManageBusiness(client, businessId)) {
-		messagePlayerError(client, "You can't change this business rank level!");
+		messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
 		return false;
 	}
 
@@ -421,7 +503,7 @@ function setBusinessRankCommand(command, params, client) {
 	}
 
 	if(!canPlayerManageBusiness(client, businessId)) {
-		messagePlayerError(client, "You can't change this business rank!");
+		messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
 		return false;
 	}
 
@@ -438,6 +520,15 @@ function setBusinessRankCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function setBusinessJobCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -471,6 +562,15 @@ function setBusinessJobCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function setBusinessPublicCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -492,6 +592,15 @@ function setBusinessPublicCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function removeBusinessOwnerCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -513,6 +622,15 @@ function removeBusinessOwnerCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function lockUnlockBusinessCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -526,7 +644,7 @@ function lockUnlockBusinessCommand(command, params, client) {
 	}
 
 	if(!canPlayerManageBusiness(client, businessId)) {
-		messagePlayerError(client, "You can't change this business rank!");
+		messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
 		return false;
 	}
 
@@ -570,6 +688,15 @@ function lockUnlockBusinessCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function setBusinessEntranceFeeCommand(command, params, client) {
 	let entranceFee = toInteger(getParam(params, " ", 1)) || 0;
 	let businessId = getPlayerBusiness(client);
@@ -580,7 +707,7 @@ function setBusinessEntranceFeeCommand(command, params, client) {
 	}
 
 	if(!canPlayerManageBusiness(client, businessId)) {
-		messagePlayerError(client, "You can't change the entrance fee for this business!");
+		messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
 		return false;
 	}
 
@@ -591,6 +718,15 @@ function setBusinessEntranceFeeCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function getBusinessInfoCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -632,6 +768,15 @@ function getBusinessInfoCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function getBusinessFloorItemsCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -649,6 +794,15 @@ function getBusinessFloorItemsCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function getBusinessStorageItemsCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -666,6 +820,15 @@ function getBusinessStorageItemsCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function setBusinessPickupCommand(command, params, client) {
 	let typeParam = getParam(params, " ", 1) || "business";
 	let businessId = getPlayerBusiness(client);
@@ -702,6 +865,15 @@ function setBusinessPickupCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function setBusinessInteriorTypeCommand(command, params, client) {
 	let typeParam = getParam(params, " ", 1) || "business";
 	let businessId = getPlayerBusiness(client);
@@ -717,6 +889,7 @@ function setBusinessInteriorTypeCommand(command, params, client) {
 			getBusinessData(businessId).exitDimension = 0;
 			getBusinessData(businessId).exitInterior = -1;
 			getBusinessData(businessId).hasInterior = false;
+			getBusinessData(businessId).interiorCutscene = "";
 			getBusinessData(businessId).exitPickupModel = -1;
 			messageAdmins(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}removed business {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR} interior`);
 			return false;
@@ -738,6 +911,9 @@ function setBusinessInteriorTypeCommand(command, params, client) {
 		getBusinessData(businessId).exitInterior = getGameConfig().interiors[getServerGame()][typeParam][1];
 		getBusinessData(businessId).exitDimension = getBusinessData(businessId).databaseId+getGlobalConfig().businessDimensionStart;
 		getBusinessData(businessId).exitPickupModel = getGameConfig().pickupModels[getServerGame()].Exit;
+		if(getGameConfig().interiors[getServerGame()][typeParam].length == 3) {
+			getBusinessData(businessId).interiorCutscene = getGameConfig().interiors[getServerGame()][typeParam][2];
+		}
 		getBusinessData(businessId).hasInterior = true;
 	}
 
@@ -755,6 +931,15 @@ function setBusinessInteriorTypeCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function setBusinessBlipCommand(command, params, client) {
 	let typeParam = getParam(params, " ", 1) || "business";
 	let businessId = getPlayerBusiness(client);
@@ -791,6 +976,15 @@ function setBusinessBlipCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function giveDefaultItemsToBusinessCommand(command, params, client) {
 	let typeParam = getParam(params, " ", 1) || "business";
 	let businessId = getPlayerBusiness(client);
@@ -833,6 +1027,15 @@ function giveDefaultItemsToBusinessCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function setBusinessEntranceLabelToDealershipCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -848,6 +1051,15 @@ function setBusinessEntranceLabelToDealershipCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function deleteBusinessFloorItemsCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -868,6 +1080,15 @@ function deleteBusinessFloorItemsCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function deleteBusinessStorageItemsCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -888,6 +1109,15 @@ function deleteBusinessStorageItemsCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function withdrawFromBusinessCommand(command, params, client) {
 	if(areParamsEmpty(params)) {
 		messagePlayerSyntax(client, getCommandSyntaxText(command));
@@ -903,7 +1133,7 @@ function withdrawFromBusinessCommand(command, params, client) {
 	}
 
 	if(!canPlayerManageBusiness(client, businessId)) {
-		messagePlayerError(client, "You can't withdraw cash from this business!");
+		messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
 		return false;
 	}
 
@@ -922,6 +1152,15 @@ function withdrawFromBusinessCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function setBusinessBuyPriceCommand(command, params, client) {
 	if(areParamsEmpty(params)) {
 		messagePlayerSyntax(client, getCommandSyntaxText(command));
@@ -937,7 +1176,7 @@ function setBusinessBuyPriceCommand(command, params, client) {
 	}
 
 	if(!canPlayerManageBusiness(client, businessId)) {
-		messagePlayerError(client, "You can't change the purchase price for this business!");
+		messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
 		return false;
 	}
 
@@ -955,6 +1194,15 @@ function setBusinessBuyPriceCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function depositIntoBusinessCommand(command, params, client) {
 	if(areParamsEmpty(params)) {
 		messagePlayerSyntax(client, getCommandSyntaxText(command));
@@ -990,6 +1238,15 @@ function depositIntoBusinessCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function orderItemForBusinessCommand(command, params, client) {
 	if(areParamsEmpty(params)) {
 		messagePlayerSyntax(client, getCommandSyntaxText(command));
@@ -1023,7 +1280,7 @@ function orderItemForBusinessCommand(command, params, client) {
 	}
 
 	if(!canPlayerManageBusiness(client, businessId)) {
-		messagePlayerError(client, "You can't order items for this business!");
+		messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
 		return false;
 	}
 
@@ -1042,6 +1299,15 @@ function orderItemForBusinessCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function orderItemForBusiness(businessId, itemType, amount) {
 	if(getBusinessData(businessId).till < orderTotalCost) {
 		let neededAmount = orderTotalCost-getBusinessData(businessId).till;
@@ -1056,6 +1322,15 @@ function orderItemForBusiness(businessId, itemType, amount) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function viewBusinessTillAmountCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -1069,7 +1344,7 @@ function viewBusinessTillAmountCommand(command, params, client) {
 	}
 
 	if(!canPlayerManageBusiness(client, businessId)) {
-		messagePlayerError(client, "You can't see the till amount for this business!");
+		messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
 		return false;
 	}
 
@@ -1078,6 +1353,15 @@ function viewBusinessTillAmountCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function buyBusinessCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -1108,6 +1392,15 @@ function buyBusinessCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function moveBusinessEntranceCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -1139,6 +1432,15 @@ function moveBusinessEntranceCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function moveBusinessExitCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -1178,6 +1480,14 @@ function getBusinessDataFromDatabaseId(databaseId) {
 
 // ===========================================================================
 
+/**
+ * Gets the closest business entrance to a position
+ *
+ * @param {Vector3} position - The position to check
+ * @param {Number} dimension - The dimension to check
+ * @return {Number} The data index of the business
+ *
+ */
 function getClosestBusinessEntrance(position, dimension) {
 	let closest = 0;
 	for(let i in getServerData().businesses) {
@@ -1192,6 +1502,14 @@ function getClosestBusinessEntrance(position, dimension) {
 
 // ===========================================================================
 
+/**
+ * Gets the closest business exit to a position
+ *
+ * @param {Vector3} position - The position to check
+ * @param {Number} dimension - The dimension to check
+ * @return {Number} The data index of the business
+ *
+ */
 function getClosestBusinessExit(position, dimension) {
 	let closest = 0;
 	for(let i in getServerData().businesses) {
@@ -1206,6 +1524,13 @@ function getClosestBusinessExit(position, dimension) {
 
 // ===========================================================================
 
+/**
+ * Gets whether or not a client is in a business
+ *
+ * @param {Client} client - The client to check whether or not is in a business
+ * @return {Boolean} Whether or not the client is in a business
+ *
+ */
 function isPlayerInAnyBusiness(client) {
 	for(let i in getServerData().businesses) {
 		if(getServerData().businesses[i].hasInterior && getServerData().businesses[i].exitDimension == getPlayerDimension(client)) {
@@ -1218,6 +1543,13 @@ function isPlayerInAnyBusiness(client) {
 
 // ===========================================================================
 
+/**
+ * Gets the data index of the business a client is in
+ *
+ * @param {Client} client - The client to check whether or not is in a business
+ * @return {Number} The data index of the business
+ *
+ */
 function getPlayerBusiness(client) {
 	let closestEntrance = getClosestBusinessEntrance(getPlayerPosition(client), getPlayerDimension(client));
 	if(getDistance(getPlayerPosition(client), getBusinessData(closestEntrance).entrancePosition) <= getGlobalConfig().enterPropertyDistance) {
@@ -1235,27 +1567,48 @@ function getPlayerBusiness(client) {
 
 // ===========================================================================
 
-function saveAllBusinessesToDatabase() {
+/**
+ * Saves all server businesses to the database
+ *
+ * @return {Boolean} Whether or not the businesses were saved
+ *
+ */
+function saveBusinessesToDatabase() {
+	if(getServerConfig().devServer) {
+		return false;
+	}
+
 	for(let i in getServerData().businesses) {
 		if(getServerData().businesses[i].needsSaved) {
 			saveBusinessToDatabase(i);
 		}
 	}
+
+	return true
 }
 
 // ===========================================================================
 
+/**
+ * Saves a server businesses to the database by data index
+ *
+ * @param {Number} businessId - The data index of the business to save
+ * @return {Boolean} Whether or not the business was saved
+ *
+ */
 function saveBusinessToDatabase(businessId) {
 	let tempBusinessData = getServerData().businesses[businessId];
 
-    if(!tempBusinessData.needsSaved) {
-        return false;
-    }
+	if(!tempBusinessData.needsSaved) {
+		return false;
+	}
 
 	logToConsole(LOG_DEBUG, `[VRR.Business]: Saving business '${tempBusinessData.name}' to database ...`);
 	let dbConnection = connectToDatabase();
 	if(dbConnection) {
 		let safeBusinessName = escapeDatabaseString(dbConnection, tempBusinessData.name);
+		let safeExitCutscene = escapeDatabaseString(dbConnection, tempBusinessData.exitCustscene);
+		let safeEntranceCutscene = escapeDatabaseString(dbConnection, tempBusinessData.entranceCutscene);
 
 		let data = [
 			["biz_server", getServerId()],
@@ -1273,6 +1626,7 @@ function saveBusinessToDatabase(businessId) {
 			["biz_entrance_vw", tempBusinessData.entranceDimension],
 			["biz_entrance_pickup", tempBusinessData.entrancePickupModel],
 			["biz_entrance_blip", tempBusinessData.entranceBlipModel],
+			["biz_entrance_cutscene", safeEntranceCutscene],
 			["biz_exit_pos_x", tempBusinessData.exitPosition.x],
 			["biz_exit_pos_y", tempBusinessData.exitPosition.y],
 			["biz_exit_pos_z", tempBusinessData.exitPosition.z],
@@ -1281,6 +1635,7 @@ function saveBusinessToDatabase(businessId) {
 			["biz_exit_vw", tempBusinessData.exitDimension],
 			["biz_exit_pickup", tempBusinessData.exitPickupModel],
 			["biz_exit_blip", tempBusinessData.exitBlipModel],
+			["biz_exit_cutscene", safeExitCutscene],
 			["biz_has_interior", boolToInt(tempBusinessData.hasInterior)],
 			["biz_interior_lights", boolToInt(tempBusinessData.interiorLights)],
 			["biz_label_help_type", tempBusinessData.labelHelpType],
@@ -1310,6 +1665,12 @@ function saveBusinessToDatabase(businessId) {
 
 // ===========================================================================
 
+/**
+ * Creates all server pickups for all businesses
+ *
+ * @return {Boolean} Whether or not the server pickups were created
+ *
+ */
 function createAllBusinessPickups() {
 	if(!getServerConfig().createBusinessPickups) {
 		return false;
@@ -1320,10 +1681,18 @@ function createAllBusinessPickups() {
 		createBusinessExitPickup(i);
 		updateBusinessPickupLabelData(i);
 	}
+
+	return true;
 }
 
 // ===========================================================================
 
+/**
+ * Creates all server blips for all businesses
+ *
+ * @return {Boolean} Whether or not the server blips were created
+ *
+ */
 function createAllBusinessBlips() {
 	if(!getServerConfig().createBusinessBlips) {
 		return false;
@@ -1337,7 +1706,14 @@ function createAllBusinessBlips() {
 
 // ===========================================================================
 
-function createBusinessEntrancePickup(businessId) {	
+/**
+ * Creates the entrance pickup for a business by data index
+ *
+ * @param {Number} businessId - The data index of the business to create the pickup for
+ * @return {Boolean} Whether or not the blip was created
+ *
+ */
+function createBusinessEntrancePickup(businessId) {
 	if(!getServerConfig().createBusinessPickups) {
 		return false;
 	}
@@ -1350,21 +1726,40 @@ function createBusinessEntrancePickup(businessId) {
 		}
 
 		logToConsole(LOG_VERBOSE, `[VRR.Job]: Creating entrance pickup for business ${getBusinessData(businessId).name} (model ${pickupModelId})`);
-		
+
 		if(areServerElementsSupported()) {
-			getBusinessData(businessId).entrancePickup = createGamePickup(pickupModelId, getBusinessData(businessId).entrancePosition, getGameConfig().pickupTypes[getServerGame()].business);
-			setElementOnAllDimensions(getBusinessData(businessId).entrancePickup, false);
-			setElementDimension(getBusinessData(businessId).entrancePickup, getBusinessData(businessId).entranceDimension);
-			updateBusinessPickupLabelData(businessId);
-			addToWorld(getBusinessData(businessId).entrancePickup);
+			let entrancePickup = createGamePickup(pickupModelId, getBusinessData(businessId).entrancePosition, getGameConfig().pickupTypes[getServerGame()].business);
+			if(entrancePickup != null) {
+				setElementOnAllDimensions(entrancePickup, false);
+				setElementDimension(entrancePickup, getBusinessData(businessId).entranceDimension);
+				setElementOnAllDimensions(entrancePickup, false);
+				setElementStreamInDistance(entrancePickup, getGlobalConfig().houseBlipStreamInDistance);
+				setElementStreamOutDistance(entrancePickup, getGlobalConfig().houseBlipStreamOutDistance);
+				setElementTransient(entrancePickup, false);
+				addToWorld(entrancePickup);
+
+				getBusinessData(businessId).entrancePickup = entrancePickup;
+				updateBusinessPickupLabelData(businessId);
+			}
 		} else {
 			sendBusinessToPlayer(null, businessId, getBusinessData(businessId), getBusinessData(businessId).entrancePosition, getBusinessData(businessId).entranceBlipModel, getBusinessData(businessId).entrancePickupModel, getBusinessData(businessId).hasInterior, false);
 		}
+
+		return true;
 	}
+
+	return false;
 }
 
 // ===========================================================================
 
+/**
+ * Creates the entrance pickup for a business by data index
+ *
+ * @param {Number} businessId - The data index of the business to create the entrance pickup for
+ * @return {Boolean} Whether or not the blip was created
+ *
+ */
 function createBusinessEntranceBlip(businessId) {
 	if(!areServerElementsSupported()) {
 		return false;
@@ -1382,12 +1777,22 @@ function createBusinessEntranceBlip(businessId) {
 		}
 
 		logToConsole(LOG_VERBOSE, `[VRR.Job]: Creating entrance blip for business ${getBusinessData(businessId).name} (model ${blipModelId})`);
-		
+
 		if(areServerElementsSupported()) {
-			getBusinessData(businessId).entranceBlip = createGameBlip(getBusinessData(businessId).entrancePosition, blipModelId, 1, getColourByName("businessBlue"));
-			setElementOnAllDimensions(getBusinessData(businessId).entranceBlip, false);
-			setElementDimension(getBusinessData(businessId).entranceBlip, getBusinessData(businessId).entranceDimension);
-			addToWorld(getBusinessData(businessId).entranceBlip);
+			let entranceBlip = createGameBlip(getBusinessData(businessId).entrancePosition, blipModelId, 1, getColourByName("businessBlue"));
+			if(entranceBlip != null) {
+				setElementOnAllDimensions(entranceBlip, false);
+				setElementDimension(entranceBlip, getBusinessData(businessId).entranceDimension);
+				setElementDimension(entranceBlip, getBusinessData(businessId).entranceDimension);
+				setElementOnAllDimensions(entranceBlip, false);
+				setElementStreamInDistance(entranceBlip, getGlobalConfig().businessBlipStreamInDistance);
+				setElementStreamOutDistance(entranceBlip, getGlobalConfig().businessBlipStreamOutDistance);
+				setElementTransient(entranceBlip, false);
+				addToWorld(entranceBlip);
+
+				getBusinessData(businessId).entranceBlip = entranceBlip;
+			}
+
 		} else {
 			sendBusinessToPlayer(null, businessId, getBusinessData(businessId).name, getBusinessData(businessId).entrancePosition, blipModelId, getBusinessData(businessId).entrancePickupModel, getBusinessData(businessId).hasInterior, false);
 		}
@@ -1396,6 +1801,13 @@ function createBusinessEntranceBlip(businessId) {
 
 // ===========================================================================
 
+/**
+ * Creates the exit pickup for a business by data index
+ *
+ * @param {Number} businessId - The data index of the business to create the exit pickup for
+ * @return {Boolean} Whether or not the pickup was created
+ *
+ */
 function createBusinessExitPickup(businessId) {
 	if(!getServerConfig().createBusinessPickups) {
 		return false;
@@ -1410,13 +1822,20 @@ function createBusinessExitPickup(businessId) {
 			}
 
 			logToConsole(LOG_VERBOSE, `[VRR.Job]: Creating exit pickup for business ${getBusinessData(businessId).name} (model ${pickupModelId})`);
-			
+
 			if(areServerElementsSupported()) {
-				getBusinessData(businessId).exitPickup = createGamePickup(pickupModelId, getBusinessData(businessId).exitPosition, getGameConfig().pickupTypes[getServerGame()].business);
-				setElementDimension(getBusinessData(businessId).exitPickup, getBusinessData(businessId).exitDimension);
-				setElementOnAllDimensions(getBusinessData(businessId).exitPickup, false);
-				updateBusinessPickupLabelData(businessId);
-				addToWorld(getBusinessData(businessId).exitPickup);
+				let exitPickup = createGamePickup(pickupModelId, getBusinessData(businessId).exitPosition, getGameConfig().pickupTypes[getServerGame()].business);
+				if(exitPickup != null) {
+					setElementDimension(exitPickup, getBusinessData(businessId).exitDimension);
+					setElementOnAllDimensions(exitPickup, false);
+					setElementStreamInDistance(exitPickup, getGlobalConfig().businessPickupStreamInDistance);
+					setElementStreamOutDistance(exitPickup, getGlobalConfig().businessPickupStreamOutDistance);
+					setElementTransient(exitPickup, false);
+					addToWorld(exitPickup);
+
+					getBusinessData(businessId).exitPickup = exitPickup;
+					updateBusinessPickupLabelData(businessId);
+				}
 			}
 		}
 	}
@@ -1424,6 +1843,13 @@ function createBusinessExitPickup(businessId) {
 
 // ===========================================================================
 
+/**
+ * Creates the exit blip for a business by data index
+ *
+ * @param {Number} businessId - The data index of the business to create the exit blip for
+ * @return {Boolean} Whether or not the blip was created
+ *
+ */
 function createBusinessExitBlip(businessId) {
 	if(!getServerConfig().createBusinessBlips) {
 		return false;
@@ -1440,13 +1866,17 @@ function createBusinessExitBlip(businessId) {
 			if(areServerElementsSupported()) {
 				logToConsole(LOG_VERBOSE, `[VRR.Job]: Creating exit blip for business ${getBusinessData(businessId).name} (model ${blipModelId})`);
 
-				getBusinessData(businessId).exitBlip = createGameBlip(getBusinessData(businessId).exitPosition, blipModelId, 1, getColourByName("businessBlue"));
-				setElementDimension(getBusinessData(businessId).exitBlip, getBusinessData(businessId).entranceDimension);
-				setElementOnAllDimensions(getBusinessData(businessId).exitBlip, false);
-				//getBusinessData(businessId).exitBlip.interior = getBusinessData(businessId).exitInterior;
-				//setEntityData(getBusinessData(businessId).exitBlip, "vrr.owner.type", VRR_BLIP_BUSINESS_EXIT, false);
-				//setEntityData(getBusinessData(businessId).exitBlip, "vrr.owner.id", businessId, false);
-				addToWorld(getBusinessData(businessId).exitBlip);
+				let exitBlip = createGameBlip(getBusinessData(businessId).exitPosition, blipModelId, 1, getColourByName("businessBlue"));
+				if(exitBlip != null) {
+					setElementDimension(exitBlip, getBusinessData(businessId).exitDimension);
+					setElementOnAllDimensions(exitBlip, false);
+					setElementStreamInDistance(exitBlip, getGlobalConfig().businessBlipStreamInDistance);
+					setElementStreamOutDistance(exitBlip, getGlobalConfig().businessBlipStreamOutDistance);
+					setElementTransient(exitBlip, false);
+					addToWorld(exitBlip);
+
+					getBusinessData(businessId).exitBlip = exitBlip;
+				}
 			}
 		}
 	}
@@ -1454,6 +1884,13 @@ function createBusinessExitBlip(businessId) {
 
 // ===========================================================================
 
+/**
+ * Deletes a business data and removes it from the database by data index
+ *
+ * @param {Number} businessId - The data index of the business to delete
+ * @return {Boolean} Whether or not the business was deleted
+ *
+ */
 function deleteBusiness(businessId, deletedBy = 0) {
 	let tempBusinessData = getServerData().businesses[businessId];
 
@@ -1474,10 +1911,19 @@ function deleteBusiness(businessId, deletedBy = 0) {
 	removePlayersFromBusiness(businessId);
 
 	getServerData().businesses.splice(businessId, 1);
+
+	return true;
 }
 
 // ===========================================================================
 
+/**
+ * Forces all players to exit a business
+ *
+ * @param {Number} businessId - The data index of the business to force all players inside to exit from
+ * @return {Boolean} Whether or not the players were forced to exit
+ *
+ */
 function removePlayersFromBusiness(businessId) {
 	getClients().forEach(function(client) {
 		if(doesBusinessHaveInterior(businessId)) {
@@ -1488,29 +1934,63 @@ function removePlayersFromBusiness(businessId) {
 			}
 		}
 	});
+
+	return true;
 }
 
 // ===========================================================================
 
+/**
+ * Forces a player to exit a business
+ *
+ * @param {Client} client - The client to force to exit the business
+ * @return {Boolean} Whether or not the player was forced to exit
+ *
+ */
 function removePlayerFromBusinesses(client) {
 	if(isPlayerInAnyBusiness(client)) {
 		exitBusiness(client);
+		return true;
 	}
+
+	return false;
 }
 
 // ===========================================================================
 
+/**
+ * Handles a player exiting a business
+ *
+ * @param {Client} client - The client to force to exit the business
+ * @return {Boolean} Whether or not the player successfully exited the business
+ *
+ */
 function exitBusiness(client) {
 	let businessId = getPlayerBusiness(client);
+
+	if(businessId == false) {
+		return false;
+	}
+
 	if(isPlayerSpawned(client)) {
 		setPlayerInterior(client, getServerData().businesses[businessId].entranceInterior);
 		setPlayerDimension(client, getServerData().businesses[businessId].entranceDimension);
 		setPlayerPosition(client, getServerData().businesses[businessId].entrancePosition);
+		return true;
 	}
+
+	return false;
 }
 
 // ===========================================================================
 
+/**
+ * Gets the name of the type of a business owner by type ID
+ *
+ * @param {Number} ownerType - The business owner type ID
+ * @return {String} Name of the business owner type
+ *
+ */
 function getBusinessOwnerTypeText(ownerType) {
 	switch(ownerType) {
 		case VRR_BIZOWNER_CLAN:
@@ -1546,12 +2026,22 @@ function getBusinessData(businessId) {
 
 // ===========================================================================
 
+/**
+ *
+ * @param {Number} businessId - The data index of the business
+ * @returns {Boolean} Whether or not the business has an interior
+ */
 function doesBusinessHaveInterior(businessId) {
 	return getBusinessData(businessId).hasInterior;
 }
 
 // ===========================================================================
 
+/**
+ *
+ * @param {Number} businessId - The data index of the business
+ * @returns {Boolean} Whether or not the entrance pickup of the business was deleted
+ */
 function deleteBusinessEntrancePickup(businessId) {
 	if(!areServerElementsSupported()) {
 		return false;
@@ -1561,11 +2051,20 @@ function deleteBusinessEntrancePickup(businessId) {
 		//removeFromWorld(getBusinessData(businessId).entrancePickup);
 		deleteGameElement(getBusinessData(businessId).entrancePickup);
 		getBusinessData(businessId).entrancePickup = null;
+
+		return true;
 	}
+
+	return false;
 }
 
 // ===========================================================================
 
+/**
+ *
+ * @param {Number} businessId - The data index of the business
+ * @returns {Boolean} Whether or not the exit pickup of the business was deleted
+ */
 function deleteBusinessExitPickup(businessId) {
 	if(!areServerElementsSupported()) {
 		return false;
@@ -1580,6 +2079,11 @@ function deleteBusinessExitPickup(businessId) {
 
 // ===========================================================================
 
+/**
+ *
+ * @param {Number} businessId - The data index of the business
+ * @returns {Boolean} Whether or not the entrance blip of the business was deleted
+ */
 function deleteBusinessEntranceBlip(businessId) {
 	if(!areServerElementsSupported()) {
 		return false;
@@ -1594,6 +2098,11 @@ function deleteBusinessEntranceBlip(businessId) {
 
 // ===========================================================================
 
+/**
+ *
+ * @param {Number} businessId - The data index of the business
+ * @returns {Boolean} Whether or not the exit blip of the business was deleted
+ */
 function deleteBusinessExitBlip(businessId) {
 	if(!areServerElementsSupported()) {
 		return false;
@@ -1608,6 +2117,15 @@ function deleteBusinessExitBlip(businessId) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function reloadAllBusinessesCommand(command, params, client) {
 	let clients = getClients();
 	for(let i in clients) {
@@ -1631,29 +2149,25 @@ function reloadAllBusinessesCommand(command, params, client) {
 	setAllBusinessIndexes();
 	cacheAllBusinessItems();
 
-	messageAdminAction(`All businesses have been reloaded by an admin!`);
+	announceAdminAction(`AllBusinessesReloaded`);
 }
 
 // ===========================================================================
 
+/**
+ * Sets the indexes of all businesses
+ *
+ * @returns {Boolean} Whether or not the exit blip of the business was deleted
+ */
 function setAllBusinessIndexes() {
 	for(let i in getServerData().businesses) {
 		getServerData().businesses[i].index = i;
-
-		//for(let j in getServerData().businesses[i].locations) {
-		//	getServerData().businesses[i].locations[j].index = j;
-		//	getServerData().businesses[i].locations[j].businessIndex = i;
-		//}
-
-		//for(let j in getServerData().businesses[i].gameScripts) {
-		//	getServerData().businesses[i].gameScripts[j].index = j;
-		//	getServerData().businesses[i].gameScripts[j].businessIndex = i;
-		//}
 	}
 }
 
 // ===========================================================================
 
+// Adds an item to a business inventory by item type, amount and buy price
 function addToBusinessInventory(businessId, itemType, amount, buyPrice) {
 	let tempItemData = new ItemData(false);
 	tempItemData.amount = amount;
@@ -1672,6 +2186,15 @@ function addToBusinessInventory(businessId, itemType, amount, buyPrice) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function buyFromBusinessCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -1763,16 +2286,25 @@ function buyFromBusinessCommand(command, params, client) {
 	//messagePlayerSuccess(client, `You bought ${amount} {ALTCOLOUR}${itemName} {MAINCOLOUR}for ${totalCost} ${priceEach}`);
 	meActionToNearbyPlayers(client, `buys a ${itemName}`);
 
-	if(!doesPlayerHaveKeyBindsDisabled(client) && doesPlayerHaveKeyBindForCommand("inv")) {
+	if(doesPlayerHaveKeyBindsDisabled(client) && doesPlayerHaveKeyBindForCommand("inv")) {
 		let keyData = getPlayerKeyBindForCommand("inv");
 		messagePlayerNewbieTip(client, getLocaleString(client, "ViewInventoryKeyPressTip", `{ALTCOLOUR}${getKeyNameFromId(keyData.key)}{MAINCOLOUR}`));
 	} else {
-		messagePlayerNewbieTip(client, getLocaleString(client, "ViewInventoryKeyPressTip", `{ALTCOLOUR}/inv{MAINCOLOUR}`));
+		messagePlayerNewbieTip(client, getLocaleString(client, "ViewInventoryCommandTip", `{ALTCOLOUR}/inv{MAINCOLOUR}`));
 	}
 }
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function setBusinessItemSellPriceCommand(command, params, client) {
 	let businessId = getBusinessFromParams(getParam(params, " ", 3)) || getPlayerBusiness(client);
 
@@ -1807,6 +2339,15 @@ function setBusinessItemSellPriceCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function storeItemInBusinessStorageCommand(command, params, client) {
 	let businessId = getBusinessFromParams(getParam(params, " ", 3)) || getPlayerBusiness(client);
 
@@ -1842,6 +2383,15 @@ function storeItemInBusinessStorageCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function stockItemOnBusinessFloorCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 
@@ -1877,6 +2427,7 @@ function stockItemOnBusinessFloorCommand(command, params, client) {
 
 // ===========================================================================
 
+// Gets the first free slot in a business's storage items
 function getBusinessStorageFirstFreeItemSlot(businessId) {
 	for(let i in getBusinessData(businessId).storageItemCache) {
 		if(getBusinessData(businessId).storageItemCache[i] == -1) {
@@ -1889,6 +2440,7 @@ function getBusinessStorageFirstFreeItemSlot(businessId) {
 
 // ===========================================================================
 
+// Gets the first free slot in a business's floor items
 function getBusinessFloorFirstFreeItemSlot(businessId) {
 	for(let i in getBusinessData(businessId).floorItemCache) {
 		if(getBusinessData(businessId).floorItemCache[i] == -1) {
@@ -1901,6 +2453,7 @@ function getBusinessFloorFirstFreeItemSlot(businessId) {
 
 // ===========================================================================
 
+// Caches all items for all businesses
 function cacheAllBusinessItems() {
 	logToConsole(LOG_DEBUG, "[VRR.Business] Caching all business items ...");
 	for(let i in getServerData().businesses) {
@@ -1911,6 +2464,7 @@ function cacheAllBusinessItems() {
 
 // ===========================================================================
 
+// Caches all items for a business by businessId
 function cacheBusinessItems(businessId) {
 	getBusinessData(businessId).floorItemCache.splice(0, getBusinessData(businessId).floorItemCache.length);
 	getBusinessData(businessId).storageItemCache.splice(0, getBusinessData(businessId).storageItemCache.length);
@@ -1928,6 +2482,7 @@ function cacheBusinessItems(businessId) {
 
 // ===========================================================================
 
+// Gets a business's data index from a business's databaseId
 function getBusinessIdFromDatabaseId(databaseId) {
 	for(let i in getServerData().businesses) {
 		if(getBusinessData(i).databaseId == databaseId) {
@@ -1940,6 +2495,7 @@ function getBusinessIdFromDatabaseId(databaseId) {
 
 // ===========================================================================
 
+// Updates all pickup data for a business by businessId
 function updateBusinessPickupLabelData(businessId) {
 	if(!areServerElementsSupported()) {
 		return false;
@@ -1981,17 +2537,6 @@ function updateBusinessPickupLabelData(businessId) {
 
 		if(getBusinessData(businessId).buyPrice > 0) {
 			setEntityData(getBusinessData(businessId).entrancePickup, "vrr.label.price", getBusinessData(businessId).buyPrice, true);
-		}
-	}
-}
-
-// ===========================================================================
-
-function getBusinessIdFromDatabaseId(databaseId) {
-	let businesses = getServerData().businesses;
-	for(let i in businesses) {
-		if(businesses[i].databaseId == databaseId) {
-			return i;
 		}
 	}
 }
@@ -2207,17 +2752,17 @@ function getBusinessFromParams(params) {
 // ===========================================================================
 
 function deleteAllBusinessBlips() {
-    for(let i in getServerData().businesses) {
-        deleteBusinessBlips(i);
-    }
+	for(let i in getServerData().businesses) {
+		deleteBusinessBlips(i);
+	}
 }
 
 // ===========================================================================
 
 function deleteAllBusinessPickups() {
-    for(let i in getServerData().businesses) {
-        deleteBusinessPickups(i);
-    }
+	for(let i in getServerData().businesses) {
+		deleteBusinessPickups(i);
+	}
 }
 
 // ===========================================================================

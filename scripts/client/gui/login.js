@@ -20,6 +20,28 @@ let login = {
 
 // ===========================================================================
 
+let loginHTML =
+`<html>
+    <head>
+        <title>Connected RP: Login</title>
+        <style type="text/css" rel="stylesheet">
+            .input-box
+            {
+                font-family: "Roboto";
+                font-size: 14px;
+                border-style: solid;
+                border-colour: #0066AA;
+                border-radius: 2px;
+                color: #0066AA;
+            };
+        </style>
+    </head>
+    <body>
+    </body>
+</html>`;
+
+// ===========================================================================
+
 function initLoginGUI() {
     logToConsole(LOG_DEBUG, `[VRR.GUI] Creating login GUI ...`);
 	login.window = mexui.window(game.width/2-150, game.height/2-135, 300, 275, 'LOGIN', {
@@ -164,9 +186,10 @@ function loginSuccess() {
 // ===========================================================================
 
 function switchToPasswordResetGUI() {
-	closeAllWindows();
-	logToConsole(LOG_DEBUG, `[VRR.GUI] Showing password reset dialog window`);
-	showResetPasswordGUI();
+	//closeAllWindows();
+	//logToConsole(LOG_DEBUG, `[VRR.GUI] Showing password reset dialog window`);
+	//showResetPasswordGUI();
+	sendNetworkEventToServer("vrr.checkResetPassword", "");
 	return false;
 }
 

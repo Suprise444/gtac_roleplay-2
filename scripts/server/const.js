@@ -11,6 +11,7 @@
 const VRR_PROMPT_NONE = 0;
 const VRR_PROMPT_CREATEFIRSTCHAR = 1;
 const VRR_PROMPT_BIZORDER = 2;
+const VRR_PROMPT_GIVEVEHTOCLAN = 3;
 
 // Job Types
 const VRR_JOB_NONE = 0;
@@ -347,3 +348,8 @@ const VRR_GPS_TYPE_POLICE = 2;                   // Police Station
 const VRR_GPS_TYPE_HOSPITAL = 3;                 // Hospital
 const VRR_GPS_TYPE_JOB = 4;                      // Job
 const VRR_GPS_TYPE_GAMELOC = 5;                  // Game Location
+
+// Discord Webhook Types
+const VRR_DISCORD_WEBHOOK_NONE = 0;
+const VRR_DISCORD_WEBHOOK_LOG = 1;
+const VRR_DISCORD_WEBHOOK_ADMIN = 2;

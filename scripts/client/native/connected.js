@@ -8,57 +8,61 @@
 // ===========================================================================
 
 function sendNetworkEventToPlayer(networkEvent, client, ...args) {
-    triggerNetworkEvent.apply(null, networkEvent, client, args);
+	triggerNetworkEvent.apply(null, networkEvent, client, args);
 }
 
 // ===========================================================================
 
 function getPlayerPosition() {
-    return localPlayer.position;
+	return localPlayer.position;
 }
 
 // ===========================================================================
 
 function setPlayerPosition(position) {
-    localPlayer.position = position;
+	if(getGame() == VRR_GAME_GTA_IV) {
+		natives.setCharCoordinates(localPlayer, position);
+	} else {
+		localPlayer.position = position;
+	}
 }
 
 // ===========================================================================
 
 function getElementPosition(element) {
-    return element.position;
+	return element.position;
 }
 
 // ===========================================================================
 
 function setElementPosition(element, position) {
-    if(!element.isSyncer) {
-        return false;
-    }
+	if(!element.isSyncer) {
+		return false;
+	}
 
-    element.position = position;
+	element.position = position;
 }
 
 // ===========================================================================
 
 function deleteGameElement(element, position) {
-    if(!element.isOwner) {
-        return false;
-    }
+	if(!element.isOwner) {
+		return false;
+	}
 
-    destroyGameElement(element);
+	destroyGameElement(element);
 }
 
 // ===========================================================================
 
 function createGameVehicle(modelIndex, position, heading) {
-    return game.createVehicle(getGameConfig().vehicles[getGame()][modelIndex][0], position, heading);
+	return game.createVehicle(getGameConfig().vehicles[getGame()][modelIndex][0], position, heading);
 }
 
 // ===========================================================================
 
 function addNetworkEventHandler(eventName, handlerFunction) {
-    addNetworkHandler(eventName, handlerFunction);
+	addNetworkHandler(eventName, handlerFunction);
 }
 
 // ===========================================================================
@@ -139,6 +143,49 @@ function getVehiclesInRange(position, range) {
 		}
 	}
 	return inRangeVehicles;
+}
+
+// ===========================================================================
+
+function createGameBlip(blipModel, position, name = "") {
+	if(getGame() == VRR_GAME_GTA_IV) {
+		let blipId = natives.addBlipForCoord(position);
+		if(blipId) {
+			natives.changeBlipSprite(blipId, blipModel);
+			natives.setBlipMarkerLongDistance(blipId, false);
+			natives.setBlipAsShortRange(blipId, true);
+			natives.changeBlipNameFromAscii(blipId, `${name.substr(0, 24)}${(name.length > 24) ? " ...": ""}`);
+			return blipId;
+		}
+	}
+
+	return -1;
+}
+
+// ===========================================================================
+
+function setEntityData(entity, dataName, dataValue, syncToClients = true) {
+	if(entity != null) {
+		return entity.setData(dataName, dataValue);
+	}
+}
+
+// ===========================================================================
+
+function removeEntityData(entity, dataName) {
+	if(entity != null) {
+		return entity.removeData(dataName);
+	}
+	return null;
+}
+
+// ===========================================================================
+
+function doesEntityDataExist(entity, dataName) {
+	if(entity != null) {
+		return (entity.getData(dataName) != null);
+	}
+	return null;
 }
 
 // ===========================================================================

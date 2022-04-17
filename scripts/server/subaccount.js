@@ -185,7 +185,7 @@ function saveSubAccountToDatabase(subAccountData) {
 		freeDatabaseQuery(dbQuery);
 
 		disconnectFromDatabase(dbConnection);
-    }
+	}
 }
 
 // ===========================================================================
@@ -275,7 +275,7 @@ function checkNewCharacter(client, firstName, lastName) {
 	lastName = lastName.trim();
 
 	if(doesNameContainInvalidCharacters(firstName) || doesNameContainInvalidCharacters(lastName)) {
-		logToConsole(LOG_WARN, `[VRR.Account] Subaccount ${firstName} ${lastName} could not be created (invalid characters in name)`);
+		logToConsole(LOG_INFO|LOG_WARN, `[VRR.Account] Subaccount ${firstName} ${lastName} could not be created (invalid characters in name)`);
 		showPlayerNewCharacterFailedGUI(client, "Invalid characters in name!");
 		return false;
 	}
@@ -371,16 +371,20 @@ function selectCharacter(client, characterId = -1) {
 	//setPlayerCameraLookAt(client, getPosBehindPos(spawnPosition, spawnHeading, 5), spawnPosition);
 	getPlayerData(client).pedState = VRR_PEDSTATE_SPAWNING;
 
-	if(getGame() < VRR_GAME_GTA_IV) {
+	if(getGame() <= VRR_GAME_GTA_SA) {
 		spawnPlayer(client, spawnPosition, spawnHeading, getGameConfig().skins[getGame()][skin][0], spawnInterior, spawnDimension);
 	} else if(getGame() == VRR_GAME_GTA_IV) {
 		spawnPlayer(client, spawnPosition, spawnHeading, getGameConfig().skins[getGame()][skin][0], spawnInterior, spawnDimension);
+		//clearPlayerWeapons(client);
 		//setPlayerSkin(client, skin);
 		//setPlayerPosition(client, spawnPosition);
 		//setPlayerHeading(client, spawnHeading);
 		//setPlayerInterior(client, spawnInterior);
 		//setPlayerDimension(client, spawnDimension);
-	} else if(getGame() >= VRR_GAME_MAFIA_ONE) {
+		//restorePlayerCamera(client);
+	} else if(getGame() == VRR_GAME_MAFIA_ONE) {
+		//spawnPlayer(client, spawnPosition, spawnHeading, getGameConfig().skins[getGame()][skin][0]);
+		logToConsole(LOG_DEBUG, `[VRR.SubAccount] Spawning ${getPlayerDisplayForConsole(client)} as ${getGameConfig().skins[getGame()][skin][1]} (${getGameConfig().skins[getGame()][skin][0]})`);
 		spawnPlayer(client, getGameConfig().skins[getGame()][skin][0], spawnPosition, spawnHeading);
 	}
 
@@ -540,45 +544,6 @@ function setFightStyleCommand(command, params, client) {
 
 	setPlayerFightStyle(client, fightStyleId);
 	messagePlayerSuccess(client, `Your fight style has been set to ${getGameConfig().fightStyles[getServerGame()][fightStyleId][0]}`)
-
-	return true;
-}
-
-// ===========================================================================
-
-function forceFightStyleCommand(command, params, client) {
-	if(areParamsEmpty(params)) {
-		messagePlayerSyntax(client, getCommandSyntaxText(command));
-		return false;
-	}
-
-	let targetClient = getPlayerFromParams(getParam(params, " ", 1));
-	let fightStyleId = getFightStyleFromParams(getParam(params, " ", 2));
-
-	//if(!targetClient) {
-	//	messagePlayerError(client, `Player not found!`);
-	//	return false;
-	//}
-
-	//if(!getPlayerData(targetClient)) {
-	//	messagePlayerError(client, `Player not found!`);
-	//	return false;
-	//}
-
-	//if(!isPlayerSpawned(targetClient)) {
-	//	messagePlayerError(client, `That player isn't spawned`);
-	//	return false;
-	//}
-
-	if(!fightStyleId) {
-		messagePlayerError(client, `That fight style doesn't exist!`);
-		messagePlayerError(client, `Fight styles: ${getGameConfig().fightStyles[getServerGame()].map(fs => fs[0]).join(", ")}`);
-		return false;
-	}
-
-	getPlayerCurrentSubAccount(client).fightStyle = fightStyleId;
-	setPlayerFightStyle(client, fightStyleId);
-	messagePlayerSuccess(client, `You set ${getCharacterFullName(targetClient)}'s fight style to ${getGameConfig().fightStyles[getServerGame()][fightStyleId][0]}`)
 
 	return true;
 }

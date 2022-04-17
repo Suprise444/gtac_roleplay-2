@@ -54,7 +54,7 @@ function doesPlayerHaveGateKeys(client, vehicle) {
 		}
 	}
 
-    if(gateData.ownerType == VRR_GATEOWNER_BUSINESS) {
+	if(gateData.ownerType == VRR_GATEOWNER_BUSINESS) {
 		if(doesPlayerHaveStaffPermission(client, getStaffFlagValue("ManageBusinesses"))) {
 			return true;
 		}
@@ -64,7 +64,7 @@ function doesPlayerHaveGateKeys(client, vehicle) {
 		}
 	}
 
-    if(gateData.ownerType == VRR_GATEOWNER_HOUSE) {
+	if(gateData.ownerType == VRR_GATEOWNER_HOUSE) {
 		if(doesPlayerHaveStaffPermission(client, getStaffFlagValue("ManageHouses"))) {
 			return true;
 		}
@@ -80,11 +80,11 @@ function doesPlayerHaveGateKeys(client, vehicle) {
 // ===========================================================================
 
 function getGateData(gateId) {
-    if(typeof getServerData().gates[gateId] != "undefined") {
-        return getServerData().gates[gateId];
-    }
+	if(typeof getServerData().gates[gateId] != "undefined") {
+		return getServerData().gates[gateId];
+	}
 
-    return false;
+	return false;
 }
 
 // ===========================================================================

@@ -40,7 +40,7 @@ function initRegisterGUI() {
 	register.window.titleBarIconSize = toVector2(0,0);
 	register.window.titleBarHeight = 0;
 
-	register.window.image(5, 20, 290, 80, mainLogoPath, {
+	register.window.image(5, 20, 290, 100, mainLogoPath, {
 		focused: {
 			borderColour: toColour(0, 0, 0, 0),
 		},

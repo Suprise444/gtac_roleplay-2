@@ -82,7 +82,7 @@ function initAllClients() {
 
 function updateServerRules() {
 	logToConsole(LOG_DEBUG, `[VRR.Utilities]: Updating all server rules ...`);
-	
+
 	logToConsole(LOG_DEBUG, `[VRR.Utilities]: Time support: ${isTimeSupported()}`);
 	if(isTimeSupported()) {
 		if(getServerConfig() != false) {
@@ -363,7 +363,7 @@ function updateConnectionLogOnClientInfoReceive(client, clientVersion, screenWid
 		let safeClientVersion = escapeDatabaseString(dbConnection, clientVersion);
 		let safeScreenWidth = escapeDatabaseString(dbConnection, toString(screenWidth));
 		let safeScreenHeight = escapeDatabaseString(dbConnection, toString(screenHeight));
-    	quickDatabaseQuery(`UPDATE conn_main SET conn_client_version='${safeClientVersion}', conn_screen_width='${safeScreenWidth}', conn_screen_height='${safeScreenHeight}' WHERE conn_id = ${getPlayerData(client).sessionId}`);
+		quickDatabaseQuery(`UPDATE conn_main SET conn_client_version='${safeClientVersion}', conn_screen_width='${safeScreenWidth}', conn_screen_height='${safeScreenHeight}' WHERE conn_id = ${getPlayerData(client).sessionId}`);
 	}
 }
 
@@ -395,19 +395,22 @@ function getClientFromSyncerId(syncerId) {
 
 // ===========================================================================
 
-async function triggerWebHook(webHookURL, payloadData) {
-	return new Promise(resolve => {
-		//console.warn(webHookURL);
-		httpGet(
-			webHookURL,
-			`data=${payloadData}`,
-			function(data) {
-				//console.warn(JSON.parse(data));
-			},
-			function(data) {
-			}
-		);
-	});
+function triggerWebHook(messageString, serverId = getServerId(), type = VRR_DISCORD_WEBHOOK_LOG) {
+	let tempURL = getGlobalConfig().discord.webhook.webhookBaseURL;
+	tempURL = tempURL.replace("{0}", encodeURI(messageString));
+	tempURL = tempURL.replace("{1}", serverId);
+	tempURL = tempURL.replace("{2}", type);
+	tempURL = tempURL.replace("{3}", getGlobalConfig().discord.webhook.pass);
+
+	httpGet(
+		tempURL,
+		"",
+		function(data) {
+
+		},
+		function(data) {
+		}
+	);
 }
 
 // ===========================================================================
@@ -445,9 +448,9 @@ function clearTemporaryPeds() {
 // ===========================================================================
 
 function kickAllClients() {
-    getClients().forEach((client) => {
-        client.disconnect();
-    })
+	getClients().forEach((client) => {
+		client.disconnect();
+	})
 }
 
 // ===========================================================================
@@ -462,6 +465,32 @@ function updateTimeRule() {
 
 function isClientInitialized(client) {
 	return (typeof getServerData().clients[client.index] != "undefined");
+}
+
+// ===========================================================================
+
+function getPedForNetworkEvent(ped) {
+	if(getGame() == VRR_GAME_GTA_IV) {
+		return ped;
+	} else {
+		return ped.id;
+	}
+}
+
+// ===========================================================================
+
+// Get how many times a player connected in the last month by name
+function getPlayerConnectionsInLastMonthByName(name) {
+	let dbConnection = connectToDatabase();
+	if(dbConnection) {
+		let safeName = escapeDatabaseString(dbConnection, name);
+		let result = quickDatabaseQuery(`SELECT COUNT(*) AS count FROM conn_main WHERE conn_when_connect >= NOW() - INTERVAL 1 MONTH AND conn_name = '${safeName}'`);
+		if(result) {
+			return result[0].count;
+		}
+	}
+
+	return 0;
 }
 
 // ===========================================================================

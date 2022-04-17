@@ -2,11 +2,11 @@ mexui.Component.Window = function(x, y, w, h, title, styles)
 {
 	mexui.Entity.Component.call(this, true);
 	mexui.Entity.StyleableEntity.call(this, this.linkComponentStyles('Window', styles));
-	
+
 	this.position				= new Vec2(x, y);
 	this.size					= new Vec2(w, h);
 	this.title					= title || '';
-	
+
 	this.controls				= [];
 	this.titleBarShown			= true;
 	this.titleBarHeight			= 30;
@@ -21,7 +21,7 @@ mexui.Component.Window.defaultStyles = mexui.util.linkStyles(mexui.Entity.Stylea
 	{
 		backgroundColour:	toColour(0, 0, 0, 190),
 		textColour:			toColour(255, 255, 255, 255),
-		
+
 		hover:
 		{
 			backgroundColour:	toColour(0, 0, 0, 170)
@@ -52,12 +52,12 @@ mexui.Component.Window.prototype.onMouseDown = function(e)
 		e.used = true;
 		return;
 	}
-	
+
 	if(this.isCursorOverWindow())
 	{
 		this.setTop();
 	}
-	
+
 	this.triggerEvent('onMouseDown', e);
 };
 
@@ -70,15 +70,15 @@ mexui.Component.Window.prototype.onMouseMove = function(e, offset)
 {
 	//var wasHovered = this.isHovered();
 	//e.wasHovered = wasHovered;
-	
+
 	if(mexui.hoveredComponent && !mexui.hoveredComponent.isCursorOverItem())
 	{
 		mexui.hoveredComponent.onMouseExit();
 		mexui.clearHoveredComponent();
 	}
-	
+
 	this.triggerEvent('onMouseMove', e, offset);
-	
+
 	if(e.used)
 	{
 		/*
@@ -90,7 +90,7 @@ mexui.Component.Window.prototype.onMouseMove = function(e, offset)
 		*/
 		return;
 	}
-	
+
 	if(this.isCursorOverWindow())
 	{
 		if(!this.isHovered())
@@ -129,13 +129,13 @@ mexui.Component.Window.prototype.render = function()
 {
 	// window background
 	mexui.native.drawRectangleBackground(this.position, this.size, this.getStyles('main'));
-	
+
 	if(this.titleBarShown)
 	{
 		// window title bar
 		mexui.native.drawRectangle(this.position, new Vec2(this.size.x, this.titleBarHeight), this.getStyles('title'));
 		mexui.native.drawText(this.position, new Vec2(this.size.x, this.titleBarHeight), this.title, this.getStyles('title'));
-		
+
 		if(this.titleBarIconShown)
 		{
 			// window title bar icons
@@ -144,17 +144,17 @@ mexui.Component.Window.prototype.render = function()
 			mexui.native.drawText(iconPos, this.titleBarIconSize, 'X', this.getStyles('icon'));
 		}
 	}
-	
+
 	// window border
 	mexui.native.drawRectangleBorder(this.position, this.size, this.getStyles('main'));
-	
+
 	// window controls
 	var show, control;
 	for(var i in this.controls)
 	{
 		control = this.controls[i];
 		show = false;
-		
+
 		if(control.shown)
 		{
 			show = true;
@@ -164,7 +164,7 @@ mexui.Component.Window.prototype.render = function()
 					show = false;
 			}
 		}
-		
+
 		if(show)
 			control.render.call(control);
 	}
@@ -177,7 +177,7 @@ mexui.Component.Window.prototype.renderAfter = function()
 		if(this.controls[i].shown)
 		{
 			this.controls[i].renderAfter.call(this.controls[i]);
-			
+
 			for(var i2 in this.controls[i].scrollBars)
 			{
 				if(this.controls[i].scrollBars[i2].shown)
@@ -219,10 +219,10 @@ mexui.Component.Window.prototype.triggerEvent = function(eventName, e, data, cal
 	for(var i in this.controls)
 	{
 		var control = this.controls[i];
-		
+
 		if(!control.shown)
 			continue;
-		
+
 		if(callBaseMethodFirst)
 		{
 			if(mexui.Entity.Component.prototype[eventName])
@@ -231,7 +231,7 @@ mexui.Component.Window.prototype.triggerEvent = function(eventName, e, data, cal
 				if(e.used)
 					break;
 			}
-			
+
 			this.controls[i][eventName].call(control, e, data);
 			if(e.used)
 				break;
@@ -248,7 +248,7 @@ mexui.Component.Window.prototype.triggerEvent = function(eventName, e, data, cal
 				}
 				break;
 			}
-			
+
 			if(mexui.Entity.Component.prototype[eventName])
 			{
 				mexui.Entity.Component.prototype[eventName].call(control, e, data);
@@ -268,9 +268,9 @@ mexui.Component.Window.prototype.addControl = function(control)
 mexui.Component.Window.prototype.setShown = function(shown)
 {
 	//var anyWindowShownBefore = mexui.isAnyWindowShown();
-	
+
 	this.shown = shown;
-	
+
 	if(mexui.focusedControl && this.isControlInWindow(mexui.focusedControl))
 	{
 		if(!shown)
@@ -278,7 +278,7 @@ mexui.Component.Window.prototype.setShown = function(shown)
 			mexui.focusedControl = null;
 		}
 	}
-	
+
 	/*
 	if(shown)
 	{
@@ -336,7 +336,7 @@ mexui.Component.Window.prototype.getFirstShownControl = function()
 mexui.Component.Window.prototype.getNextShownControl = function(afterControl)
 {
 	var controlIndex = this.controls.indexOf(afterControl);
-	
+
 	if(this.controls[controlIndex + 1])
 		return this.controls[controlIndex + 1];
 	else
@@ -386,4 +386,3 @@ mexui.Component.Window.prototype.tree			= function(x, y, w, h, styles, callback)
 mexui.Component.Window.prototype.week			= function(x, y, w, h, text, styles, callback)	{	return this.addControl(new mexui.Control.Week(this, x, y, w, h, text, styles, callback));			};
 mexui.Component.Window.prototype.weekDay		= function(x, y, w, h, text, styles, callback)	{	return this.addControl(new mexui.Control.WeekDay(this, x, y, w, h, text, styles, callback));		};
 mexui.Component.Window.prototype.year			= function(x, y, w, h, text, styles, callback)	{	return this.addControl(new mexui.Control.Year(this, x, y, w, h, text, styles, callback));			};
-

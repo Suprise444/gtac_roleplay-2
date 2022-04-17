@@ -151,4 +151,3 @@ mexui.native.drawImage = function(position, size, image, styles)
 {
 	drawing.drawRectangle(image, position, size);
 };
-

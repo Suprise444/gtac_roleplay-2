@@ -16,31 +16,31 @@ function initDiscordScript() {
 
 /*
 addEventHandler("OnDiscordCommand", function(command, params, discordUser) {
-    let commandData = getCommand(command);
+	let commandData = getCommand(command);
 
-    if(!commandData) {
-        messagePlayerError(discordUser, "That command does not exist!");
-        return false;
-    }
+	if(!commandData) {
+		messagePlayerError(discordUser, "That command does not exist!");
+		return false;
+	}
 
-    if(isCommandAllowedOnDiscord(command)) {
-        messagePlayerError(discordUser, "That command can not be used on Discord!");
-        return false;
-    }
+	if(isCommandAllowedOnDiscord(command)) {
+		messagePlayerError(discordUser, "That command can not be used on Discord!");
+		return false;
+	}
 
-    if(doesClientHavePermission(discordUser, getCommandRequiredPermissions(command))) {
-        messagePlayerError(discordUser, "You do not have permission to use that command!");
-        return false;
-    }
+	if(doesClientHavePermission(discordUser, getCommandRequiredPermissions(command))) {
+		messagePlayerError(discordUser, "You do not have permission to use that command!");
+		return false;
+	}
 
-    commandData.handlerFunction(command, params, discordUser);
+	commandData.handlerFunction(command, params, discordUser);
 });
 */
 
 // ===========================================================================
 
 function messageDiscordUser(discordUser, messageText) {
-    let socketData = JSON.stringify({
+	let socketData = JSON.stringify({
 		type: "chat.message.text",
 		payload: {
 			author: discordUser.name,
@@ -53,88 +53,82 @@ function messageDiscordUser(discordUser, messageText) {
 // ===========================================================================
 
 function sendDiscordSocketData(socketData) {
-    if(!getDiscordSocket()) {
-        return false;
-    }
+	if(!getDiscordSocket()) {
+		return false;
+	}
 
-    getDiscordSocket().send(module.hash.encodeBase64(socketData) + "\r\n");
+	getDiscordSocket().send(module.hash.encodeBase64(socketData) + "\r\n");
 }
 
 // ===========================================================================
 
 function isClientFromDiscord(client) {
-    if(client == null) {
-        return false;
-    }
+	if(client == null) {
+		return false;
+	}
 
-    if(client instanceof Client) {
-        return false;
-    } else {
-        return true;
-    }
+	if(client instanceof Client) {
+		return false;
+	} else {
+		return true;
+	}
 }
 
 // ===========================================================================
 
 function getDiscordSocket() {
-    return false;
+	return false;
 }
 
 // ===========================================================================
 
 function getDiscordUserData(discordUserId) {
-    return loadAccountFromDiscordUserId(discordUserId);
+	return loadAccountFromDiscordUserId(discordUserId);
 }
 
 // ===========================================================================
 
-function messageDiscordChatChannel(message) {
-    if(!getServerConfig().discordConfig.sendChat) {
-        return false;
-    }
+function messageDiscordChatChannel(messageString) {
+	if(getServerConfig().devServer) {
+		return false;
+	}
 
-    message = removeColoursInMessage(message);
-    console.warn(message);
-    let payloadData = {
-        "username": "Chat",
-        "content": message,
-    };
+	if(!getServerConfig().discord.sendChat) {
+		return false;
+	}
 
-    triggerWebHook(getServerConfig().discordConfig.chatChannelWebHookURL, JSON.stringify(payloadData));
+	messageString = removeColoursInMessage(messageString);
+	triggerWebHook(messageString, getServerId(), VRR_DISCORD_WEBHOOK_LOG);
 }
 
 // ===========================================================================
 
-function messageDiscordAdminChannel(message) {
-    if(!getServerConfig().discordConfig.sendAdminEvents) {
-        return false;
-    }
+function messageDiscordEventChannel(messageString) {
+	if(getServerConfig().devServer == true) {
+		return false;
+	}
 
-    message = removeColoursInMessage(message);
-    console.warn(message);
-    let payloadData = {
-        "username": "Admin Event",
-        "content": message,
-    };
+	if(!getServerConfig().discord.sendEvents) {
+		return false;
+	}
 
-    triggerWebHook(getServerConfig().discordConfig.adminChannelWebHookURL, JSON.stringify(payloadData));
+	messageString = removeColoursInMessage(messageString);
+	triggerWebHook(messageString, getServerId(), VRR_DISCORD_WEBHOOK_LOG);
 }
 
 // ===========================================================================
 
-function messageDiscordEventChannel(message) {
-    if(!getServerConfig().discordConfig.sendEvents) {
-        return false;
-    }
+function messageDiscordAdminChannel(messageString) {
+	if(getServerConfig().devServer == true) {
+		return false;
+	}
 
-    message = removeColoursInMessage(message);
-    console.warn(message);
-    let payloadData = {
-        "username": "Event",
-        "content": message,
-    };
+	if(!getServerConfig().discord.sendAdmin) {
+		return false;
+	}
 
-    triggerWebHook(getServerConfig().discordConfig.eventChannelWebHookURL, JSON.stringify(payloadData));
+	messageString = removeColoursInMessage(messageString);
+	triggerWebHook(messageString, getServerId(), VRR_DISCORD_WEBHOOK_ADMIN);
 }
 
 // ===========================================================================

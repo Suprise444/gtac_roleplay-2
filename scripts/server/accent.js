@@ -8,30 +8,30 @@
 // ===========================================================================
 
 function getPlayerAccentText(client) {
-    return getPlayerCurrentSubAccount(client).accent;
+	return getPlayerCurrentSubAccount(client).accent;
 }
 
 // ===========================================================================
 
 function setPlayerAccentText(client, text) {
-    getPlayerCurrentSubAccount(client).accent = text;
+	getPlayerCurrentSubAccount(client).accent = text;
 }
 
 // ===========================================================================
 
 function doesPlayerHaveAccent(client) {
-    return (getPlayerCurrentSubAccount(client).accent != "");
+	return (getPlayerCurrentSubAccount(client).accent != "");
 }
 
 // ===========================================================================
 
 function getPlayerAccentInlineOutput(client) {
-    let outputText = "";
-    if(doesPlayerHaveAccent(client)) {
-        outputText = `[${getPlayerAccentText(client)}] `;
-    }
+	let outputText = "";
+	if(doesPlayerHaveAccent(client)) {
+		outputText = `[${getPlayerAccentText(client)}] `;
+	}
 
-    return outputText;
+	return outputText;
 }
 
 // ===========================================================================

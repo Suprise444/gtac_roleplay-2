@@ -94,13 +94,13 @@ function toggleAutoSelectLastCharacterCommand(command, params, client) {
 function toggleAccountGUICommand(command, params, client) {
 	let flagValue = getAccountSettingsFlagValue("NoGUI");
 
-	if(!doesPlayerHaveGUIEnabled(client)) {
+	if(doesPlayerHaveGUIEnabled(client)) {
 		getPlayerData(client).accountData.settings = removeBitFlag(getPlayerData(client).accountData.settings, flagValue);
-		messagePlayerNormal(client, getLocaleString(client, "GUIAccountSettingToggle", `{softRed}${toUpperCase(getLocaleString(client, "Off"))}`));
+		messagePlayerNormal(client, getLocaleString(client, "GUIAccountSettingToggle", `{softRed}${toUpperCase(getLocaleString(client, "Off"))}{MAINCOLOUR}`));
 		logToConsole(LOG_DEBUG, `[VRR.Account] ${getPlayerDisplayForConsole(client)} has toggled GUI for their account ON.`);
 	} else {
 		getPlayerData(client).accountData.settings = addBitFlag(getPlayerData(client).accountData.settings, flagValue);
-		messagePlayerNormal(client, getLocaleString(client, "GUIAccountSettingToggle", `{softGreen}${toUpperCase(getLocaleString(client, "On"))}`));
+		messagePlayerNormal(client, getLocaleString(client, "GUIAccountSettingToggle", `{softGreen}${toUpperCase(getLocaleString(client, "On"))}{MAINCOLOUR}`));
 		logToConsole(LOG_DEBUG, `[VRR.Account] ${getPlayerDisplayForConsole(client)} has toggled GUI for their account ON.`);
 	}
 
@@ -267,6 +267,26 @@ function setAccountChatScrollLinesCommand(command, params, client) {
 	getPlayerData(client).accountData.chatScrollLines = lines;
 	sendPlayerChatScrollLines(client, lines);
 	messagePlayerSuccess(client, `Your chatbox will now scroll ${toInteger(lines)} lines at a time!`);
+}
+
+// ===========================================================================
+
+function setAccountChatAutoHideDelayCommand(command, params, client) {
+	if(areParamsEmpty(params)) {
+		messagePlayerSyntax(client, getCommandSyntaxText(command));
+		return false;
+	}
+
+	if(isNaN(params)) {
+		messagePlayerError(client, `The delay time must be a number!`);
+		return false;
+	}
+
+	let delay = Math.ceil(toInteger(params));
+
+	getPlayerData(client).accountData.chatAutoHideDelay = delay;
+	sendPlayerChatAutoHideDelay(client, delay);
+	messagePlayerSuccess(client, `Your chatbox will now automatically hide after ${toInteger(delay)} seconds!`);
 }
 
 // ===========================================================================
@@ -569,6 +589,7 @@ function loginSuccess(client) {
 	if(doesServerHaveTesterOnlyEnabled()) {
 		if(!hasBitFlag(getPlayerData(client).accountData.flags.moderation, getModerationFlagValue("IsTester"))) {
 			setTimeout(function() {
+				getPlayerData(client).customDisconnectReason = "Kicked - Not a tester";
 				client.disconnect();
 			}, 3500);
 
@@ -580,13 +601,13 @@ function loginSuccess(client) {
 				logToConsole(LOG_DEBUG, `[VRR.Account] ${getPlayerDisplayForConsole(client)} is being shown the "not a tester" error message (GUI disabled).`);
 				messagePlayerError(client, getLocaleString(client, "NotATester"));
 				return false;
-			}			
+			}
 		}
 	}
 
 	if(getPlayerData(client).subAccounts.length == 0) {
 		if(doesServerHaveGUIEnabled() && doesPlayerHaveGUIEnabled(client)) {
-			showPlayerPromptGUI(client, getLocaleString(client, "NoCharactersGUIMessage"), getLocaleString(client, "NoCharactersGUIWindowTitle"));
+			showPlayerPromptGUI(client, getLocaleString(client, "NoCharactersGUIMessage"), getLocaleString(client, "NoCharactersGUIWindowTitle"), getLocaleString(client, "Yes"), getLocaleString(client, "No"));
 			getPlayerData(client).promptType = VRR_PROMPT_CREATEFIRSTCHAR;
 			logToConsole(LOG_DEBUG, `[VRR.Account] ${getPlayerDisplayForConsole(client)} is being shown the no characters prompt GUI`);
 		} else {
@@ -600,8 +621,8 @@ function loginSuccess(client) {
 	getPlayerData(client).accountData.ipAddress = client.ip;
 
 	sendPlayerChatScrollLines(client, getPlayerData(client).accountData.chatScrollLines);
-
 	messagePlayerNormal(null, `👋 ${getPlayerName(client)} has joined the server`, getColourByName("softYellow"));
+	messageDiscordChatChannel(`👋 ${getPlayerName(client)} has joined the server`);
 }
 
 // ===========================================================================
@@ -636,6 +657,7 @@ function saveAccountToDatabase(accountData) {
 			["acct_svr_staff_flags", accountData.flags.admin],
 			["acct_svr_mod_flags", accountData.flags.moderation],
 			["acct_svr_chat_scroll_lines", accountData.chatScrollLines],
+			["acct_svr_chat_auto_hide_delay", accountData.chatAutoHideDelay],
 		];
 
 		let queryString1 = createDatabaseUpdateQuery("acct_main", data, `acct_id=${accountData.databaseId}`);
@@ -915,13 +937,13 @@ function checkRegistration(client, password, confirmPassword = "", emailAddress 
 		} else {
 			messagePlayerError(client, "Password doesn't meet requirements!");
 		}
-		return false
+		return false;
 	}
 
 	if(doesServerHaveGUIEnabled() && doesPlayerHaveGUIEnabled(client)) {
 		if(!isValidEmailAddress(emailAddress)) {
 			showPlayerRegistrationFailedGUI(client, getLocaleString(client, "RegistrationFailedInvalidEmail"));
-			return false
+			return false;
 		}
 	}
 
@@ -947,7 +969,7 @@ function checkRegistration(client, password, confirmPassword = "", emailAddress 
 		setAccountEmailVerificationCode(getPlayerData(client).accountData, emailVerificationCode);
 		sendEmailVerificationEmail(client, emailVerificationCode);
 		logToConsole(LOG_WARN, `${getPlayerDisplayForConsole(client)} was sent a registration email verification code`);
-    }
+	}
 
 	if(doesServerHaveTesterOnlyEnabled() && !isPlayerATester(client)) {
 		setTimeout(function() {
@@ -962,7 +984,7 @@ function checkRegistration(client, password, confirmPassword = "", emailAddress 
 			logToConsole(LOG_DEBUG, `[VRR.Account] ${getPlayerDisplayForConsole(client)} is being shown the "not a tester" error message (GUI disabled).`);
 			messagePlayerError(client, getLocaleString(client, "NotATester"));
 			return false;
-		}	
+		}
 	} else {
 		messagePlayerAlert(client, getLocaleString(client, "RegistrationCreateCharReminder"));
 
@@ -979,6 +1001,10 @@ function checkRegistration(client, password, confirmPassword = "", emailAddress 
 // ===========================================================================
 
 function checkAccountResetPasswordRequest(client, inputText) {
+	if(!checkForSMTPModule() || !getEmailConfig().enabled) {
+		return false;
+	}
+
 	if(getPlayerData(client).passwordResetState == VRR_RESETPASS_STATE_NONE) {
 		if(toLowerCase(getPlayerData(client).accountData.emailAddress) != toLowerCase(inputText)) {
 			logToConsole(LOG_DEBUG|LOG_WARN, `${getPlayerDisplayForConsole(client)} failed to reset their password (email not correct)`);
@@ -1063,7 +1089,7 @@ function isValidEmailAddress(emailAddress) {
 
 // ===========================================================================
 
-function saveAllClientsToDatabase() {
+function savePlayersToDatabase() {
 	logToConsole(LOG_DEBUG, "[VRR.Account]: Saving all clients to database ...");
 	getClients().forEach(function(client) {
 		savePlayerToDatabase(client);
@@ -1078,7 +1104,7 @@ function savePlayerToDatabase(client) {
 		return false;
 	}
 
-	if(!getPlayerData(client).loggedIn) {
+	if(!isPlayerLoggedIn(client)) {
 		return false;
 	}
 
@@ -1088,7 +1114,7 @@ function savePlayerToDatabase(client) {
 	if(getPlayerData(client).currentSubAccount != -1) {
 		//let subAccountData = getPlayerCurrentSubAccount(client);
 
-		if(client.player != null) {
+		if(getPlayerPed(client) != null) {
 			if(getPlayerData(client).returnToPosition != null) {
 				getPlayerCurrentSubAccount(client).spawnPosition = getPlayerData(client).returnToPosition;
 				getPlayerCurrentSubAccount(client).spawnHeading = getPlayerData(client).returnToHeading.z;
@@ -1146,6 +1172,7 @@ function initClient(client) {
 				if(isAccountAutoIPLoginEnabled(tempAccountData) && getPlayerData(client).accountData.ipAddress == client.ip) {
 					messagePlayerAlert(client, getLocaleString(client, "AutoLoggedInIP"));
 					loginSuccess(client);
+					playRadioStreamForPlayer(client, getServerIntroMusicURL(), true, getPlayerStreamingRadioVolume(client));
 				} else {
 					if(doesServerHaveGUIEnabled() && doesPlayerHaveGUIEnabled(client)) {
 						logToConsole(LOG_DEBUG, `[VRR.Account] ${getPlayerDisplayForConsole(client)} is being shown the login GUI.`);
@@ -1153,6 +1180,12 @@ function initClient(client) {
 					} else {
 						logToConsole(LOG_DEBUG, `[VRR.Account] ${getPlayerDisplayForConsole(client)} is being shown the login message (GUI disabled).`);
 						messagePlayerNormal(client, getLocaleString(client, "WelcomeBack", getServerName(), getPlayerName(client), "/login"),getColourByName("softGreen"));
+
+						//if(checkForGeoIPModule()) {
+						//	let iso = module.geoip.getCountryISO(client.ip);
+						//	let localeId = getLocaleFromCountryISO(iso);
+						//}
+						//showGameMessage(client, getLocaleString(client, "LocaleOffer", `/lang ${getLocaleData(localeId)[2]}`), getColourByName("white"), 10000, "Roboto");
 					}
 					playRadioStreamForPlayer(client, getServerIntroMusicURL(), true, getPlayerStreamingRadioVolume(client));
 				}

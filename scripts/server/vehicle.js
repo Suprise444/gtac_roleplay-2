@@ -797,17 +797,25 @@ function setVehicleClanCommand(command, params, client) {
 	}
 
 	let vehicle = getPlayerVehicle(client);
-	let clanId = getClanFromParams(params);
+	let clanId = getPlayerClan(client);
 
 	if(!getClanData(clanId)) {
 		messagePlayerError(client, "That clan is invalid or doesn't exist!");
 		return false;
 	}
 
-	getVehicleData(vehicle).ownerType = VRR_VEHOWNER_CLAN;
-	getVehicleData(vehicle).ownerId = getClanData(clanId).databaseId;
+	if(getVehicleData(vehicle).ownerType != VRR_VEHOWNER_PLAYER) {
+		messagePlayerError(client, getLocaleString(client, "MustOwnVehicle"));
+		return false;
+	}
 
-	messageAdmins(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}set their {vehiclePurple}${getVehicleName(vehicle)} {MAINCOLOUR}owner to the {clanOrange}${getClanData(clanId).name} {MAINCOLOUR}clan`);
+	if(getVehicleData(vehicle).ownerId != getPlayerCurrentSubAccount(client).databaseId) {
+		messagePlayerError(client, getLocaleString(client, "MustOwnVehicle"));
+		return false;
+	}
+
+	showPlayerPromptGUI(client, getLocaleString(client, "SetVehicleClanConfirmMessage"), getLocaleString(client, "SetVehicleClanConfirm"), getLocaleString(client, "Yes"), getLocaleString(client, "No"));
+	getPlayerData(client).promptType = VRR_PROMPT_GIVEVEHTOCLAN;
 
 	getVehicleData(vehicle).needsSaved = true;
 }

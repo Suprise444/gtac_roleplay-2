@@ -85,8 +85,35 @@ function playerPromptAnswerYes(client) {
 
 				}
 			} else {
-				showPlayerErrorGUI(client, `You aren't ordering anything for a business!`, `Business Order Canceled`);
+				showPlayerErrorGUI(client, ``, `Business Order Canceled`);
 			}
+			break;
+
+		case VRR_PROMPT_GIVEVEHTOCLAN:
+			if(!isPlayerInAnyVehicle(client)) {
+				messagePlayerError(client, getLocaleString(client, "MustBeInVehicle"));
+				return false;
+			}
+
+			if(!getVehicleData(getPlayerVehicle(client))) {
+				messagePlayerError(client, getLocaleString(client, "RandomVehicleCommandsDisabled"));
+				return false;
+			}
+
+			if(getVehicleData(getPlayerVehicle(client)).ownerType != VRR_VEHOWNER_PLAYER) {
+				messagePlayerError(client, getLocaleString(client, "MustOwnVehicle"));
+				return false;
+			}
+
+			if(getVehicleData(getPlayerVehicle(client)).ownerId != getPlayerCurrentSubAccount(client).databaseId) {
+				messagePlayerError(client, getLocaleString(client, "MustOwnVehicle"));
+				return false;
+			}
+
+			getVehicleData(getPlayerVehicle(client)).ownerType = VRR_VEHOWNER_CLAN;
+			getVehicleData(getPlayerVehicle(client)).ownerId = getPlayerCurrentSubAccount(client).clan;
+			messagePlayerSuccess(client, getLocaleString(client, "GaveVehicleToClan"));
+			//messageAdmins(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}set their {vehiclePurple}${getVehicleName(vehicle)} {MAINCOLOUR}owner to the {clanOrange}${getClanData(clanId).name} {MAINCOLOUR}clan`);
 			break;
 
 		default:

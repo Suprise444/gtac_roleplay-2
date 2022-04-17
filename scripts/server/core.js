@@ -33,6 +33,8 @@ let serverData = {
 	cachedTranslationFrom: [],
 	triggers: [],
 	npcs: [],
+	locales: [],
+	accents: [],
 };
 
 // ===========================================================================

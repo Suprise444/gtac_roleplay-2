@@ -21,7 +21,7 @@ function announceAdminAction(localeString, ...args) {
 		messagePlayerNormal(clients[i], `⚠️ ${messageText}`, getColourByName("orange"));
 	}
 
-	messageDiscordEventChannel(getLanguageLocaleString.apply(null, [getGlobalConfig().locale.defaultLanguageId, localeString, args]));
+	messageDiscordEventChannel(getLanguageLocaleString.apply(null, [0, localeString, args]));
 }
 
 // ===========================================================================

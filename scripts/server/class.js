@@ -19,7 +19,7 @@ function initClassScript() {
 /**
  * @class Representing data for server configuration
  */
-class ServerData {
+class ServerConfigData {
 	constructor(dbAssoc = false) {
 		this.databaseId = 0;
 		this.needsSaved = false;
@@ -58,7 +58,6 @@ class ServerData {
 		this.showLogo = true;
 		this.inflationMultiplier = 1;
 		this.testerOnly = false;
-		this.settings = 0;
 		this.devServer = false;
 
 		this.antiCheat = {
@@ -102,7 +101,6 @@ class ServerData {
 				bank: dbAssoc["svr_newchar_bank"],
 				skin: dbAssoc["svr_newchar_skin"],
 			},
-			this.settings = toInteger(dbAssoc["svr_settings"]);
 
 			this.connectCameraPosition = toVector3(dbAssoc["svr_connectcam_pos_x"], dbAssoc["svr_connectcam_pos_y"], dbAssoc["svr_connectcam_pos_z"]);
 			this.connectCameraLookAt = toVector3(dbAssoc["svr_connectcam_lookat_x"], dbAssoc["svr_connectcam_lookat_y"], dbAssoc["svr_connectcam_lookat_z"]);
@@ -111,6 +109,21 @@ class ServerData {
 			this.minute = toInteger(dbAssoc["svr_start_time_min"]);
 			this.minuteDuration = toInteger(dbAssoc["svr_time_min_duration"]);
 			this.weather = toInteger(dbAssoc["svr_start_weather"]);
+			//this.fallingSnow = intToBool(toInteger(dbAssoc["svr_start_snow_falling"]));
+			//this.groundSnow = intToBool(toInteger(dbAssoc["svr_start_snow_ground"]));
+			//this.useGUI = intToBool(toInteger(dbAssoc["svr_gui_enabled"]));
+			//this.showLogo = intToBool(toInteger(dbAssoc["svr_logo_enabled"]));
+			//this.testerOnly = intToBool(toInteger(dbAssoc["svr_tester_only"]));
+
+			/*
+			this.createJobPickups = intToBool(toInteger(dbAssoc["svr_job_pickups_enabled"]));
+			this.createBusinessPickups = intToBool(toInteger(dbAssoc["svr_biz_pickups_enabled"]));
+			this.createHousePickups = intToBool(toInteger(dbAssoc["svr_house_pickups_enabled"]));
+			this.createJobBlips = intToBool(toInteger(dbAssoc["svr_job_blips_enabled"]));
+			this.createBusinessBlips = intToBool(toInteger(dbAssoc["svr_biz_blips_enabled"]));
+			this.createHouseBlips = intToBool(toInteger(dbAssoc["svr_house_blips_enabled"]));
+			*/
+
 			this.guiColourPrimary = [toInteger(dbAssoc["svr_gui_col1_r"]), toInteger(dbAssoc["svr_gui_col1_g"]), toInteger(dbAssoc["svr_gui_col1_b"])];
 			this.guiColourSecondary = [toInteger(dbAssoc["svr_gui_col2_r"]), toInteger(dbAssoc["svr_gui_col2_g"]), toInteger(dbAssoc["svr_gui_col2_b"])];
 			this.guiTextColourPrimary = [toInteger(dbAssoc["svr_gui_textcol1_r"]), toInteger(dbAssoc["svr_gui_textcol1_g"]), toInteger(dbAssoc["svr_gui_textcol1_b"])];
@@ -119,7 +132,9 @@ class ServerData {
 
 			this.discordBotToken = intToBool(dbAssoc["svr_discord_bot_token"]);
 			this.introMusicURL = dbAssoc["svr_intro_music"];
-			this.realTimeZone = dbAssoc["svr_time_realtime_timezone"];
+
+			//this.useRealTime = intToBool(toInteger(dbAssoc["svr_real_time_enabled"]));
+			//this.realTimeZone = dbAssoc["svr_real_time_timezone"];
 
 			this.discord = {
 				sendEvents: true,

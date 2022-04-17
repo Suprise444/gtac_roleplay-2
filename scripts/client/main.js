@@ -27,7 +27,7 @@ let renderHotBar = true;
 let renderItemActionDelay = true;
 let renderInteriorLights = true;
 
-let logLevel = LOG_INFO;
+let logLevel = LOG_INFO|LOG_DEBUG|LOG_VERBOSE|LOG_WARN|LOG_ERROR;
 
 let weaponDamageEnabled = {};
 let weaponDamageEvent = {};
@@ -65,6 +65,12 @@ let vehiclePurchasing = null;
 let vehiclePurchasePosition = null;
 
 let forceWantedLevel = 0;
+
+let guiSubmitKey = false;
+let guiLeftKey = false;
+let guiRightKey = false;
+let guiUpKey = false;
+let guiDownKey = false;
 
 // Pre-cache all allowed skins
 let allowedSkins = getAllowedSkins(getGame());

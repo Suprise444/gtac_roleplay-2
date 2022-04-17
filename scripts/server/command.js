@@ -393,6 +393,18 @@ function loadCommands() {
 			//new CommandData("npcrespawnall", respawnAllNPCsCommand, "", getStaffFlagValue("ManageNPCs"), true, false, "Respawns all NPCs"),
 			//new CommandData("npcrespawn", respawnNPCCommand, "", getStaffFlagValue("ManageNPCs"), true, false, "Respawns the nearest NPC"),
 		],
+		race: [
+			new CommandData("addrace", createRaceCommand, "<name>", getStaffFlagValue("ManageRaces"), true, false, "Creates a race"),
+			new CommandData("delrace", deleteRaceCommand, "", getStaffFlagValue("ManageRaces"), true, false, "Deletes a race by name"),
+			new CommandData("addracecp", createRaceCheckPointCommand, "<name>", getStaffFlagValue("ManageRaces"), true, false, "Creates a race checkpoint"),
+			new CommandData("addracestart", createRaceStartPositionCommand, "<name>", getStaffFlagValue("ManageRaces"), true, false, "Creates a starting position for a race"),
+			new CommandData("delracestart", deleteRaceStartPositionCommand, "", getStaffFlagValue("ManageRaces"), true, false, "Deletes the closest starting position for a race"),
+			new CommandData("delracecp", deleteRaceCheckPointCommand, "", getStaffFlagValue("ManageRaces"), true, false, "Deletes the closest race checkpoint"),
+			new CommandData("racename", setRaceNameCommand, "<name>", getStaffFlagValue("ManageRaces"), true, false, "Sets a race's name"),
+			new CommandData("startrace", startRaceCommand, "", getStaffFlagValue("None"), true, false, "Starts a race"),
+			new CommandData("stoprace", stopRaceCommand, "", getStaffFlagValue("None"), true, false, "Stops racing (forfeits if in an active race)"),
+			new CommandData("stopAllRacesCommand", stopAllRacesCommand, "", getStaffFlagValue("ManageRaces"), true, false, "Stops a race"),
+		],
 		radio: [
 			new CommandData("radiostation", playStreamingRadioCommand, "<radio station id>", getStaffFlagValue("None"), true, false, "Plays a radio station in your vehicle, house, or business (depending on which one you're in)"),
 			new CommandData("radiostations", showRadioStationListCommand, "", getStaffFlagValue("None"), true, false, "Shows a list of all available radio stations"),

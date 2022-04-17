@@ -445,7 +445,7 @@ function testErrorGUICommand(command, params, client) {
 
 function saveServerDataCommand(command, params, client) {
 	messageAdmins(`{clanOrange}Vortrex has forced a manual save of all data. Initiating ...`);
-	saveAllServerDataToDatabase();
+	saveServerDataToDatabase();
 	messageAdmins(`{clanOrange}All server data saved to database successfully!`);
 	return true;
 }

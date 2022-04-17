@@ -1331,36 +1331,6 @@ function getEntityData(entity, dataName) {
 
 // ===========================================================================
 
-function setEntityData(entity, dataName, dataValue, syncToClients = true) {
-	if(entity != null) {
-		if(typeof server != "undefined") {
-			return entity.setData(dataName, dataValue, syncToClients);
-		} else {
-			return entity.setData(dataName, dataValue);
-		}
-	}
-}
-
-// ===========================================================================
-
-function removeEntityData(entity, dataName) {
-	if(entity != null) {
-		return entity.removeData(dataName);
-	}
-	return null;
-}
-
-// ===========================================================================
-
-function doesEntityDataExist(entity, dataName) {
-	if(entity != null) {
-		return (entity.getData(dataName) != null);
-	}
-	return null;
-}
-
-// ===========================================================================
-
 function getDistance(vec1, vec2) {
 	if(isNull(vec1) || isNull(vec2)) {
 		return false;
@@ -2045,7 +2015,7 @@ async function waitUntil(condition) {
 	return new Promise((resolve) => {
 		let interval = setInterval(() => {
 			if (!condition()) {
-				return
+				return;
 			}
 
 			clearInterval(interval);
@@ -2767,6 +2737,54 @@ function replaceEmojiInString(messageString) {
 function isWeekend() {
 	let d = new Date();
 	return d.getDay() == 6 || d.getDay() == 0;
+}
+
+// ===========================================================================
+
+/*
+function getPlayerLocationName(client) {
+	if(getPlayerBusiness(client)) {
+		return `at ${getBusinessData(getPlayerBusiness(client)).name}`;
+	}
+
+	if(getPlayerHouse(client)) {
+		return `at ${getHouseData(getPlayerHouse(client)).description}`;
+	}
+
+	let closestBusiness = getClosestBusinessEntrance(client.position, getPlayerDimension(client));
+	if(getBusinessData(closestBusiness)) {
+		return `near ${getBusinessData(closestBusiness).name} in ${getGameAreaFromPos(getPlayerPosition(client))}`;
+	}
+
+	let closestHouse = getClosestHouseEntrance(client.position, getPlayerDimension(client));
+	if(getHouseData(closestHouse)) {
+		let areaId = getGameAreaFromPos(getPlayerPosition(client));
+		if(getDistance(getHouseData(closestHouse).entrancePosition) > 7) {
+			return `near ${getHouseData(closestHouse).description} in ${getGameConfig().areas[getGame()][areaId][1]}`;
+		}
+	}
+}
+*/
+
+// ===========================================================================
+
+function getGameAreaFromPos(position) {
+	let areas = getGameConfig().areas[getGame()];
+	for(let i in areas) {
+		if(isPointInPoly(areas[i].borders, position)) {
+			return i;
+		}
+	}
+}
+
+// ===========================================================================
+
+function isPosInPoly(poly, position) {
+	for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
+		((poly[i].y <= position.y && position.y < poly[j].y) || (poly[j].y <= position.y && position.y < poly[i].y))
+		&& (position.x < (poly[j].x - poly[i].x) * (position[1] - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x)
+		&& (c = !c);
+	return c;
 }
 
 // ===========================================================================

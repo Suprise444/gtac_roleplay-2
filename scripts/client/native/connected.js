@@ -163,3 +163,29 @@ function createGameBlip(blipModel, position, name = "") {
 }
 
 // ===========================================================================
+
+function setEntityData(entity, dataName, dataValue, syncToClients = true) {
+	if(entity != null) {
+		return entity.setData(dataName, dataValue);
+	}
+}
+
+// ===========================================================================
+
+function removeEntityData(entity, dataName) {
+	if(entity != null) {
+		return entity.removeData(dataName);
+	}
+	return null;
+}
+
+// ===========================================================================
+
+function doesEntityDataExist(entity, dataName) {
+	if(entity != null) {
+		return (entity.getData(dataName) != null);
+	}
+	return null;
+}
+
+// ===========================================================================

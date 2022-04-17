@@ -607,7 +607,7 @@ function loginSuccess(client) {
 
 	if(getPlayerData(client).subAccounts.length == 0) {
 		if(doesServerHaveGUIEnabled() && doesPlayerHaveGUIEnabled(client)) {
-			showPlayerPromptGUI(client, getLocaleString(client, "NoCharactersGUIMessage"), getLocaleString(client, "NoCharactersGUIWindowTitle"));
+			showPlayerPromptGUI(client, getLocaleString(client, "NoCharactersGUIMessage"), getLocaleString(client, "NoCharactersGUIWindowTitle"), getLocaleString(client, "Yes"), getLocaleString(client, "No"));
 			getPlayerData(client).promptType = VRR_PROMPT_CREATEFIRSTCHAR;
 			logToConsole(LOG_DEBUG, `[VRR.Account] ${getPlayerDisplayForConsole(client)} is being shown the no characters prompt GUI`);
 		} else {

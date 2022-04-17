@@ -49,20 +49,20 @@ function unBindChatBoxKeys() {
 // ===========================================================================
 
 function receiveChatBoxMessageFromServer(messageString, colour) {
-	logToConsole(LOG_INFO, `[VRR.ChatBox]: Received chatbox message from server: ${messageString}`);
+	logToConsole(LOG_DEBUG, `[VRR.ChatBox]: Received chatbox message from server: ${messageString}`);
 
 	// Just in case it's hidden by auto hide
-	setChatWindowEnabled(true);
+	//setChatWindowEnabled(true);
 
 	let colouredString = replaceColoursInMessage(messageString);
 
-	logToConsole(LOG_INFO, `[VRR.ChatBox]: Changed colours in string: ${colouredString}`);
+	logToConsole(LOG_DEBUG, `[VRR.ChatBox]: Changed colours in string: ${colouredString}`);
 
+	addToChatBoxHistory(colouredString, colour);
 	//if(bottomMessageIndex >= chatBoxHistory.length-1) {
 		message(colouredString, colour);
 		bottomMessageIndex = chatBoxHistory.length-1;
 	//}
-	addToChatBoxHistory(colouredString, colour);
 
 	chatLastUse = getCurrentUnixTimestamp();
 }
@@ -151,6 +151,8 @@ function processMouseWheelForChatBox(mouseId, deltaCoordinates, flipped) {
 // ===========================================================================
 
 function checkChatAutoHide() {
+	return false;
+
 	// Make sure chat input isn't active
 	if(gui.cursorEnabled) {
 		return false;

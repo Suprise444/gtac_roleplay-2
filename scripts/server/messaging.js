@@ -17,7 +17,9 @@ function initMessagingScript() {
 function announceAdminAction(localeString, ...args) {
 	let clients = getClients();
 	for(let i in clients) {
-		let messageText = getLocaleString.apply(null, [clients[i], localeString, args]);
+		let argsArray = [clients[i], localeString];
+		argsArray = argsArray.concat(args);
+		let messageText = getLocaleString.apply(null, argsArray);
 		messagePlayerNormal(clients[i], `⚠️ ${messageText}`, getColourByName("orange"));
 	}
 

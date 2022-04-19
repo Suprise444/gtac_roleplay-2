@@ -83,7 +83,7 @@ function setStaffTitleCommand(command, params, client) {
 	}
 
 	getPlayerData(targetClient).accountData.staffTitle = staffTitle;
-	messageAdmins(`${client.name} {MAINCOLOUR}set ${getPlayerName(targetClient)}'s staff title to ${staffTitle}`);
+	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} set {ALTCOLOUR}${getPlayerName(targetClient)}'s{MAINCOLOUR} staff title to ${staffTitle}`);
 	messagePlayerAlert(client, `${getPlayerName(client)} set your staff title to ${staffTitle}`);
 	targetClient.disconnect();
 }
@@ -119,7 +119,7 @@ function muteClientCommand(command, params, client) {
 		}
 	}
 
-	messageAdmins(`${targetClient.name} {MAINCOLOUR}has been muted by ${client.name}!`);
+	messageAdmins(`{adminRed}${targetClient.name}{MAINCOLOUR} has been muted by {adminRed}${client.name}`);
 	getPlayerData(targetClient).muted = true;
 }
 
@@ -154,7 +154,7 @@ function unMuteClientCommand(command, params, client) {
 		}
 	}
 
-	messageAdmins(`${targetClient.name} {MAINCOLOUR}has been un-muted by ${client.name}!`);
+	messageAdmins(`{adminRed}${targetClient.name}{MAINCOLOUR} has been un-muted by {adminRed}${client.name}`);
 	getPlayerData(targetClient).muted = false;
 }
 
@@ -189,7 +189,7 @@ function freezeClientCommand(command, params, client) {
 		}
 	}
 
-	messageAdmins(`${targetClient.name} {MAINCOLOUR}has been frozen by ${client.name}!`);
+	messageAdmins(`{adminRed}${targetClient.name}{MAINCOLOUR} has been frozen by ${client.name}`);
 	//setPlayerFrozenState(client, state);
 	setPlayerControlState(client, false);
 }
@@ -225,7 +225,7 @@ function unFreezeClientCommand(command, params, client) {
 		}
 	}
 
-	messageAdmins(`${targetClient.name} {MAINCOLOUR}has been un-frozen by ${client.name}!`);
+	messageAdmins(`{adminRed}${targetClient.name}{MAINCOLOUR} has been un-frozen by ${client.name}`);
 	//sendPlayerFrozenState(client, false);
 	setPlayerControlState(client, true);
 }
@@ -393,7 +393,7 @@ function getVehicleCommand(command, params, client) {
 	setElementInterior(vehicle, getPlayerInterior(client));
 	setElementDimension(vehicle, getPlayerDimension(client));
 
-	messageAdmins(`${client.name} {MAINCOLOUR}teleported a {vehiclePurple}${getVehicleName(vehicle)} {ALTCOLOUR}(ID ${vehicle.id}) {MAINCOLOUR}to you`);
+	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} teleported a {vehiclePurple}${getVehicleName(vehicle)}{ALTCOLOUR} (ID ${vehicle.id}){MAINCOLOUR} to their position`);
 }
 
 // ===========================================================================
@@ -814,7 +814,7 @@ function playerInteriorCommand(command, params, client) {
 
 	let interiorId = getParam(params, " ", 2);
 	setPlayerInterior(targetClient, Number(interiorId));
-	messageAdmins(`${client.name} {MAINCOLOUR}set ${getPlayerName(targetClient)}'s interior to {ALTCOLOUR}${interiorId}`);
+	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} set {ALTCOLOUR}${getPlayerName(targetClient)}'s{MAINCOLOUR} interior to {ALTCOLOUR}${interiorId}`);
 }
 
 // ===========================================================================
@@ -841,13 +841,13 @@ function playerVirtualWorldCommand(command, params, client) {
 	}
 
 	if(getParamsCount(params, " ") == 1) {
-		messagePlayerInfo(client, `{ALTCOLOUR}${getPlayerName(targetClient)}'s {MAINCOLOUR}virtual world is {ALTCOLOUR}${getPlayerDimension(targetClient)}`);
+		messagePlayerInfo(client, `{ALTCOLOUR}${getPlayerName(targetClient)}'s{MAINCOLOUR} virtual world is {ALTCOLOUR}${getPlayerDimension(targetClient)}`);
 		return false;
 	}
 
 	let dimensionId = getParam(params, " ", 2);
 	setPlayerDimension(targetClient, Number(dimensionId));
-	messageAdmins(`${client.name} {MAINCOLOUR}set {ALTCOLOUR}${getPlayerName(targetClient)}'s {MAINCOLOUR}virtual world to {ALTCOLOUR}${dimensionId}`);
+	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} set {ALTCOLOUR}${getPlayerName(targetClient)}'s{MAINCOLOUR} virtual world to {ALTCOLOUR}${dimensionId}`);
 }
 
 // ===========================================================================
@@ -895,7 +895,7 @@ function getPlayerCommand(command, params, client) {
 	setPlayerInterior(targetClient, getPlayerInterior(client));
 	setPlayerDimension(targetClient, getPlayerDimension(client));
 
-	messageAdmins(`${client.name} {MAINCOLOUR}teleported {ALTCOLOUR}${getPlayerName(targetClient)} {MAINCOLOUR}to their position.`);
+	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} teleported {ALTCOLOUR}${getPlayerName(targetClient)}{MAINCOLOUR} to their position.`);
 	messagePlayerAlert(targetClient, `An admin has teleported you to their location`);
 }
 
@@ -942,7 +942,7 @@ function returnPlayerCommand(command, params, client) {
 	getPlayerData(targetClient).returnToBusiness = null;
 	getPlayerData(targetClient).returnToType = VRR_RETURNTO_TYPE_NONE;
 
-	messageAdmins(`${client.name} {MAINCOLOUR}returned {ALTCOLOUR}${getPlayerName(targetClient)} {MAINCOLOUR}to their previous position.`);
+	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} returned {ALTCOLOUR}${getPlayerName(targetClient)}{MAINCOLOUR} to their previous position.`);
 	messagePlayerAlert(targetClient, `An admin has returned you to your previous location`);
 }
 
@@ -985,7 +985,7 @@ function addPlayerStaffFlagCommand(command, params, client) {
 	}
 
 	givePlayerStaffFlag(targetClient, flagName);
-	messageAdmins(`${client.name} has {MAINCOLOUR}given {ALTCOLOUR}${getPlayerName(targetClient)} {MAINCOLOUR}the {ALTCOLOUR}${flagName} {MAINCOLOUR}staff flag`);
+	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} has given {ALTCOLOUR}${getPlayerName(targetClient)}{MAINCOLOUR} the {ALTCOLOUR}${flagName}{MAINCOLOUR} staff flag`);
 }
 
 // ===========================================================================
@@ -1027,7 +1027,7 @@ function removePlayerStaffFlagCommand(command, params, client) {
 	}
 
 	takePlayerStaffFlag(targetClient, flagName);
-	messageAdmins(`${client.name} {MAINCOLOUR}has taken the {ALTCOLOUR}${flagName} {MAINCOLOUR}staff flag from {ALTCOLOUR}${getPlayerName(targetClient)}`);
+	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} has taken the {ALTCOLOUR}${flagName}{MAINCOLOUR} staff flag from {ALTCOLOUR}${getPlayerName(targetClient)}`);
 }
 
 // ===========================================================================
@@ -1063,7 +1063,7 @@ function removePlayerStaffFlagsCommand(command, params, client) {
 	}
 
 	clearPlayerStaffFlags(targetClient);
-	messageAdmins(`${client.name} {MAINCOLOUR}removed all staff flags from {ALTCOLOUR}${getPlayerName(targetClient)}`);
+	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} removed all staff flags from {ALTCOLOUR}${getPlayerName(targetClient)}`);
 }
 
 // ===========================================================================
@@ -1190,7 +1190,7 @@ function givePlayerMoneyCommand(command, params, client) {
 	givePlayerCash(targetClient, toInteger(amount));
 	updatePlayerCash(targetClient);
 	//messagePlayerSuccess(client, `You gave {ALTCOLOUR}$${amount} {MAINCOLOUR}to {ALTCOLOUR}${getCharacterFullName(targetClient)}`);
-	messageAdmins(`${client.name} {MAINCOLOUR}gave {ALTCOLOUR}$${amount} {MAINCOLOUR}to {ALTCOLOUR}${getCharacterFullName(targetClient)}`)
+	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} gave {ALTCOLOUR}$${amount}{MAINCOLOUR} to {ALTCOLOUR}${getCharacterFullName(targetClient)}`)
 	messagePlayerAlert(targetClient, `An admin gave you {ALTCOLOUR}$${amount}`);
 }
 
@@ -1227,11 +1227,11 @@ function setPlayerAccentCommand(command, params, client) {
 
 	if(newAccent == "") {
 		//messagePlayerSuccess(client, `You removed {ALTCOLOUR}${getCharacterFullName(targetClient)}'s {MAINCOLOUR}accent.`);
-		messageAdmins(client, `${client.name} removed {ALTCOLOUR}${getCharacterFullName(targetClient)}'s {MAINCOLOUR}accent.`);
+		messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} removed {ALTCOLOUR}${getCharacterFullName(targetClient)}'s{MAINCOLOUR} accent.`);
 		messagePlayerAlert(client, `An admin removed your accent.`);
 	} else {
 		//messagePlayerSuccess(client, `You set {ALTCOLOUR}${getCharacterFullName(targetClient)}'s {MAINCOLOUR}accent to {ALTCOLOUR}${newAccent}`);
-		messageAdmins(`${client.name} set {ALTCOLOUR}${getCharacterFullName(targetClient)}'s {MAINCOLOUR}accent to {ALTCOLOUR}${newAccent}`)
+		messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} set {ALTCOLOUR}${getCharacterFullName(targetClient)}'s{MAINCOLOUR} accent to {ALTCOLOUR}${newAccent}`)
 		messagePlayerAlert(client, `An admin set your accent to {ALTCOLOUR}${newAccent}`);
 	}
 }
@@ -1262,7 +1262,7 @@ function forceCharacterNameChangeCommand(command, params, client) {
 
 	getPlayerData(targetClient).changingCharacterName = true;
 
-	messageAdmins(`${client.name} {MAINCOLOUR}forced {ALTCOLOUR}${getPlayerName(targetClient)} (${getCharacterFullName(targetClient)}) {MAINCOLOUR}to change their character's name.`);
+	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} forced {ALTCOLOUR}${getPlayerName(targetClient)} (${getCharacterFullName(targetClient)}){MAINCOLOUR} to change their character's name.`);
 	showPlayerNewCharacterFailedGUI(targetClient, getLocaleString(targetClient, "NonRPName"));
 }
 
@@ -1305,7 +1305,7 @@ function setCharacterNameCommand(command, params, client) {
 	getPlayerCurrentSubAccount(targetClient).firstName = firstName;
 	getPlayerCurrentSubAccount(targetClient).lastName = lastName;
 
-	messageAdmins(`${getPlayerName(client)} {MAINCOLOUR}forced {ALTCOLOUR}${getPlayerName(targetClient)}'s{MAINCOLOUR} current character name from {ALTCOLOUR}${oldName}{MAINCOLOUR} to {ALTCOLOUR}${newName}`);
+	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set {ALTCOLOUR}${getPlayerName(targetClient)}'s{MAINCOLOUR} current character name from {ALTCOLOUR}${oldName}{MAINCOLOUR} to {ALTCOLOUR}${newName}`);
 
 	updateAllPlayerNameTags();
 }
@@ -1349,7 +1349,7 @@ function setPlayerSkinCommand(command, params, client) {
 	getPlayerCurrentSubAccount(targetClient).skin = skinIndex;
 	setPlayerSkin(targetClient, skinIndex);
 
-	messageAdmins(`${getPlayerName(client)} {MAINCOLOUR}set ${getPlayerName(targetClient)}'s{MAINCOLOUR} skin to {ALTCOLOUR}${getGameConfig().skins[getGame()][skinIndex][1]}`);
+	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set ${getPlayerName(targetClient)}'s{MAINCOLOUR} skin to {ALTCOLOUR}${getGameConfig().skins[getGame()][skinIndex][1]}`);
 }
 
 // ===========================================================================
@@ -1385,7 +1385,7 @@ function setPlayerHealthCommand(command, params, client) {
 
 	setPlayerHealth(targetClient, health);
 
-	messageAdmins(`${getPlayerName(client)}{MAINCOLOUR} set ${getPlayerName(targetClient)}'s{MAINCOLOUR} health to {ALTCOLOUR}${health}`);
+	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set ${getPlayerName(targetClient)}'s{MAINCOLOUR} health to {ALTCOLOUR}${health}`);
 }
 
 // ===========================================================================
@@ -1415,7 +1415,7 @@ function setPlayerArmourCommand(command, params, client) {
 
 	setPlayerArmour(targetClient, armour);
 
-	messageAdmins(`${getPlayerName(client)}{MAINCOLOUR} set ${getPlayerName(targetClient)}'s{MAINCOLOUR} armour to {ALTCOLOUR}${armour}`);
+	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set ${getPlayerName(targetClient)}'s{MAINCOLOUR} armour to {ALTCOLOUR}${armour}`);
 }
 
 // ===========================================================================
@@ -1451,7 +1451,7 @@ function setPlayerInfiniteRunCommand(command, params, client) {
 	state = toInteger(state);
 	setPlayerInfiniteRun(targetClient, intToBool(state));
 
-	messageAdmins(`${getPlayerName(client)}{MAINCOLOUR} ${getBoolRedGreenInlineColour(state)}${(state) ? "enabled" : "disabled"}{MAINCOLOUR} infinite run for {ALTCOLOUR}${getPlayerName(targetClient)}`);
+	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} ${getBoolRedGreenInlineColour(state)}${(state) ? "enabled" : "disabled"}{MAINCOLOUR} infinite run for {ALTCOLOUR}${getPlayerName(targetClient)}`);
 }
 
 // ===========================================================================
@@ -1481,7 +1481,7 @@ function setPlayerWantedLevelCommand(command, params, client) {
 
 	setPlayerWantedLevel(targetClient, wantedLevel);
 
-	//messageAdmins(`${getPlayerName(client)} {MAINCOLOUR}set ${getPlayerName(targetClient)}'s {MAINCOLOUR}skin to {ALTCOLOUR}${getGameConfig().skins[getGame()][skinIndex][1]}`);
+	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set ${getPlayerName(targetClient)}'s{MAINCOLOUR} wanted level to {ALTCOLOUR}${wantedLevel}`);
 }
 
 // ===========================================================================
@@ -1631,10 +1631,10 @@ function toggleSyncForElementsSpawnedByPlayerCommand(command, params, client) {
 
 	if(!hasBitFlag(getPlayerData(client).accountData.flags.moderation, getModerationFlagValue("DontSyncClientElements"))) {
 		getPlayerData(client).accountData.flags.moderation = addBitFlag(getPlayerData(client).accountData.flags.moderation, getModerationFlagValue("DontSyncClientElements"));
-		messageAdmins(`${getPlayerName(client)} {MAINCOLOUR}turned {softGreen}ON client element sync for {ALTCOLOUR}${getPlayerName(targetClient)}`);
+		messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} turned {softGreen}ON{MAINCOLOUR} client element sync for {ALTCOLOUR}${getPlayerName(targetClient)}`);
 	} else {
 		getPlayerData(client).accountData.flags.moderation = removeBitFlag(getPlayerData(client).accountData.flags.moderation, getModerationFlagValue("DontSyncClientElements"));
-		messageAdmins(`${getPlayerName(client)} {MAINCOLOUR}turned {softRed}OFF client element sync for {ALTCOLOUR}${getPlayerName(targetClient)}`);
+		messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} turned {softRed}OFF{MAINCOLOUR} client element sync for {ALTCOLOUR}${getPlayerName(targetClient)}`);
 	}
 }
 

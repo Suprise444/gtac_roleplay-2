@@ -92,9 +92,7 @@ function createHouseCommand(command, params, client) {
 
 	//getHouseData(houseId).needsSaved = true;
 
-	let messageText = `{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}created house {houseGreen}${tempHouseData.description}`;
-	logToConsole(LOG_INFO, messageText);
-	messageAdmins(messageText);
+	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} created house {houseGreen}${tempHouseData.description}`);
 }
 
 // ===========================================================================
@@ -158,7 +156,7 @@ function setHouseDescriptionCommand(command, params, client) {
 
 	getHouseData(houseId).needsSaved = true;
 
-	messageAdmins(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}renamed house {houseGreen}${oldDescription} {MAINCOLOUR}to {houseGreen}${getHouseData(houseId).description}`);
+	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} renamed house {houseGreen}${oldDescription}{MAINCOLOUR} to {houseGreen}${getHouseData(houseId).description}`);
 }
 
 // ===========================================================================
@@ -197,7 +195,7 @@ function setHouseOwnerCommand(command, params, client) {
 
 	getHouseData(houseId).ownerType = VRR_HOUSEOWNER_PLAYER;
 	getHouseData(houseId).ownerId = getServerData().clients[newHouseOwner.index].accountData.databaseId;
-	messagePlayerSuccess(`{MAINCOLOUR}You gave house {houseGreen}${getHouseData(houseId).description} {MAINCOLOUR}to {ALTCOLOUR}${newHouseOwner.name}`);
+	messagePlayerSuccess(`{MAINCOLOUR}You gave house {houseGreen}${getHouseData(houseId).description}{MAINCOLOUR} to {ALTCOLOUR}${newHouseOwner.name}`);
 }
 
 // ===========================================================================
@@ -237,7 +235,7 @@ function setHouseClanCommand(command, params, client) {
 
 	getHouseData(houseId).ownerType = VRR_HOUSEOWNER_CLAN;
 	getHouseData(houseId).ownerId = getClanData(clanId).databaseId;
-	messagePlayerSuccess(`{MAINCOLOUR}You gave house {houseGreen}${getHouseData(houseId).description} {MAINCOLOUR} to the {clanOrange}${getClanData(clanId).name} {MAINCOLOUR}clan!`);
+	messagePlayerSuccess(`{MAINCOLOUR}You gave house {houseGreen}${getHouseData(houseId).description}{MAINCOLOUR} to the {clanOrange}${getClanData(clanId).name} {MAINCOLOUR}clan!`);
 }
 
 // ===========================================================================
@@ -335,7 +333,7 @@ function setHousePickupCommand(command, params, client) {
 
 	getHouseData(houseId).needsSaved = true;
 
-	messageAdmins(`{ALTCOLOUR}${client.name} {MAINCOLOUR}set house {houseGreen}${getHouseData(houseId).description} {MAINCOLOUR}pickup display to {ALTCOLOUR}${toLowerCase(typeParam)}`);
+	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} set house {houseGreen}${getHouseData(houseId).description}{MAINCOLOUR} pickup display to {ALTCOLOUR}${toLowerCase(typeParam)}`);
 }
 
 // ===========================================================================
@@ -366,7 +364,7 @@ function setHouseInteriorTypeCommand(command, params, client) {
 			tempHouseLocation.exitInterior = -1;
 			getHouseData(houseId).exitPickupModel = -1;
 			getHouseData(houseId).hasInterior = false;
-			messageAdmins(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}removed house {houseGreen}${getHouseData(houseId).description} {MAINCOLOUR}interior`);
+			messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} removed house {houseGreen}${getHouseData(houseId).description}{MAINCOLOUR} interior`);
 			return false;
 		}
 
@@ -396,7 +394,7 @@ function setHouseInteriorTypeCommand(command, params, client) {
 
 	getHouseData(houseId).needsSaved = true;
 
-	messageAdmins(`{ALTCOLOUR}${client.name} {MAINCOLOUR}set house {houseGreen}${getHouseData(houseId).description} {MAINCOLOUR}interior type to {ALTCOLOUR}${toLowerCase(typeParam)}`);
+	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} set house {houseGreen}${getHouseData(houseId).description}{MAINCOLOUR} interior type to {ALTCOLOUR}${toLowerCase(typeParam)}`);
 }
 
 // ===========================================================================
@@ -447,7 +445,7 @@ function setHouseBlipCommand(command, params, client) {
 	resetHouseBlips(houseId);
 	getHouseData(houseId).needsSaved = true;
 
-	messageAdmins(`{ALTCOLOUR}${client.name} {MAINCOLOUR}set house {houseGreen}${getHouseData(houseId).description} {MAINCOLOUR}blip display to {ALTCOLOUR}${toLowerCase(typeParam)}`);
+	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} set house {houseGreen}${getHouseData(houseId).description}{MAINCOLOUR} blip display to {ALTCOLOUR}${toLowerCase(typeParam)}`);
 }
 
 // ===========================================================================
@@ -483,7 +481,7 @@ function moveHouseEntranceCommand(command, params, client) {
 
 	getHouseData(houseId).needsSaved = true;
 
-	messageAdmins(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}moved house {houseGreen}${getHouseData(houseId).description} {MAINCOLOUR}entrance to their position`);
+	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} moved house {houseGreen}${getHouseData(houseId).description}{MAINCOLOUR} entrance to their position`);
 }
 
 // ===========================================================================
@@ -523,7 +521,7 @@ function moveHouseExitCommand(command, params, client) {
 
 	getHouseData(houseId).needsSaved = true;
 
-	messageAdmins(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}moved house {houseGreen}${getHouseData(houseId).description} {MAINCOLOUR}exit to their position`);
+	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} moved house {houseGreen}${getHouseData(houseId).description}{MAINCOLOUR} exit to their position`);
 }
 
 // ===========================================================================
@@ -545,7 +543,7 @@ function deleteHouseCommand(command, params, client) {
 		return false;
 	}
 
-	messageAdmins(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}deleted house {houseGreen}${getHouseData(houseId).description}`);
+	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} deleted house {houseGreen}${getHouseData(houseId).description}`);
 	deleteHouse(houseId, getPlayerData(client).accountData.databaseId);
 }
 

@@ -477,5 +477,6 @@
 		"Use {1} to play an internet radio station in your car, house, or business",
 		"Want to make a clan? Use {1} for details",
 		"Legal weapons can be purchased at any ammunation"
-	]
+	],
+	"PromptResponseTip": "Use {1} to accept or {2} to decline"
 }

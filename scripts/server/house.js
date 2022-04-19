@@ -108,39 +108,6 @@ function createHouseCommand(command, params, client) {
  * @return {bool} Whether or not the command was successful
  *
  */
-function lockUnlockHouseCommand(command, params, client) {
-	let houseId = getPlayerHouse(client);
-
-	if(!getHouseData(houseId)) {
-		messagePlayerError(client, getLocaleString(client, "InvalidHouse"));
-		return false;
-	}
-
-	getHouseData(houseId).locked = !getHouseData(houseId).locked;
-
-	//for(let i in getHouseData(houseId).locations) {
-	//	if(getHouseData(houseId).locations[i].type == VRR_HOUSE_LOC_DOOR) {
-	//		setEntityData(getHouseData(houseId).locations[i].entrancePickup, "vrr.label.locked", getHouseData(houseId).locked, true);
-	//	}
-	//}
-
-	setEntityData(getHouseData(houseId).entrancePickup, "vrr.label.locked", getHouseData(houseId).locked, true);
-	getHouseData(houseId).needsSaved = true;
-
-	messagePlayerSuccess(client, `House {houseGreen}${getHouseData(houseId).description} {MAINCOLOUR}${getLockedUnlockedFromBool((getHouseData(houseId).locked))}!`);
-}
-
-// ===========================================================================
-
-/**
- * This is a command handler function.
- *
- * @param {string} command - The command name used by the player
- * @param {string} params - The parameters/args string used with the command by the player
- * @param {Client} client - The client/player that used the command
- * @return {bool} Whether or not the command was successful
- *
- */
  function toggleHouseInteriorLightsCommand(command, params, client) {
 	let houseId = getPlayerHouse(client);
 

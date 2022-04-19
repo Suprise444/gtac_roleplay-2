@@ -631,41 +631,6 @@ function removeBusinessOwnerCommand(command, params, client) {
  * @return {bool} Whether or not the command was successful
  *
  */
-function lockUnlockBusinessCommand(command, params, client) {
-	let businessId = getPlayerBusiness(client);
-
-	if(!areParamsEmpty(params)) {
-		businessId = getBusinessFromParams(params);
-	}
-
-	if(!getBusinessData(businessId)) {
-		messagePlayerError(client, getLocaleString(client, "InvalidBusiness"));
-		return false;
-	}
-
-	if(!canPlayerManageBusiness(client, businessId)) {
-		messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
-		return false;
-	}
-
-	getBusinessData(businessId).locked = !getBusinessData(businessId).locked;
-	setEntityData(getBusinessData(businessId).entrancePickup, "vrr.label.locked", getBusinessData(businessId).locked, true);
-
-	getBusinessData(businessId).needsSaved = true;
-	messagePlayerSuccess(client, `${getLockedUnlockedEmojiFromBool((getBusinessData(businessId).locked))} Business {businessBlue}${getBusinessData(businessId).name} {MAINCOLOUR}${getLockedUnlockedFromBool((getBusinessData(businessId).locked))}!`);
-}
-
-// ===========================================================================
-
-/**
- * This is a command handler function.
- *
- * @param {string} command - The command name used by the player
- * @param {string} params - The parameters/args string used with the command by the player
- * @param {Client} client - The client/player that used the command
- * @return {bool} Whether or not the command was successful
- *
- */
  function toggleBusinessInteriorLightsCommand(command, params, client) {
 	let businessId = getPlayerBusiness(client);
 

@@ -348,7 +348,7 @@ function checkPlayerSpawning() {
 
 // ===========================================================================
 
-function showPlayerPrompt(client, promptType, promptMessage, promptTitle) {
+function showPlayerPrompt(client, promptType, promptMessage, promptTitle, yesButtonText, noButtonText) {
 	if(promptType == VRR_PROMPT_NONE) {
 		return false;
 	}
@@ -356,15 +356,24 @@ function showPlayerPrompt(client, promptType, promptMessage, promptTitle) {
 	getPlayerData(client).promptType = promptType;
 
 	if(canPlayerUseGUI(client)) {
-		showPlayerPromptGUI(client, promptMessage, promptTitle);
+		showPlayerPromptGUI(client, promptMessage, promptTitle, yesButtonText, noButtonText);
 	} else {
 		messagePlayerNormal(client, `❓ ${promptMessage}`);
-		messagePlayerInfo(client, `{MAINCOLOUR}Use {ALTCOLOUR}/yes or {ALTCOLOUR}/no`);
+		messagePlayerInfo(client, getLocaleString(client, "PromptResponseTip", `{ALTCOLOUR}/yes{MAINCOLOUR}`, `{ALTCOLOUR}/no{MAINCOLOUR}`));
 	}
 }
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function updateServerGameTime() {
 	if(isTimeSupported()) {
 		game.time.hour = getServerConfig().hour;
@@ -374,6 +383,15 @@ function updateServerGameTime() {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function listOnlineAdminsCommand(command, params, client) {
 	//== Admins ===================================
 	messagePlayerNormal(client, makeChatBoxSectionHeader(getLocaleString(client, "HeaderAdminsList")));
@@ -398,6 +416,15 @@ function listOnlineAdminsCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function gpsCommand(command, params, client) {
 	messagePlayerNormal(client, makeChatBoxSectionHeader(getLocaleString(client, "HeaderBusinessList")));
 
@@ -528,6 +555,15 @@ function gpsCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function stuckPlayerCommand(command, params, client) {
 	if((getCurrentUnixTimestamp()-getPlayerData(client).lastStuckCommand) < getGlobalConfig().stuckCommandInterval) {
 		messagePlayerError(client, "CantUseCommandYet");
@@ -598,6 +634,15 @@ function stuckPlayerCommand(command, params, client) {
 
 // ===========================================================================
 
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
 function playerPedSpeakCommand(command, params, client) {
 	if(areParamsEmpty(params)) {
 		messagePlayerSyntax(client, getCommandSyntaxText(command));
@@ -605,6 +650,106 @@ function playerPedSpeakCommand(command, params, client) {
 	}
 
 	makePlayerPedSpeak(client, params);
+}
+
+// ===========================================================================
+
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
+function lockCommand(command, params, client) {
+	if(isPlayerInAnyVehicle(client)) {
+		let vehicle = getPlayerVehicle(client);
+
+		if(!getVehicleData(vehicle)) {
+			messagePlayerError(client, getLocaleString(client, "RandomVehicleCommandsDisabled"));
+			return false;
+		}
+
+		if(isPlayerInAnyVehicle(client)) {
+			vehicle = getPlayerVehicle(client);
+			if(!isPlayerInFrontVehicleSeat(client)) {
+				messagePlayerError(client, getLocaleString(client, "MustBeInVehicleFrontSeat"));
+				return false;
+			}
+		} else {
+			if(!doesPlayerHaveVehicleKeys(client, vehicle)) {
+				messagePlayerError(client, getLocaleString(client, "DontHaveVehicleKey"));
+				return false;
+			}
+		}
+
+		getVehicleData(vehicle).locked = !getVehicleData(vehicle).locked;
+		vehicle.locked = getVehicleData(vehicle).locked;
+		getVehicleData(vehicle).needsSaved = true;
+
+		meActionToNearbyPlayers(client, `${toLowerCase(getLockedUnlockedFromBool(getVehicleData(vehicle).locked))} the ${getVehicleName(vehicle)}`);
+	} else {
+		let businessId = getPlayerBusiness(client);
+		if(businessId != false) {
+			if(!canPlayerManageBusiness(client, businessId)) {
+				messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
+				return false;
+			}
+
+			getBusinessData(businessId).locked = !getBusinessData(businessId).locked;
+			updateBusinessPickupLabelData(businessId);
+			getBusinessData(businessId).needsSaved = true;
+
+			messagePlayerSuccess(client, `${getLockedUnlockedEmojiFromBool((getBusinessData(businessId).locked))} Business {businessBlue}${getBusinessData(businessId).name} {MAINCOLOUR}${getLockedUnlockedFromBool((getBusinessData(businessId).locked))}!`);
+			return true;
+		}
+
+		let houseId = getPlayerHouse(client);
+		if(houseId != false) {
+			if(!canPlayerManageHouse(client, houseId)) {
+				messagePlayerError(client, getLocaleString(client, "CantModifyHouse"));
+				return false;
+			}
+
+			getHouseData(houseId).locked = !getHouseData(houseId).locked;
+			updateHousePickupLabelData(houseId);
+			getHouseData(houseId).needsSaved = true;
+
+			messagePlayerSuccess(client, `House {houseGreen}${getHouseData(houseId).description} {MAINCOLOUR}${getLockedUnlockedFromBool((getHouseData(houseId).locked))}!`);
+			return true;
+		}
+
+		let vehicle = getClosestVehicle(getPlayerPosition(client));
+		if(getDistance(getPlayerPosition(client), getVehiclePosition(vehicle) <= getGlobalConfig().vehicleLockDistance)) {
+			if(!getVehicleData(vehicle)) {
+				messagePlayerError(client, getLocaleString(client, "RandomVehicleCommandsDisabled"));
+				return false;
+			}
+
+			if(isPlayerInAnyVehicle(client)) {
+				vehicle = getPlayerVehicle(client);
+				if(!isPlayerInFrontVehicleSeat(client)) {
+					messagePlayerError(client, getLocaleString(client, "MustBeInVehicleFrontSeat"));
+					return false;
+				}
+			} else {
+				if(!doesPlayerHaveVehicleKeys(client, vehicle)) {
+					messagePlayerError(client, getLocaleString(client, "DontHaveVehicleKey"));
+					return false;
+				}
+			}
+
+			getVehicleData(vehicle).locked = !getVehicleData(vehicle).locked;
+			vehicle.locked = getVehicleData(vehicle).locked;
+			getVehicleData(vehicle).needsSaved = true;
+
+			meActionToNearbyPlayers(client, `${toLowerCase(getLockedUnlockedFromBool(getVehicleData(vehicle).locked))} the ${getVehicleName(vehicle)}`);
+
+			return false;
+		}
+	}
 }
 
 // ===========================================================================

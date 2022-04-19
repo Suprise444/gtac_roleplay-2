@@ -75,8 +75,8 @@ function loadCommands() {
 			//new CommandData("delbizloc", deleteBusinessLocationCommand, "[id]", getStaffFlagValue("ManageBusinesses"), true, false),
 			new CommandData("bizreloadall", reloadAllBusinessesCommand, "", getStaffFlagValue("ManageBusinesses"), true, false, "Reloads all businesses from the database"),
 
-			new CommandData("bizlock", lockUnlockBusinessCommand, "", getStaffFlagValue("None"), true, true, "Locks a business"),
-			new CommandData("bizlights", toggleBusinessInteriorLightsCommand, "", getStaffFlagValue("None"), true, true, "Turns on/off a business's interior lights"),
+			//new CommandData("bizlock", lockUnlockBusinessCommand, "", getStaffFlagValue("None"), true, true, "Locks a business"),
+			//new CommandData("bizlights", toggleBusinessInteriorLightsCommand, "", getStaffFlagValue("None"), true, true, "Turns on/off a business's interior lights"),
 			new CommandData("bizbuy", buyBusinessCommand, "", getStaffFlagValue("None"), true, true, "Purchases a business"),
 			new CommandData("bizfee", setBusinessEntranceFeeCommand, "<amount>", getStaffFlagValue("None"), true, true, "Sets a fee to charge players when they enter the business."),
 			new CommandData("biztill", viewBusinessTillAmountCommand, "", getStaffFlagValue("None"), true, true, "Shows the business's till (cash register) amount"),
@@ -250,8 +250,8 @@ function loadCommands() {
 			new CommandData("housebuy", buyHouseCommand, "", getStaffFlagValue("None"), true, false, "Purchases a house"),
 			new CommandData("houseclan", setHouseClanCommand, "", getStaffFlagValue("None"), true, false, "Gives a house to your clan"),
 			new CommandData("housedesc", setHouseDescriptionCommand, "", getStaffFlagValue("ManageHouses"), true, false, "Sets a house's description"),
-			new CommandData("houselock", lockUnlockHouseCommand, "", getStaffFlagValue("None"), true, false, "Locks/unlocks a house door"),
-			new CommandData("houselights", toggleHouseInteriorLightsCommand, "", getStaffFlagValue("None"), true, false, "Turns on and off the lights inside a house"),
+			//new CommandData("houselock", lockUnlockHouseCommand, "", getStaffFlagValue("None"), true, false, "Locks/unlocks a house door"),
+			//new CommandData("houselights", toggleHouseInteriorLightsCommand, "", getStaffFlagValue("None"), true, false, "Turns on and off the lights inside a house"),
 			new CommandData("houseowner", setHouseOwnerCommand, "", getStaffFlagValue("None"), true, false, "Gives a house to a player"),
 			new CommandData("housebuyprice", setHouseBuyPriceCommand, "", getStaffFlagValue("None"), true, false, "Sets the purchase price of a house so people can buy it"),
 			new CommandData("houserentprice", setHouseRentPriceCommand, "", getStaffFlagValue("None"), true, false, "Sets the rent price of a house so people can rent it"),
@@ -384,6 +384,8 @@ function loadCommands() {
 			new CommandData("stuck", stuckPlayerCommand, "", getStaffFlagValue("None"), true, false, "Fixes your position and virtual world if bugged"),
 			new CommandData("gps", gpsCommand, "[item or place name]", getStaffFlagValue("None"), true, false, "Shows you locations for special places or where to buy items"),
 			new CommandData("speak", playerPedSpeakCommand, "<speech name>", getStaffFlagValue("None"), true, false, "Makes your ped say something in their game voice (IV only)"),
+			new CommandData("lock", lockCommand, "", getStaffFlagValue("None"), true, false, "Locks and unlocks your vehicle, house, or business"),
+			new CommandData("lights", lightsCommand, "", getStaffFlagValue("None"), true, false, "Turns on and off the lights for your vehicle, house, or business"),
 		],
 		npc: [
 			new CommandData("addnpc", createNPCCommand, "<skin id/name>", getStaffFlagValue("ManageNPCs"), true, false, "Creates an NPC with the specified skin"),
@@ -492,11 +494,9 @@ function loadCommands() {
 			new CommandData("oldcar", getLastVehicleInfoCommand, "", getStaffFlagValue("None"), true, false),
 			new CommandData("lastcar", getLastVehicleInfoCommand, "", getStaffFlagValue("None"), true, false),
 
-			new CommandData("lock", vehicleLockCommand, "", getStaffFlagValue("None"), true, false),
 			new CommandData("unlock", vehicleLockCommand, "", getStaffFlagValue("None"), true, false),
 			new CommandData("engine", vehicleEngineCommand, "", getStaffFlagValue("None"), true, false),
 			new CommandData("siren", vehicleSirenCommand, "", getStaffFlagValue("None"), true, false),
-			new CommandData("lights", vehicleLightsCommand, "", getStaffFlagValue("None"), true, false),
 
 			new CommandData("vehowner", setVehicleOwnerCommand, "<player id/name>", getStaffFlagValue("ManageVehicles"), true, true),
 			new CommandData("vehpublic", setVehiclePublicCommand, "", getStaffFlagValue("ManageVehicles"), true, true),

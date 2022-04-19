@@ -4,7 +4,32 @@
 // ===========================================================================
 // FILE: connected.js
 // DESC: Provides wrapped natives for GTA Connected and Mafia Connected mods
-// TYPE: Server (JavaScript)
+// TYPE: Client (JavaScript)
+// ===========================================================================
+
+function addEventHandlers() {
+	bindEventHandler("OnResourceStart", thisResource, onResourceStart);
+	bindEventHandler("OnResourceReady", thisResource, onResourceReady);
+	bindEventHandler("OnResourceStop", thisResource, onResourceStop);
+
+	addEventHandler("onProcess", onProcess);
+	addEventHandler("onKeyUp", onKeyUp);
+	addEventHandler("onDrawnHUD", onDrawnHUD);
+	addEventHandler("onPedWasted", onPedWasted);
+	addEventHandler("onElementStreamIn", onElementStreamIn);
+	addEventHandler("onPedEnteredVehicle", onPedEnteredVehicle);
+	addEventHandler("onPedExitedVehicle", onPedExitedVehicle);
+	addEventHandler("onPedEnterSphere", onPedEnterSphere);
+	addEventHandler("onPedExitSphere", onPedExitSphere);
+	addEventHandler("onPedSwitchWeapon", onPedChangeWeapon);
+
+	addEventHandler("OnPedInflictDamage", onPedInflictDamage);
+	addEventHandler("OnLostFocus", onLostFocus);
+	addEventHandler("OnFocus", onFocus);
+	addEventHandler("OnCameraProcess", onCameraProcess);
+	addEventHandler("OnMouseWheel", onMouseWheel);
+}
+
 // ===========================================================================
 
 function sendNetworkEventToPlayer(networkEvent, client, ...args) {

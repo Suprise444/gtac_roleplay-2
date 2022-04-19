@@ -9,50 +9,8 @@
 
 function initEventScript() {
 	logToConsole(LOG_DEBUG, "[VRR.Event]: Initializing event script ...");
-	addCustomEvents();
-	addAllEventHandlers();
+	addEventHandlers();
 	logToConsole(LOG_DEBUG, "[VRR.Event]: Event script initialized!");
-}
-
-// ===========================================================================
-
-function addCustomEvents() {
-	addEvent("OnLocalPlayerEnterSphere", 1);
-	addEvent("OnLocalPlayerExitSphere", 1);
-	addEvent("OnLocalPlayerEnteredVehicle", 1);
-	addEvent("OnLocalPlayerExitedVehicle", 1);
-	addEvent("OnLocalPlayerSwitchWeapon", 2);
-}
-
-// ===========================================================================
-
-function addAllEventHandlers() {
-	bindEventHandler("OnResourceStart", thisResource, onResourceStart);
-	bindEventHandler("OnResourceReady", thisResource, onResourceReady);
-	bindEventHandler("OnResourceStop", thisResource, onResourceStop);
-
-	addEventHandler("OnProcess", onProcess);
-	addEventHandler("OnKeyUp", onKeyUp);
-	addEventHandler("OnDrawnHUD", onDrawnHUD);
-
-	addEventHandler("OnPedWasted", onPedWasted);
-
-	addEventHandler("OnElementStreamIn", onElementStreamIn);
-
-	addEventHandler("OnLocalPlayerEnteredVehicle", onLocalPlayerEnteredVehicle);
-	addEventHandler("OnLocalPlayerExitedVehicle", onLocalPlayerExitedVehicle);
-	addEventHandler("OnLocalPlayerEnterSphere", onLocalPlayerEnterSphere);
-	addEventHandler("OnLocalPlayerExitSphere", onLocalPlayerExitSphere);
-	addEventHandler("OnLocalPlayerSwitchWeapon", onLocalPlayerSwitchWeapon);
-
-	addEventHandler("OnPedInflictDamage", onPedInflictDamage);
-
-	addEventHandler("OnLostFocus", onLostFocus);
-	addEventHandler("OnFocus", onFocus);
-
-	addEventHandler("OnCameraProcess", onCameraProcess);
-
-	addEventHandler("OnMouseWheel", onMouseWheel);
 }
 
 // ===========================================================================
@@ -60,7 +18,7 @@ function addAllEventHandlers() {
 function onResourceStart(event, resource) {
 	sendResourceStartedSignalToServer();
 	setUpInitialGame();
-	garbageCollectorInterval = setInterval(collectAllGarbage, 1000*60);
+	//garbageCollectorInterval = setInterval(collectAllGarbage, 1000*60);
 }
 
 // ===========================================================================
@@ -146,28 +104,28 @@ function onElementStreamIn(event, element) {
 
 // ===========================================================================
 
-function onLocalPlayerExitedVehicle(event, vehicle, seat) {
-	logToConsole(LOG_DEBUG, `[VRR.Event] Local player exited vehicle`);
-	sendNetworkEventToServer("vrr.onPlayerExitVehicle", getVehicleForNetworkEvent(vehicle), seat);
-
-	if(inVehicleSeat) {
-		parkedVehiclePosition = false;
-		parkedVehicleHeading = false;
+function onPedExitedVehicle(event, ped, vehicle, seat) {
+	if(ped == localPlayer) {
+		logToConsole(LOG_DEBUG, `[VRR.Event] Local player exited vehicle`);
+		if(inVehicleSeat) {
+			parkedVehiclePosition = false;
+			parkedVehicleHeading = false;
+		}
 	}
 }
 
 // ===========================================================================
 
-function onLocalPlayerEnteredVehicle(event, vehicle, seat) {
-	logToConsole(LOG_DEBUG, `[VRR.Event] Local player entered vehicle`);
+function onPedEnteredVehicle(event, ped, vehicle, seat) {
+	if(ped == localPlayer) {
+		logToConsole(LOG_DEBUG, `[VRR.Event] Local player entered vehicle`);
 
-	sendNetworkEventToServer("vrr.onPlayerEnterVehicle", getVehicleForNetworkEvent(vehicle), seat);
-
-	if(inVehicleSeat == 0) {
-		inVehicle.engine = false;
-		if(!inVehicle.engine) {
-			parkedVehiclePosition = inVehicle.position;
-			parkedVehicleHeading = inVehicle.heading;
+		if(inVehicleSeat == 0) {
+			inVehicle.engine = false;
+			if(!inVehicle.engine) {
+				parkedVehiclePosition = inVehicle.position;
+				parkedVehicleHeading = inVehicle.heading;
+			}
 		}
 	}
 }
@@ -192,17 +150,19 @@ function onPedInflictDamage(event, damagedEntity, damagerEntity, weaponId, healt
 
 // ===========================================================================
 
-function onLocalPlayerEnterSphere(event, sphere) {
-	logToConsole(LOG_DEBUG, `[VRR.Event] Local player entered sphere`);
-	if(sphere == jobRouteLocationSphere) {
-		enteredJobRouteSphere();
+function onPedEnterSphere(event, ped, sphere) {
+	//logToConsole(LOG_DEBUG, `[VRR.Event] Local player entered sphere`);
+	if(ped == localPlayer) {
+		if(sphere == jobRouteLocationSphere) {
+			enteredJobRouteSphere();
+		}
 	}
 }
 
 // ===========================================================================
 
-function onLocalPlayerExitSphere(event, sphere) {
-	logToConsole(LOG_DEBUG, `[VRR.Event] Local player exited sphere`);
+function onPedExitSphere(event, ped, sphere) {
+	//logToConsole(LOG_DEBUG, `[VRR.Event] Local player exited sphere`);
 }
 
 // ===========================================================================
@@ -219,7 +179,7 @@ function onFocus(event) {
 
 // ===========================================================================
 
-function onLocalPlayerSwitchWeapon(oldWeapon, newWeapon) {
+function onPedChangeWeapon(oldWeapon, newWeapon) {
 
 }
 
@@ -231,8 +191,8 @@ function onCameraProcess(event) {
 
 // ===========================================================================
 
-function onMouseWheel(event, mouseId, deltaCoordinates, flipped) {
-	processMouseWheelForChatBox(mouseId, deltaCoordinates, flipped);
+function onMouseWheel(event, mouseId, up) {
+	processMouseWheelForChatBox(mouseId, up);
 }
 
 // ===========================================================================

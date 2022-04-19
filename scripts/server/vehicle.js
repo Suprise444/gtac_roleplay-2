@@ -265,42 +265,6 @@ function getNearbyVehiclesCommand(command, params, client) {
 
 // ===========================================================================
 
-function vehicleLockCommand(command, params, client) {
-	let vehicle = getClosestVehicle(getPlayerPosition(client));
-
-	if(!getPlayerVehicle(client) && getDistance(getVehiclePosition(vehicle), getPlayerPosition(client)) > getGlobalConfig().vehicleLockDistance) {
-		messagePlayerError(client, getLocaleString(client, "MustBeInOrNearVehicle"));
-		return false;
-	}
-
-	if(!getVehicleData(vehicle)) {
-		messagePlayerError(client, getLocaleString(client, "RandomVehicleCommandsDisabled"));
-		return false;
-	}
-
-	if(isPlayerInAnyVehicle(client)) {
-		vehicle = getPlayerVehicle(client);
-		if(!isPlayerInFrontVehicleSeat(client)) {
-			messagePlayerError(client, getLocaleString(client, "MustBeInVehicleFrontSeat"));
-			return false;
-		}
-	} else {
-		if(!doesPlayerHaveVehicleKeys(client, vehicle)) {
-			messagePlayerError(client, getLocaleString(client, "DontHaveVehicleKey"));
-			return false;
-		}
-	}
-
-	getVehicleData(vehicle).locked = !getVehicleData(vehicle).locked;
-	vehicle.locked = getVehicleData(vehicle).locked;
-
-	getVehicleData(vehicle).needsSaved = true;
-
-	meActionToNearbyPlayers(client, `${toLowerCase(getLockedUnlockedFromBool(getVehicleData(vehicle).locked))} the ${getVehicleName(vehicle)}`);
-}
-
-// ===========================================================================
-
 function vehicleTrunkCommand(command, params, client) {
 	let vehicle = getClosestVehicle(getPlayerPosition(client));
 
@@ -814,7 +778,7 @@ function setVehicleClanCommand(command, params, client) {
 		return false;
 	}
 
-	showPlayerPromptGUI(client, getLocaleString(client, "SetVehicleClanConfirmMessage"), getLocaleString(client, "SetVehicleClanConfirm"), getLocaleString(client, "Yes"), getLocaleString(client, "No"));
+	showPlayerPrompt(client, getLocaleString(client, "SetVehicleClanConfirmMessage"), getLocaleString(client, "SetVehicleClanConfirm"), getLocaleString(client, "Yes"), getLocaleString(client, "No"));
 	getPlayerData(client).promptType = VRR_PROMPT_GIVEVEHTOCLAN;
 
 	getVehicleData(vehicle).needsSaved = true;

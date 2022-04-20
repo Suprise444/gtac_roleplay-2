@@ -9,15 +9,7 @@
 
 function initBusinessScript() {
 	logToConsole(LOG_INFO, "[VRR.Business]: Initializing business script ...");
-	if(!getServerConfig().devServer) {
-		getServerData().businesses = loadBusinessesFromDatabase();
-	}
 
-	createAllBusinessPickups();
-	createAllBusinessBlips();
-
-	setAllBusinessIndexes();
-	cacheAllBusinessItems();
 
 	logToConsole(LOG_INFO, "[VRR.Business]: Business script initialized successfully!");
 	return true;
@@ -151,7 +143,7 @@ function createBusinessCommand(command, params, client) {
 	let tempBusinessData = createBusiness(params, getPlayerPosition(client), toVector3(0.0, 0.0, 0.0), getGameConfig().pickupModels[getServerGame()].Business, getGameConfig().blipSprites[getServerGame()].Business, getPlayerInterior(client), getPlayerDimension(client), getPlayerData(client).interiorCutscene);
 	tempBusinessData.needsSaved = true;
 	let businessId = getServerData().businesses.push(tempBusinessData);
-	setAllBusinessIndexes();
+	setBusinessDataIndexes();
 
 	saveBusinessesToDatabase();
 
@@ -2111,7 +2103,7 @@ function reloadAllBusinessesCommand(command, params, client) {
 	getServerData().businesses = loadBusinessesFromDatabase();
 	createAllBusinessPickups();
 	createAllBusinessBlips();
-	setAllBusinessIndexes();
+	setBusinessDataIndexes();
 	cacheAllBusinessItems();
 
 	announceAdminAction(`AllBusinessesReloaded`);
@@ -2124,7 +2116,7 @@ function reloadAllBusinessesCommand(command, params, client) {
  *
  * @returns {Boolean} Whether or not the exit blip of the business was deleted
  */
-function setAllBusinessIndexes() {
+function setBusinessDataIndexes() {
 	for(let i in getServerData().businesses) {
 		getServerData().businesses[i].index = i;
 	}
@@ -2486,10 +2478,10 @@ function updateBusinessPickupLabelData(businessId) {
 		} else if(getBusinessData(businessId).labelHelpType == VRR_PROPLABEL_INFO_REPAIR) {
 			setEntityData(getBusinessData(businessId).entrancePickup, "vrr.label.help", VRR_PROPLABEL_INFO_REPAIR, true);
 		} else {
-			if(getBusinessData(businessId).buyPrice > 0) {
-				setEntityData(getBusinessData(businessId).entrancePickup, "vrr.label.price", getBusinessData(businessId).buyPrice, true);
-				setEntityData(getBusinessData(businessId).entrancePickup, "vrr.label.help", VRR_PROPLABEL_INFO_BUYBIZ, true);
-			} else {
+			//if(getBusinessData(businessId).buyPrice > 0) {
+			//	setEntityData(getBusinessData(businessId).entrancePickup, "vrr.label.price", getBusinessData(businessId).buyPrice, true);
+			//	setEntityData(getBusinessData(businessId).entrancePickup, "vrr.label.help", VRR_PROPLABEL_INFO_BUYBIZ, true);
+			//} else {
 				if(getBusinessData(businessId).hasInterior) {
 					setEntityData(getBusinessData(businessId).entrancePickup, "vrr.label.help", VRR_PROPLABEL_INFO_ENTER, true);
 				} else {
@@ -2497,7 +2489,7 @@ function updateBusinessPickupLabelData(businessId) {
 						setEntityData(getBusinessData(businessId).entrancePickup, "vrr.label.help", VRR_PROPLABEL_INFO_BUY, true);
 					}
 				}
-			}
+			//}
 		}
 
 		if(getBusinessData(businessId).buyPrice > 0) {

@@ -9,13 +9,6 @@
 
 function initJobScript() {
 	logToConsole(LOG_INFO, "[VRR.Job]: Initializing job script ...");
-	getServerData().jobs = loadJobsFromDatabase();
-
-	createAllJobPickups();
-	createAllJobBlips();
-
-	setAllJobDataIndexes();
-
 	logToConsole(LOG_INFO, "[VRR.Job]: Job script initialized successfully!");
 	return true;
 }

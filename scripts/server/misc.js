@@ -672,17 +672,9 @@ function lockCommand(command, params, client) {
 			return false;
 		}
 
-		if(isPlayerInAnyVehicle(client)) {
-			vehicle = getPlayerVehicle(client);
-			if(!isPlayerInFrontVehicleSeat(client)) {
-				messagePlayerError(client, getLocaleString(client, "MustBeInVehicleFrontSeat"));
-				return false;
-			}
-		} else {
-			if(!doesPlayerHaveVehicleKeys(client, vehicle)) {
-				messagePlayerError(client, getLocaleString(client, "DontHaveVehicleKey"));
-				return false;
-			}
+		if(!isPlayerInFrontVehicleSeat(client)) {
+			messagePlayerError(client, getLocaleString(client, "MustBeInVehicleFrontSeat"));
+			return false;
 		}
 
 		getVehicleData(vehicle).locked = !getVehicleData(vehicle).locked;
@@ -728,17 +720,9 @@ function lockCommand(command, params, client) {
 				return false;
 			}
 
-			if(isPlayerInAnyVehicle(client)) {
-				vehicle = getPlayerVehicle(client);
-				if(!isPlayerInFrontVehicleSeat(client)) {
-					messagePlayerError(client, getLocaleString(client, "MustBeInVehicleFrontSeat"));
-					return false;
-				}
-			} else {
-				if(!doesPlayerHaveVehicleKeys(client, vehicle)) {
-					messagePlayerError(client, getLocaleString(client, "DontHaveVehicleKey"));
-					return false;
-				}
+			if(!doesPlayerHaveVehicleKeys(client, vehicle)) {
+				messagePlayerError(client, getLocaleString(client, "DontHaveVehicleKey"));
+				return false;
 			}
 
 			getVehicleData(vehicle).locked = !getVehicleData(vehicle).locked;
@@ -753,3 +737,101 @@ function lockCommand(command, params, client) {
 }
 
 // ===========================================================================
+
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
+ function lightsCommand(command, params, client) {
+	if(isPlayerInAnyVehicle(client)) {
+		let vehicle = getPlayerVehicle(client);
+
+		if(!getVehicleData(vehicle)) {
+			messagePlayerError(client, getLocaleString(client, "RandomVehicleCommandsDisabled"));
+			return false;
+		}
+
+		if(!isPlayerInFrontVehicleSeat(client)) {
+			messagePlayerError(client, getLocaleString(client, "MustBeInVehicleFrontSeat"));
+			return false;
+		}
+
+		getVehicleData(vehicle).lights = !getVehicleData(vehicle).lights;
+		setVehicleLights(vehicle, getVehicleData(vehicle).lights)
+		getVehicleData(vehicle).needsSaved = true;
+
+		meActionToNearbyPlayers(client, `${toLowerCase(getLockedUnlockedFromBool(getVehicleData(vehicle).lights))} the ${getVehicleName(vehicle)}`);
+	} else {
+		let vehicle = getClosestVehicle(getPlayerPosition(client));
+		if(vehicle != false) {
+			if(getDistance(getPlayerPosition(client), getVehiclePosition(vehicle) <= getGlobalConfig().vehicleLockDistance)) {
+				return false;
+			}
+
+			if(!getVehicleData(vehicle)) {
+				messagePlayerError(client, getLocaleString(client, "RandomVehicleCommandsDisabled"));
+				return false;
+			}
+
+			if(!doesPlayerHaveVehicleKeys(client, vehicle)) {
+				messagePlayerError(client, getLocaleString(client, "DontHaveVehicleKey"));
+				return false;
+			}
+
+			getVehicleData(vehicle).locked = !getVehicleData(vehicle).locked;
+			vehicle.locked = getVehicleData(vehicle).locked;
+			getVehicleData(vehicle).needsSaved = true;
+
+			meActionToNearbyPlayers(client, `${toLowerCase(getLockedUnlockedFromBool(getVehicleData(vehicle).locked))} the ${getVehicleName(vehicle)}`);
+		}
+
+		let businessId = getPlayerBusiness(client);
+		if(businessId != false) {
+			if(!canPlayerManageBusiness(client, businessId)) {
+				messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
+				return false;
+			}
+
+			getBusinessData(businessId).interiorLights = !getBusinessData(businessId).interiorLights;
+
+			let clients = getClients();
+			for(let i in clients) {
+				if(getPlayerBusiness(client) == getPlayerBusiness(clients[i]) && getPlayerDimension(clients[i]) == getBusinessData(businessId).exitDimension) {
+					setPlayerInteriorLights(clients[i], getBusinessData(businessId).interiorLights);
+				}
+			}
+
+			getBusinessData(businessId).needsSaved = true;
+
+			meActionToNearbyPlayers(client, `turned ${getOnOffFromBool((getBusinessData(businessId).interiorLights))} on the business lights`);
+			return true;
+		}
+
+		let houseId = getPlayerHouse(client);
+		if(houseId != false) {
+			if(!canPlayerManageHouse(client, houseId)) {
+				messagePlayerError(client, getLocaleString(client, "CantModifyHouse"));
+				return false;
+			}
+
+			getHouseData(businessId).interiorLights = !getHouseData(houseId).interiorLights;
+
+			let clients = getClients();
+			for(let i in clients) {
+				if(getPlayerHouse(client) == getPlayerHouse(clients[i]) && getPlayerDimension(clients[i]) == getHouseData(houseId).exitDimension) {
+					setPlayerInteriorLights(clients[i], getHouseData(houseId).interiorLights);
+				}
+			}
+
+			getHouseData(houseId).needsSaved = true;
+
+			meActionToNearbyPlayers(client, `turned ${getOnOffFromBool((getHouseData(houseId).interiorLights))} on the house lights`);
+			return true;
+		}
+	}
+}

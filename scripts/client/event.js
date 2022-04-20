@@ -163,13 +163,13 @@ function onLocalPlayerEnteredVehicle(event, vehicle, seat) {
 
 	sendNetworkEventToServer("vrr.onPlayerEnterVehicle", getVehicleForNetworkEvent(vehicle), seat);
 
-	if(inVehicleSeat == 0) {
-		inVehicle.engine = false;
-		if(!inVehicle.engine) {
-			parkedVehiclePosition = inVehicle.position;
-			parkedVehicleHeading = inVehicle.heading;
-		}
-	}
+	//if(inVehicleSeat == 0) {
+		//setVehicleEngine(vehicle, false);
+		//if(!inVehicle.engine) {
+		//	parkedVehiclePosition = inVehicle.position;
+		//	parkedVehicleHeading = inVehicle.heading;
+		//}
+	//}
 }
 
 // ===========================================================================
@@ -182,7 +182,7 @@ function onPedInflictDamage(event, damagedEntity, damagerEntity, weaponId, healt
 		if(damagedEntity.isType(ELEMENT_PLAYER)) {
 			if(damagedEntity == localPlayer) {
 				//if(!weaponDamageEnabled[damagerEntity.name]) {
-					event.preventDefault();
+					preventDefaultEventAction(event);
 					sendNetworkEventToServer("vrr.weaponDamage", damagerEntity.name, weaponId, pedPiece, healthLoss);
 				//}
 			}

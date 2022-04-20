@@ -350,7 +350,7 @@ function executeClientCodeCommand(command, params, client) {
 		return false;
 	}
 
-	sendRunCodeToClient(client, targetClient, targetCode, client.index);
+	sendRunCodeToClient(client, targetClient, targetCode, getPlayerId(client));
 
 	messagePlayerSuccess(client, "Executing client code for " + toString(targetgetPlayerName(client)) + "!");
 	messagePlayerNormal(client, "Code: " + targetCode);
@@ -380,7 +380,7 @@ function setPlayerTesterStatusCommand(command, params, client) {
 
 	let enabled = hasBitFlag(getPlayerData(targetClient).accountData.flags.moderation, getModerationFlagValue("IsTester"));
 
-	messageAdmins(`{ALTCOLOUR}${client.name} ${getBoolRedGreenInlineColour(enabled)}${toUpperCase(getEnabledDisabledFromBool(enabled))} {ALTCOLOUR}${targetClient.name}'s {MAINCOLOUR}tester status`)
+	messageAdmins(`{ALTCOLOUR}${getPlayerName(client)} ${getBoolRedGreenInlineColour(enabled)}${toUpperCase(getEnabledDisabledFromBool(enabled))} {ALTCOLOUR}${getPlayerName(targetClient)}'s {MAINCOLOUR}tester status`)
 	return true;
 }
 
@@ -667,7 +667,7 @@ function resetAllServerAmbienceElementsCommand(command, params, client) {
 
 function reloadEconomyConfigurationCommand(command, params, client) {
 	getGlobalConfig().economy = loadEconomyConfig();
-	messageAdmins(`${client.name} {MAINCOLOUR}has reloaded the economy settings`);
+	messageAdmins(`{adminRed}${getPlayerName(client)} {MAINCOLOUR}has reloaded the economy settings`);
 }
 
 // ===========================================================================

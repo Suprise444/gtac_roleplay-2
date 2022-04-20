@@ -9,19 +9,6 @@
 
 function initHouseScript() {
 	logToConsole(LOG_INFO, "[VRR.House]: Initializing house script ...");
-	if(!getServerConfig().devServer) {
-		getServerData().houses = loadHousesFromDatabase();
-	}
-
-	if(getServerConfig().createHousePickups) {
-		createAllHousePickups();
-	}
-
-	if(getServerConfig().createHouseBlips) {
-		createAllHouseBlips();
-	}
-
-	setAllHouseIndexes();
 	logToConsole(LOG_INFO, "[VRR.House]: House script initialized successfully!");
 	return true;
 }
@@ -83,7 +70,7 @@ function createHouseCommand(command, params, client) {
 	let houseId = getServerData().houses.push(tempHouseData);
 
 	saveHouseToDatabase(houseId-1);
-	setAllHouseIndexes();
+	setHouseDataIndexes();
 
 	createHouseEntrancePickup(houseId-1);
 	createHouseExitPickup(houseId-1);
@@ -333,7 +320,7 @@ function setHousePickupCommand(command, params, client) {
 
 	getHouseData(houseId).needsSaved = true;
 
-	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} set house {houseGreen}${getHouseData(houseId).description}{MAINCOLOUR} pickup display to {ALTCOLOUR}${toLowerCase(typeParam)}`);
+	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set house {houseGreen}${getHouseData(houseId).description}{MAINCOLOUR} pickup display to {ALTCOLOUR}${toLowerCase(typeParam)}`);
 }
 
 // ===========================================================================
@@ -394,7 +381,7 @@ function setHouseInteriorTypeCommand(command, params, client) {
 
 	getHouseData(houseId).needsSaved = true;
 
-	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} set house {houseGreen}${getHouseData(houseId).description}{MAINCOLOUR} interior type to {ALTCOLOUR}${toLowerCase(typeParam)}`);
+	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set house {houseGreen}${getHouseData(houseId).description}{MAINCOLOUR} interior type to {ALTCOLOUR}${toLowerCase(typeParam)}`);
 }
 
 // ===========================================================================
@@ -445,7 +432,7 @@ function setHouseBlipCommand(command, params, client) {
 	resetHouseBlips(houseId);
 	getHouseData(houseId).needsSaved = true;
 
-	messageAdmins(`{adminRed}${client.name}{MAINCOLOUR} set house {houseGreen}${getHouseData(houseId).description}{MAINCOLOUR} blip display to {ALTCOLOUR}${toLowerCase(typeParam)}`);
+	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set house {houseGreen}${getHouseData(houseId).description}{MAINCOLOUR} blip display to {ALTCOLOUR}${toLowerCase(typeParam)}`);
 }
 
 // ===========================================================================
@@ -1279,7 +1266,7 @@ function exitHouse(client) {
 
 // ===========================================================================
 
-function setAllHouseIndexes() {
+function setHouseDataIndexes() {
 	for(let i in getServerData().houses) {
 		getServerData().houses[i].index = i;
 

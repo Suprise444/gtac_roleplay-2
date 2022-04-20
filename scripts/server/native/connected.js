@@ -261,7 +261,7 @@ function setPlayerHealth(client, health) {
 // ===========================================================================
 
 function getPlayerHealth(client) {
-	return getServerData(client).health;
+	return getPlayerData(client).health;
 }
 
 // ===========================================================================
@@ -331,7 +331,7 @@ function takePlayerCash(client, amount) {
 
 function disconnectPlayer(client) {
 	logToConsole(LOG_DEBUG, `Disconnecting (kicking) ${getPlayerDisplayForConsole(client)}`);
-	client.disconnect();
+	disconnectPlayer(client);
 	return false;
 }
 
@@ -739,7 +739,7 @@ function givePlayerWeaponAmmo(client, ammo) {
 
 function getPlayerWeapon(client) {
 	if(areServerElementsSupported(client)) {
-		return getPlayerPed(client).weapon;;
+		return getPlayerPed(client).weapon;
 	} else {
 		return getPlayerData(client).syncWeapon;
 	}
@@ -1164,6 +1164,42 @@ function doesEntityDataExist(entity, dataName) {
 		return (entity.getData(dataName) != null);
 	}
 	return null;
+}
+
+// ===========================================================================
+
+function disconnectPlayer(client) {
+	client.disconnect();
+}
+
+// ===========================================================================
+
+function getPlayerId(client) {
+	return client.index;
+}
+
+// ===========================================================================
+
+function getPlayerIP(client) {
+	return client.ip;
+}
+
+// ===========================================================================
+
+function getPlayerGameVersion(client) {
+	client.gameVersion;
+}
+
+// ===========================================================================
+
+function setPlayerNativeAdminState(client, state) {
+	client.administrator = state;
+}
+
+// ===========================================================================
+
+function despawnPlayer(client) {
+	client.despawnPlayer();
 }
 
 // ===========================================================================

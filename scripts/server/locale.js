@@ -190,7 +190,7 @@ function reloadLocaleConfigurationCommand(command, params, client) {
 
 	getGlobalConfig().locale.defaultLanguageId = getLocaleFromParams(getGlobalConfig().locale.defaultLanguage);
 
-	messageAdmins(`${client.name}{MAINCOLOUR} has reloaded the locale settings and texts`);
+	messageAdmins(`${getPlayerName(client)}{MAINCOLOUR} has reloaded the locale settings and texts`);
 }
 
 // ===========================================================================

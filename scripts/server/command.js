@@ -756,7 +756,7 @@ function processPlayerCommand(command, params, client) {
 	//	}
 	//}
 
-	if(!client.console) {
+	if(!isConsole(client)) {
 		if(!doesPlayerHaveStaffPermission(client, getCommandRequiredPermissions(toLowerCase(command)))) {
 			console.warn(`[VRR.Command] ${getPlayerDisplayForConsole(client)} attempted to use command, but failed (no permission): /${command} ${paramsDisplay}`);
 			messagePlayerError(client, `You do not have permission to use the {ALTCOLOUR}/${toLowerCase(command)} {MAINCOLOUR}command!`);

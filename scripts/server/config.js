@@ -94,6 +94,7 @@ function initConfigScript() {
 	serverConfig = loadServerConfigFromGameAndPort(server.game, server.port, getMultiplayerMod());
 
 	logToConsole(LOG_INFO, "[VRR.Config]: Applying server config ...");
+	getServerConfig().devServer = intToBool(toInteger(server.getCVar("vrr_devserver")));
 	getServerConfig().fallingSnow = intToBool(toInteger(server.getCVar("vrr_fallingsnow")));
 	getServerConfig().groundSnow = intToBool(toInteger(server.getCVar("vrr_groundsnow")));
 	getServerConfig().useGUI = intToBool(toInteger(server.getCVar("vrr_gui")));

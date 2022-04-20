@@ -9,11 +9,6 @@
 
 function initClanScript() {
 	logToConsole(LOG_INFO, "[VRR.Clan]: Initializing clans script ...");
-	if(!getServerConfig().devServer) {
-		getServerData().clans = loadClansFromDatabase();
-	}
-
-	setAllClanDataIndexes();
 	logToConsole(LOG_INFO, "[VRR.Clan]: Clan script initialized successfully!");
 	return true;
 }

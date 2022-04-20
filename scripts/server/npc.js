@@ -8,12 +8,8 @@
 // ===========================================================================
 
 function initNPCScript() {
-	if(!getServerConfig().devServer) {
-		getServerData().npcs = loadNPCsFromDatabase();
-	}
-
-	setNPCDataIndexes();
-	spawnNPCs();
+	logToConsole(LOG_INFO, "[VRR.NPC]: Initializing NPC script ...");
+	logToConsole(LOG_INFO, "[VRR.NPC]: NPC script initialized successfully!");
 }
 
 // ===========================================================================
@@ -47,7 +43,7 @@ function createNPCCommand(client, command, params) {
 	let position = getPosInFrontOfPos(getPlayerPosition(client), getPlayerHeading(client), 3);
 
 	let npcId = createNPC(skinId, position, getPlayerHeading(client));
-	messageAdmins(`${client.name}{MAINCOLOUR} created a ${getSkinNameFromIndex(getNPCData(npcId).skin)} NPC!`);
+	messageAdmins(`${getPlayerName(client)}{MAINCOLOUR} created a ${getSkinNameFromIndex(getNPCData(npcId).skin)} NPC!`);
 }
 
 // ===========================================================================
@@ -285,7 +281,7 @@ function spawnNPC(npcIndex) {
 
 // ===========================================================================
 
-function spawnNPCs() {
+function spawnAllNPCs() {
 	for(let i in getServerData().npcs) {
 		spawnNPC(npcIndex);
 	}
@@ -309,7 +305,7 @@ function deleteNPCCommand(command, params, client) {
 	let npcName = getNPCData(closestNPC).name;
 
 	deleteNPC(closestNPC);
-	messageAdmins(`${client.name}{MAINCOLOUR} deleted NPC {npcPink}${npcName}`);
+	messageAdmins(`${getPlayerName(client)}{MAINCOLOUR} deleted NPC {npcPink}${npcName}`);
 }
 
 // ===========================================================================

@@ -185,7 +185,7 @@ function setLocalPlayerControlState(controlState, cursorState = false) {
 	logToConsole(LOG_DEBUG, `[VRR.Utilities] Setting control state to ${controlState} (Cursor: ${cursorState})`);
 	controlsEnabled = controlState;
 	if(getGame() == VRR_GAME_GTA_III || getGame() == VRR_GAME_GTA_VC) {
-		game.SET_PLAYER_CONTROL(localClient.index, boolToInt(controlState));
+		game.SET_PLAYER_CONTROL(getPlayerId(localClient), boolToInt(controlState));
 	}
 
 	if(getGame() != VRR_GAME_GTA_IV) {

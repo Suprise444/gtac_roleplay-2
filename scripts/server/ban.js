@@ -39,7 +39,7 @@ function accountBanCommand(command, params, client) {
 
 	logToConsole(LOG_WARN, `[VRR.Ban]: ${getPlayerDisplayForConsole(targetClient)} (${getPlayerData(targetClient).accountData.name}) account was banned by ${getPlayerDisplayForConsole(client)}. Reason: ${reason}`);
 
-	announceAdminAction(`PlayerAccountBanned`, `{ALTCOLOUR}${targetClient.name}{MAINCOLOUR}`);
+	announceAdminAction(`PlayerAccountBanned`, `{ALTCOLOUR}${getPlayerName(client)}{MAINCOLOUR}`);
 	banAccount(getPlayerData(targetClient).accountData.databaseId, getPlayerData(client).accountData.databaseId, reason);
 	disconnectPlayer(client);
 }
@@ -69,7 +69,7 @@ function subAccountBanCommand(command, params, client, fromDiscord) {
 
 	logToConsole(LOG_WARN, `[VRR.Ban]: ${getPlayerDisplayForConsole(targetClient)} (${getPlayerData(targetClient).accountData.name})'s subaccount was banned by ${getPlayerDisplayForConsole(client)}. Reason: ${reason}`);
 
-	announceAdminAction(`PlayerCharacterBanned`, `{ALTCOLOUR}${targetClient.name}{MAINCOLOUR}`);
+	announceAdminAction(`PlayerCharacterBanned`, `{ALTCOLOUR}${getPlayerName(client)}{MAINCOLOUR}`);
 	banSubAccount(getPlayerData(targetClient).currentSubAccountData.databaseId, getPlayerData(client).accountData.databaseId, reason);
 
 	disconnectPlayer(client);
@@ -98,11 +98,11 @@ function ipBanCommand(command, params, client, fromDiscord) {
 		return false;
 	}
 
-	announceAdminAction(`PlayerIPBanned`, `{ALTCOLOUR}${targetClient.name}{MAINCOLOUR}`);
-	banIPAddress(targetClient.ip, getPlayerData(client).accountData.databaseId, reason);
+	announceAdminAction(`PlayerIPBanned`, `{ALTCOLOUR}${getPlayerName(targetClient)}{MAINCOLOUR}`);
+	banIPAddress(getPlayerIP(targetClient), getPlayerData(client).accountData.databaseId, reason);
 
-	server.banIP(targetClient.ip);
-	targetClient.disconnect();
+	server.banIP(getPlayerIP(targetClient));
+	disconnectPlayer(targetClient);
 }
 
 // ===========================================================================
@@ -129,10 +129,10 @@ function subNetBanCommand(command, params, client, fromDiscord) {
 		return false;
 	}
 
-	announceAdminAction(`PlayerSubNetBanned`, `{ALTCOLOUR}${targetClient.name}{MAINCOLOUR}`);
-	banSubNet(targetClient.ip, getSubNet(targetClient.ip, octetAmount), getPlayerData(client).accountData.databaseId, reason);
+	announceAdminAction(`PlayerSubNetBanned`, `{ALTCOLOUR}${getPlayerName(client)}{MAINCOLOUR}`);
+	banSubNet(getPlayerIP(targetClient), getSubNet(getPlayerIP(targetClient), octetAmount), getPlayerData(client).accountData.databaseId, reason);
 
-	server.banIP(targetClient.ip);
+	server.banIP(getPlayerIP(targetClient));
 }
 
 // ===========================================================================

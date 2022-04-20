@@ -89,7 +89,7 @@ function getDiscordUserData(discordUserId) {
 // ===========================================================================
 
 function messageDiscordChatChannel(messageString) {
-	if(getServerConfig().devServer) {
+	if(getServerConfig().devServer == true) {
 		return false;
 	}
 

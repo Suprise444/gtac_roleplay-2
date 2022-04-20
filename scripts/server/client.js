@@ -98,7 +98,7 @@ function updateAllPlayerNameTags() {
 
 function updatePlayerPing(client) {
 	//logToConsole(LOG_DEBUG, `[VRR.Client] Sending ${getPlayerDisplayForConsole(client)}'s ping to all players`);
-	sendNetworkEventToPlayer("vrr.ping", null, getPlayerName(client), client.ping);
+	sendNetworkEventToPlayer("vrr.ping", null, getPlayerName(client), getPlayerPing(client));
 }
 
 // ===========================================================================
@@ -106,7 +106,7 @@ function updatePlayerPing(client) {
 function playerClientReady(client) {
 	setEntityData(client, "vrr.isReady", true, false);
 	logToConsole(LOG_DEBUG, `${getPlayerDisplayForConsole(client)}'s client resources are downloaded and ready!`);
-	if(client.getData("vrr.isStarted") == true) {
+	if(getEntityData(client, "vrr.isStarted") == true) {
 		initClient(client);
 	}
 }
@@ -123,7 +123,7 @@ function playerGUIReady(client) {
 function playerClientStarted(client) {
 	setEntityData(client, "vrr.isStarted", true, false);
 	logToConsole(LOG_DEBUG, `${getPlayerDisplayForConsole(client)}'s client resources are started and running!`);
-	if(client.getData("vrr.isReady") == true) {
+	if(getEntityData(client, "vrr.isReady") == true) {
 		initClient(client);
 	}
 }
@@ -132,7 +132,7 @@ function playerClientStarted(client) {
 
 function playerClientStopped(client) {
 	logToConsole(LOG_DEBUG, `${getPlayerDisplayForConsole(client)}'s client resources have stopped (possibly error?). Kicking them from the server ...`);
-	client.disconnect();
+	disconnectPlayer(client);
 }
 
 // ===========================================================================
@@ -739,7 +739,7 @@ function forcePlayerIntoSkinSelect(client) {
 		setPlayerPosition(client, getGameConfig().skinChangePosition[getServerGame()][0]);
 		setPlayerHeading(client, getGameConfig().skinChangePosition[getServerGame()][1]);
 		setPlayerInterior(client, getGameConfig().skinChangePosition[getServerGame()][2]);
-		setPlayerDimension(client, client.index+500);
+		setPlayerDimension(client, getPlayerId(client)+500);
 	}
 
 	sendNetworkEventToPlayer("vrr.skinSelect", client, true);

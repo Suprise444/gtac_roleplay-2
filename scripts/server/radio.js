@@ -9,11 +9,6 @@
 
 function initRadioScript() {
 	logToConsole(LOG_INFO, "[VRR.Radio]: Initializing radio script ...");
-	if(!getServerConfig().devServer) {
-		getServerData().radioStations = loadRadioStationsFromDatabase();
-	}
-
-	setRadioStationIndexes();
 	logToConsole(LOG_INFO, "[VRR.Radio]: Radio script initialized successfully!");
 	return true;
 }
@@ -229,7 +224,7 @@ function showRadioStationListCommand(command, params, client) {
 
 // ===========================================================================
 
-function setRadioStationIndexes() {
+function setAllRadioStationIndexes() {
 	for(let i in getServerData().radioStations) {
 		getServerData().radioStations[i].index = i;
 	}

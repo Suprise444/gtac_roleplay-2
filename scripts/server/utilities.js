@@ -64,7 +64,7 @@ function getGameAreas(gameId) {
 function getPlayerData(client) {
 	if(client != null) {
 		if(isClientInitialized(client)) {
-			return getServerData().clients[client.index];
+			return getServerData().clients[getPlayerId(client)];
 		}
 	}
 	return false;
@@ -178,7 +178,7 @@ function getPlayerDisplayForConsole(client) {
 	if(isNull(client)) {
 		return "(Unknown client)";
 	}
-	return `${getPlayerName(client)}[${client.index}]`;
+	return `${getPlayerName(client)}[${getPlayerId(client)}]`;
 }
 
 // ===========================================================================
@@ -449,7 +449,7 @@ function clearTemporaryPeds() {
 
 function kickAllClients() {
 	getClients().forEach((client) => {
-		client.disconnect();
+		disconnectPlayer(client);
 	})
 }
 
@@ -464,7 +464,7 @@ function updateTimeRule() {
 // ===========================================================================
 
 function isClientInitialized(client) {
-	return (typeof getServerData().clients[client.index] != "undefined");
+	return (typeof getServerData().clients[getPlayerId(client)] != "undefined");
 }
 
 // ===========================================================================

@@ -111,7 +111,7 @@ function forcePlayerPayDayCommand(command, params, client) {
 		return false;
 	}
 
-	messageAdmins(`${client.name} gave ${targetClient.name} an instant payday`);
+	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} gave {ALTCOLOUR}${getPlayerName(targetClient)}{MAINCOLOUR} an instant payday`);
 	playerPayDay(targetClient);
 }
 
@@ -132,7 +132,7 @@ function setPayDayBonusMultiplier(command, params, client) {
 
 	getGlobalConfig().economy.grossIncomeMultiplier = newMultiplier;
 
-	announceAdminAction(`PaydayBonusSet`, `{adminRed}${client.name}{MAINCOLOUR}`, `{ALTCOLOUR}${newMultiplier*100}%{MAINCOLOUR}`);
+	announceAdminAction(`PaydayBonusSet`, `{adminRed}${getPlayerName(client)}{MAINCOLOUR}`, `{ALTCOLOUR}${newMultiplier*100}%{MAINCOLOUR}`);
 }
 
 // ===========================================================================
@@ -147,7 +147,7 @@ function taxInfoCommand(command, params, client) {
 
 function wealthInfoCommand(command, params, client) {
 	let wealth = calculateWealth(client);
-	messagePlayerInfo(client, `Your wealth is: $${wealth}. Use {ALTCOLOUR}/help wealth {MAINCOLOUR}for more information.`);
+	messagePlayerInfo(client, `Your wealth is: {ALTCOLOUR}$${wealth}{MAINCOLOUR}. Use {ALTCOLOUR}/help wealth {MAINCOLOUR}for more information.`);
 }
 
 // ===========================================================================

@@ -54,13 +54,13 @@ function onPlayerConnect(event, ipAddress, port) {
 // ===========================================================================
 
 function onPlayerJoin(event, client) {
-	logToConsole(LOG_INFO, `[VRR.Event] Client ${client.name}[${client.index}] joining from ${client.ip}`);
+	logToConsole(LOG_INFO, `[VRR.Event] Client ${getPlayerName(client)}[${getPlayerId(client)}] joining from ${getPlayerIP(client)}`);
 
 	if(isFadeCameraSupported()) {
 		fadeCamera(client, true, 1.0);
 	}
 
-	messageDiscordEventChannel(`👋 ${client.name} is connecting to the server ...`);
+	messageDiscordEventChannel(`👋 ${getPlayerName(client)} is connecting to the server ...`);
 	//messageDiscordEventChannel(`👋 ${getPlayerDisplayForConsole(client)} has joined the server.`);
 }
 
@@ -103,13 +103,13 @@ function onPlayerQuit(event, client, quitReasonId) {
 			reasonText = getPlayerData(client).customDisconnectReason;
 		}
 		messagePlayerNormal(null, `👋 ${getPlayerName(client)} has left the server (${reasonText})`, getColourByName("softYellow"));
-		messageDiscordEventChannel(`👋 ${client.name} has left the server (${reasonText})`);
+		messageDiscordEventChannel(`👋 ${getPlayerName(client)} has left the server (${reasonText})`);
 
 		savePlayerToDatabase(client);
 		resetClientStuff(client);
-		getServerData().clients[client.index] = null;
+		getServerData().clients[getPlayerId(client)] = null;
 	} else {
-		messageDiscordEventChannel(`👋 ${client.name} has left the server (${disconnectReasons[quitReasonId]}[${quitReasonId}])`);
+		messageDiscordEventChannel(`👋 ${getPlayerName(client)} has left the server (${disconnectReasons[quitReasonId]}[${quitReasonId}])`);
 	}
 
 	clearTemporaryVehicles();
@@ -395,7 +395,7 @@ function onPlayerDeath(client, position) {
 		setTimeout(function() {
 			if(getPlayerCurrentSubAccount(client).inJail) {
 				let closestJail = getClosestPoliceStation(getPlayerPosition(client));
-				client.despawnPlayer();
+				despawnPlayer(client);
 				getPlayerCurrentSubAccount(client).interior = closestJail.interior;
 				getPlayerCurrentSubAccount(client).dimension = closestJail.dimension;
 
@@ -417,7 +417,7 @@ function onPlayerDeath(client, position) {
 				setPlayerControlState(client, true);
 			} else {
 				let closestHospital = getClosestHospital(getPlayerPosition(client));
-				client.despawnPlayer();
+				despawnPlayer(client);
 				getPlayerCurrentSubAccount(client).interior = closestHospital.interior;
 				getPlayerCurrentSubAccount(client).dimension = closestHospital.dimension;
 
@@ -467,21 +467,21 @@ function onPlayerSpawn(client) {
 	logToConsole(LOG_DEBUG, `[VRR.Event] Checking ${getPlayerDisplayForConsole(client)}'s player data`);
 	if(!getPlayerData(client)) {
 		logToConsole(LOG_DEBUG, `[VRR.Event] ${getPlayerDisplayForConsole(client)}'s player data is invalid. Kicking them from server.`);
-		client.disconnect();
+		disconnectPlayer(client);
 		return false;
 	}
 
 	logToConsole(LOG_DEBUG, `[VRR.Event] Checking ${getPlayerDisplayForConsole(client)}'s login status`);
 	if(!isPlayerLoggedIn(client)) {
 		logToConsole(LOG_DEBUG, `[VRR.Event] ${getPlayerDisplayForConsole(client)} is NOT logged in. Despawning their player.`);
-		client.disconnect();
+		disconnectPlayer(client);
 		return false;
 	}
 
 	logToConsole(LOG_DEBUG, `[VRR.Event] Checking ${getPlayerDisplayForConsole(client)}'s selected character status`);
 	if(getPlayerData(client).currentSubAccount == -1) {
 		logToConsole(LOG_DEBUG, `[VRR.Event] ${getPlayerDisplayForConsole(client)} has NOT selected a character. Despawning their player.`);
-		client.disconnect();
+		disconnectPlayer(client);
 		return false;
 	}
 
@@ -622,7 +622,7 @@ function onPlayerSpawn(client) {
 
 	getPlayerData(client).payDayTickStart = sdl.ticks;
 
-	messageDiscordEventChannel(`🧍 ${client.name} spawned as ${getCharacterFullName(client)}`);
+	messageDiscordEventChannel(`🧍 ${getPlayerName(client)} spawned as ${getCharacterFullName(client)}`);
 }
 
 // ===========================================================================

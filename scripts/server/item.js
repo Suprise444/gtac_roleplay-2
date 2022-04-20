@@ -9,16 +9,6 @@
 
 function initItemScript() {
 	logToConsole(LOG_INFO, "[VRR.Item]: Initializing item script ...");
-	getServerData().itemTypes = loadItemTypesFromDatabase();
-	if(!getServerConfig().devServer) {
-		getServerData().items = loadItemsFromDatabase();
-	}
-
-	setItemTypeDataIndexes();
-	setItemDataIndexes();
-
-	cacheAllGroundItems();
-	createAllGroundItemObjects();
 	logToConsole(LOG_INFO, "[VRR.Item]: Item script initialized successfully!");
 	return true;
 }
@@ -2327,7 +2317,6 @@ function createGroundPlant(itemId) {
 	createGroundItem(getItemTypeData(itemId).useId, 1, position, dimension);
 	groundPlantCache.push(itemId);
 	groundItemCache.push(itemId);
-
 }
 
 // ===========================================================================

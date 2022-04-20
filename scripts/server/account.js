@@ -583,14 +583,14 @@ function loginSuccess(client) {
 
 	if(doesPlayerHaveStaffPermission(client, "Developer") || doesPlayerHaveStaffPermission(client, "ManageServer")) {
 		logToConsole(LOG_WARN, `[VRR.Account] ${getPlayerDisplayForConsole(client)} has needed permissions and is being given administrator access`);
-		client.administrator = true;
+		setPlayerAsNativeAdmin(client);
 	}
 
 	if(doesServerHaveTesterOnlyEnabled()) {
 		if(!hasBitFlag(getPlayerData(client).accountData.flags.moderation, getModerationFlagValue("IsTester"))) {
 			setTimeout(function() {
 				getPlayerData(client).customDisconnectReason = "Kicked - Not a tester";
-				client.disconnect();
+				disconnectPlayer();
 			}, 3500);
 
 			if(doesServerHaveGUIEnabled() && doesPlayerHaveGUIEnabled(client)) {
@@ -618,7 +618,7 @@ function loginSuccess(client) {
 		showCharacterSelectToClient(client);
 	}
 
-	getPlayerData(client).accountData.ipAddress = client.ip;
+	getPlayerData(client).accountData.ipAddress = getPlayerIP(client);
 
 	sendPlayerChatScrollLines(client, getPlayerData(client).accountData.chatScrollLines);
 	messagePlayerNormal(null, `👋 ${getPlayerName(client)} has joined the server`, getColourByName("softYellow"));
@@ -794,7 +794,7 @@ function createAccount(name, password, email = "") {
 function checkLogin(client, password) {
 	getPlayerData(client).loginAttemptsRemaining = getPlayerData(client).loginAttemptsRemaining-1;
 	if(getPlayerData(client).loginAttemptsRemaining <= 0) {
-		client.disconnect();
+		disconnectPlayer();
 	}
 
 	if(isPlayerLoggedIn(client)) {
@@ -831,7 +831,7 @@ function checkLogin(client, password) {
 		}
 
 		if(isAccountEmailVerified(getPlayerData(client).accountData) && isAccountSettingFlagEnabled(getPlayerData(client).accountData, getAccountSettingsFlagValue("AuthAttemptAlert"))) {
-			sendAccountLoginFailedNotification(getPlayerData(client).accountData.emailAddress, client.name, client.ip, getServerGame());
+			sendAccountLoginFailedNotification(getPlayerData(client).accountData.emailAddress, getPlayerName(client), getPlayerIP(client), getServerGame());
 		}
 		return false;
 	}
@@ -847,7 +847,7 @@ function checkLogin(client, password) {
 		}
 
 		if(isAccountEmailVerified(getPlayerData(client).accountData) && isAccountSettingFlagEnabled(getPlayerData(client).accountData, getAccountSettingsFlagValue("AuthAttemptAlert"))) {
-			sendAccountLoginFailedNotification(getPlayerData(client).accountData.emailAddress, client.name, client.ip, getServerGame());
+			sendAccountLoginFailedNotification(getPlayerData(client).accountData.emailAddress, getPlayerName(client), getPlayerIP(client), getServerGame());
 		}
 		return false;
 	}
@@ -865,7 +865,7 @@ function checkLogin(client, password) {
 	loginSuccess(client);
 
 	if(isAccountEmailVerified(getPlayerData(client).accountData) && isAccountSettingFlagEnabled(getPlayerData(client).accountData, getAccountSettingsFlagValue("AuthAttemptAlert"))) {
-		sendAccountLoginSuccessNotification(getPlayerData(client).accountData.emailAddress, client.name, client.ip, getServerGame());
+		sendAccountLoginSuccessNotification(getPlayerData(client).accountData.emailAddress, getPlayerName(client), getPlayerIP(client), getServerGame());
 	}
 }
 
@@ -973,7 +973,7 @@ function checkRegistration(client, password, confirmPassword = "", emailAddress 
 
 	if(doesServerHaveTesterOnlyEnabled() && !isPlayerATester(client)) {
 		setTimeout(function() {
-			client.disconnect();
+			disconnectPlayer();
 		}, 5000);
 
 		if(doesServerHaveGUIEnabled() && doesPlayerHaveGUIEnabled(client)) {
@@ -1024,7 +1024,7 @@ function checkAccountResetPasswordRequest(client, inputText) {
 			logToConsole(LOG_DEBUG, `${getPlayerDisplayForConsole(client)} entered the correct reset password verification code. Awaiting new password input ...`);
 		} else {
 			getPlayerData(client).passwordResetState = VRR_RESETPASS_STATE_NONE;
-			client.disconnect();
+			disconnectPlayer(client);
 			logToConsole(LOG_DEBUG|LOG_WARN, `${getPlayerDisplayForConsole(client)} failed to reset their password (verification code not correct)`);
 		}
 	}
@@ -1038,7 +1038,7 @@ function checkAccountChangePassword(client, newPassword, confirmNewPassword) {
 	if(!isPlayerLoggedIn(client)) {
 		if(getPlayerData(client).passwordResetState != VRR_RESETPASS_STATE_SETPASS) {
 			//getPlayerData(client).passwordResetState = VRR_RESETPASS_STATE_NONE;
-			//client.disconnect();
+			//disconnectPlayer(client);
 			logToConsole(LOG_DEBUG|LOG_WARN, `${getPlayerDisplayForConsole(client)} failed to change their password (not logged in or not using reset password)`);
 			return false;
 		}
@@ -1141,11 +1141,11 @@ function initClient(client) {
 		return false;
 	}
 
-	if(client.getData("vrr.isInitialized") != null || client.getData("vrr.isInitialized") == true) {
+	if(doesEntityDataExist(client, "vrr.isInitialized") || getEntityData(client, "vrr.isInitialized") == true) {
 		return false;
 	}
 
-	client.setData("vrr.isInitialized", true, false);
+	setEntityData(client, "vrr.isInitialized", true, false);
 
 	sendPlayerGUIColours(client);
 	sendPlayerGUIInit(client);
@@ -1162,14 +1162,14 @@ function initClient(client) {
 			let tempAccountData = loadAccountFromName(getPlayerName(client), true);
 			let tempSubAccounts = loadSubAccountsFromAccount(tempAccountData.databaseId);
 
-			getServerData().clients[client.index] = new ClientData(client, tempAccountData, tempSubAccounts);
+			getServerData().clients[getPlayerId(client)] = new ClientData(client, tempAccountData, tempSubAccounts);
 
-			getServerData().clients[client.index].sessionId = saveConnectionToDatabase(client);
-			getServerData().clients[client.index].connectTime = getCurrentUnixTimestamp();
+			getServerData().clients[getPlayerId(client)].sessionId = saveConnectionToDatabase(client);
+			getServerData().clients[getPlayerId(client)].connectTime = getCurrentUnixTimestamp();
 			requestClientInfo(client);
 
 			if(tempAccountData != false) {
-				if(isAccountAutoIPLoginEnabled(tempAccountData) && getPlayerData(client).accountData.ipAddress == client.ip) {
+				if(isAccountAutoIPLoginEnabled(tempAccountData) && getPlayerData(client).accountData.ipAddress == getPlayerIp(client)) {
 					messagePlayerAlert(client, getLocaleString(client, "AutoLoggedInIP"));
 					loginSuccess(client);
 					playRadioStreamForPlayer(client, getServerIntroMusicURL(), true, getPlayerStreamingRadioVolume(client));
@@ -1182,7 +1182,7 @@ function initClient(client) {
 						messagePlayerNormal(client, getLocaleString(client, "WelcomeBack", getServerName(), getPlayerName(client), "/login"),getColourByName("softGreen"));
 
 						//if(checkForGeoIPModule()) {
-						//	let iso = module.geoip.getCountryISO(client.ip);
+						//	let iso = module.geoip.getCountryISO(getPlayerIp(client));
 						//	let localeId = getLocaleFromCountryISO(iso);
 						//}
 						//showGameMessage(client, getLocaleString(client, "LocaleOffer", `/lang ${getLocaleData(localeId)[2]}`), getColourByName("white"), 10000, "Roboto");
@@ -1200,7 +1200,7 @@ function initClient(client) {
 				playRadioStreamForPlayer(client, getServerIntroMusicURL(), true, getPlayerStreamingRadioVolume(client));
 			}
 
-			getServerData().clients[client.index].keyBinds = loadAccountKeybindsFromDatabase(getServerData().clients[client.index].accountData.databaseId);
+			getServerData().clients[getPlayerId(client)].keyBinds = loadAccountKeybindsFromDatabase(getServerData().clients[getPlayerId(client)].accountData.databaseId);
 			sendAccountKeyBindsToClient(client);
 		}
 	}, 2500);
@@ -1212,7 +1212,7 @@ function saveConnectionToDatabase(client) {
 	let dbConnection = connectToDatabase();
 	if(dbConnection) {
 		let safeName = escapeDatabaseString(dbConnection, getPlayerName(client));
-		let dbQueryString = `INSERT INTO conn_main (conn_when_connect, conn_server, conn_script_version, conn_game_version, conn_client_version, conn_name, conn_ip) VALUES (NOW(), ${getServerConfig().databaseId}, '${scriptVersion}', '${client.gameVersion}', '0.0.0', '${safeName}', '${client.ip}')`;
+		let dbQueryString = `INSERT INTO conn_main (conn_when_connect, conn_server, conn_script_version, conn_game_version, conn_client_version, conn_name, conn_ip) VALUES (NOW(), ${getServerConfig().databaseId}, '${scriptVersion}', '${getPlayerGameVersion(client)}', '0.0.0', '${safeName}', '${getPlayerIP(client)}')`;
 		queryDatabase(dbConnection, dbQueryString);
 		return getDatabaseInsertId(dbConnection);
 	}
@@ -1520,7 +1520,7 @@ function checkPlayerTwoFactorAuthentication(client, authCode) {
 		}
 	}
 
-	client.disconnect();
+	disconnectPlayer(client);
 	return false;
 }
 

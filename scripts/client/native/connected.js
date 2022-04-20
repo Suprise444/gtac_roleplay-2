@@ -189,3 +189,27 @@ function doesEntityDataExist(entity, dataName) {
 }
 
 // ===========================================================================
+
+function preventDefaultEventAction(event) {
+	event.preventDefault();
+}
+
+// ===========================================================================
+
+function getPlayerId(client) {
+	return client.index;
+}
+
+// ===========================================================================
+
+function consolePrint(text) {
+	console.log(text);
+}
+
+// ===========================================================================
+
+function getPlayerName(client) {
+	return client.name;
+}
+
+// ===========================================================================

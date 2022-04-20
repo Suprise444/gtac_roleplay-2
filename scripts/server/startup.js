@@ -38,14 +38,16 @@ function initServerScripts() {
 	initEconomyScript();
 	initRadioScript();
 	initLocaleScript();
-
 	initCommandScript();
 
-	serverStartTime = getCurrentUnixTimestamp();
+	loadServerDataFromDatabase();
+	setAllServerDataIndexes();
+	createAllServerElements();
 
 	initAllClients();
-
 	initTimers();
+
+	serverStartTime = getCurrentUnixTimestamp();
 }
 
 // ===========================================================================
@@ -101,6 +103,54 @@ function checkForAllRequiredModules() {
 
 	logToConsole(LOG_DEBUG, "[VRR.Startup]: All required modules loaded!");
 	return true;
+}
+
+// ===========================================================================
+
+function loadServerDataFromDatabase() {
+	getServerData().itemTypes = loadItemTypesFromDatabase();
+
+	if(!getServerConfig().devServer) {
+		getServerData().items = loadItemsFromDatabase();
+		getServerData().businesses = loadBusinessesFromDatabase();
+		getServerData().houses = loadHousesFromDatabase();
+		getServerData().vehicles = loadVehiclesFromDatabase();
+		getServerData().clans = loadClansFromDatabase();
+		getServerData().jobs = loadJobsFromDatabase();
+		getServerData().npcs = loadNPCsFromDatabase();
+		getServerData().races = loadRacesFromDatabase();
+		getServerData().radioStations = loadRadioStationsFromDatabase();
+	}
+}
+
+// ===========================================================================
+
+function setAllServerDataIndexes() {
+	setItemTypeDataIndexes();
+	setItemDataIndexes();
+	setBusinessDataIndexes();
+	setHouseDataIndexes();
+	setAllClanDataIndexes();
+	setAllJobDataIndexes();
+	setNPCDataIndexes();
+	setAllRaceDataIndexes();
+	setAllRadioStationIndexes();
+	cacheAllGroundItems();
+	cacheAllBusinessItems();
+}
+
+// ===========================================================================
+
+function createAllServerElements() {
+	createAllBusinessPickups();
+	createAllBusinessBlips();
+	createAllHousePickups();
+	createAllHouseBlips();
+	createAllJobPickups();
+	createAllJobBlips();
+	createAllGroundItemObjects();
+	spawnAllVehicles();
+	spawnAllNPCs();
 }
 
 // ===========================================================================

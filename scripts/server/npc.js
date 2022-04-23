@@ -147,7 +147,7 @@ function loadNPCTriggerResponsesFromDatabase(npcTriggerDatabaseId) {
 
 // ===========================================================================
 
-function saveNPCsToDatabase() {
+function saveAllNPCsToDatabase() {
 	if(getServerConfig().devServer) {
 		return false;
 	}
@@ -183,11 +183,11 @@ function saveNPCToDatabase(npcDataId) {
 		if(tempNPCData.ped != false) {
 			if(!tempNPCData.spawnLocked) {
 				if(areServerElementsSupported()) {
-					tempNPCData.spawnPosition = tempNPCData.vehicle.position;
-					tempNPCData.spawnRotation = tempNPCData.vehicle.heading;
+					tempNPCData.position = tempNPCData.ped.position;
+					tempNPCData.heading = tempNPCData.ped.heading;
 				} else {
-					tempNPCData.spawnPosition = tempNPCData.syncPosition;
-					tempNPCData.spawnRotation = tempNPCData.syncHeading;
+					tempNPCData.position = tempNPCData.syncPosition;
+					tempNPCData.heading = tempNPCData.syncHeading;
 				}
 			}
 		}

@@ -868,7 +868,7 @@ function createClan(name) {
 // ===========================================================================
 
 function deleteClan(clanId) {
-	saveClansToDatabase();
+	//saveAllClansToDatabase();
 
 	let dbConnection = connectToDatabase();
 	if(dbConnection) {
@@ -1081,7 +1081,7 @@ function setClanRankTitle(clanId, rankId, title) {
 
 // ===========================================================================
 
-function saveClansToDatabase() {
+function saveAllClansToDatabase() {
 	if(getServerConfig().devServer) {
 		return false;
 	}

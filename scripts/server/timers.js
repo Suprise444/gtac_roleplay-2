@@ -19,51 +19,63 @@ function saveServerDataToDatabase() {
 	logToConsole(LOG_DEBUG, "[VRR.Utilities]: Saving all server data to database ...");
 
 	try {
-		saveClientsToDatabase();
+		saveAllPlayersToDatabase();
 	} catch(error) {
-		logToConsole(LOG_ERROR, `Could not save clients to database: ${error}`);
+		logToConsole(LOG_ERROR, `Could not save players to database: ${error}`);
 	}
 
 	try {
-		saveClansToDatabase();
+		saveAllClansToDatabase();
 	} catch(error) {
 		logToConsole(LOG_ERROR, `Could not save clans to database: ${error}`);
 	}
 
 	try {
-		saveHousesToDatabase();
+		saveAllHousesToDatabase();
 	} catch(error) {
 		logToConsole(LOG_ERROR, `Could not save houses to database: ${error}`);
 	}
 
 	try {
-		saveBusinessesToDatabase();
+		saveAllBusinessesToDatabase();
 	} catch(error) {
 		logToConsole(LOG_ERROR, `Could not save businesses to database: ${error}`);
 	}
 
 	try {
-		saveVehiclesToDatabase();
+		saveAllVehiclesToDatabase();
 	} catch(error) {
 		logToConsole(LOG_ERROR, `Could not save vehicles to database: ${error}`);
 	}
 
 	try {
-		saveItemTypesToDatabase();
+		saveAllItemTypesToDatabase();
 	} catch(error) {
 		logToConsole(LOG_ERROR, `Could not save item types to database: ${error}`);
 	}
 
 	try {
-		saveItemsToDatabase();
+		saveAllItemsToDatabase();
 	} catch(error) {
 		logToConsole(LOG_ERROR, `Could not save items to database: ${error}`);
 	}
 
 	try {
-		saveJobsToDatabase();
+		saveAllJobsToDatabase();
 	} catch(error) {
 		logToConsole(LOG_ERROR, `Could not save jobs to database: ${error}`);
+	}
+
+	try {
+		saveAllNPCsToDatabase();
+	} catch(error) {
+		logToConsole(LOG_ERROR, `Could not save NPCs to database: ${error}`);
+	}
+
+	try {
+		saveAllGatesToDatabase();
+	} catch(error) {
+		logToConsole(LOG_ERROR, `Could not save gates to database: ${error}`);
 	}
 
 	try {

@@ -1676,7 +1676,7 @@ function getItemTypeData(itemTypeId) {
 
 // ===========================================================================
 
-function saveItemsToDatabase() {
+function saveAllItemsToDatabase() {
 	if(getServerConfig().devServer) {
 		return false;
 	}
@@ -1688,7 +1688,7 @@ function saveItemsToDatabase() {
 
 // ===========================================================================
 
-function saveItemTypesToDatabase() {
+function saveAllItemTypesToDatabase() {
 	if(getServerConfig().devServer) {
 		return false;
 	}

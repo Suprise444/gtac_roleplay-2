@@ -60,7 +60,13 @@ function onPlayerJoin(event, client) {
 		fadeCamera(client, true, 1.0);
 	}
 
-	messageDiscordEventChannel(`👋 ${getPlayerName(client)} is connecting to the server ...`);
+	let messageText = `👋 ${getPlayerName(client)} is connecting to the server ...`;
+	messageDiscordEventChannel(messageText);
+
+	for(let i in clients) {
+		messagePlayerNormal(clients[i], getLocaleString(clients[i], "PlayerConnecting"));
+	}
+
 	//messageDiscordEventChannel(`👋 ${getPlayerDisplayForConsole(client)} has joined the server.`);
 }
 
@@ -97,19 +103,18 @@ function onPlayerQuit(event, client, quitReasonId) {
 	logToConsole(LOG_INFO, `👋 Client ${getPlayerDisplayForConsole(client)} disconnected (${disconnectReasons[quitReasonId]}[${quitReasonId}])`);
 	updateConnectionLogOnQuit(client, quitReasonId);
 
+	let reasonText = disconnectReasons[quitReasonId];
+	if(getPlayerData(client).customDisconnectReason != "") {
+		reasonText = getPlayerData(client).customDisconnectReason;
+	}
+	messageDiscordEventChannel(`👋 ${getPlayerName(client)} has left the server (${reasonText})`);
+	messagePlayerNormal(null, `👋 ${getPlayerName(client)} has left the server (${reasonText})`, getColourByName("softYellow"));
+
 	if(isPlayerLoggedIn(client)) {
-		let reasonText = disconnectReasons[quitReasonId];
-		if(getPlayerData(client).customDisconnectReason != "") {
-			reasonText = getPlayerData(client).customDisconnectReason;
-		}
-		messagePlayerNormal(null, `👋 ${getPlayerName(client)} has left the server (${reasonText})`, getColourByName("softYellow"));
-		messageDiscordEventChannel(`👋 ${getPlayerName(client)} has left the server (${reasonText})`);
 
 		savePlayerToDatabase(client);
 		resetClientStuff(client);
 		getServerData().clients[getPlayerId(client)] = null;
-	} else {
-		messageDiscordEventChannel(`👋 ${getPlayerName(client)} has left the server (${disconnectReasons[quitReasonId]}[${quitReasonId}])`);
 	}
 
 	clearTemporaryVehicles();

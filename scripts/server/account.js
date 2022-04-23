@@ -619,10 +619,14 @@ function loginSuccess(client) {
 	}
 
 	getPlayerData(client).accountData.ipAddress = getPlayerIP(client);
-
 	sendPlayerChatScrollLines(client, getPlayerData(client).accountData.chatScrollLines);
-	messagePlayerNormal(null, `👋 ${getPlayerName(client)} has joined the server`, getColourByName("softYellow"));
+
 	messageDiscordChatChannel(`👋 ${getPlayerName(client)} has joined the server`);
+
+	let clients = getClients();
+	for(let i in clients) {
+		messagePlayerNormal(clients[i], getLocaleString(clients[i], "PlayerJoined", `{ALTCOLOUR}${getPlayerName(client)}{MAINCOLOUR}`), getColourByName("softYellow"));
+	}
 }
 
 // ===========================================================================
@@ -1089,7 +1093,7 @@ function isValidEmailAddress(emailAddress) {
 
 // ===========================================================================
 
-function savePlayersToDatabase() {
+function saveAllPlayersToDatabase() {
 	logToConsole(LOG_DEBUG, "[VRR.Account]: Saving all clients to database ...");
 	getClients().forEach(function(client) {
 		savePlayerToDatabase(client);

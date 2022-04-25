@@ -729,7 +729,7 @@ function updateHeadingInVehicleData(client, vehicle, heading) {
 // ===========================================================================
 
 function forcePlayerIntoSkinSelect(client) {
-	if(getGameConfig().skinChangePosition[getServerGame()].length > 0) {
+	if(typeof getGameConfig().skinChangePosition[getServerGame()] != "undefined") {
 		getPlayerData(client).returnToPosition = getPlayerPosition(client);
 		getPlayerData(client).returnToHeading = getPlayerHeading(client);
 		getPlayerData(client).returnToInterior = getPlayerInterior(client);

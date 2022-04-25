@@ -149,27 +149,35 @@ function getFightStyleFromParams(params) {
 // ===========================================================================
 
 function getClosestHospital(position) {
-	let closest = 0;
-	for(let i in getGameConfig().hospitals[getServerGame()]) {
-		if(getDistance(getGameConfig().hospitals[getServerGame()][i].position, position) < getDistance(getGameConfig().hospitals[getServerGame()][closest].position, position)) {
-			closest = i;
+	if(typeof getGameConfig().hospitals[getServerGame()] == "undefined") {
+		return {position: getServerConfig().newCharacter.spawnPosition};
+	} else {
+		let closest = 0;
+		for(let i in getGameConfig().hospitals[getServerGame()]) {
+			if(getDistance(getGameConfig().hospitals[getServerGame()][i].position, position) < getDistance(getGameConfig().hospitals[getServerGame()][closest].position, position)) {
+				closest = i;
+			}
 		}
-	}
 
-	return getGameConfig().hospitals[getServerGame()][closest];
+		return getGameConfig().hospitals[getServerGame()][closest];
+	}
 }
 
 // ===========================================================================
 
 function getClosestPoliceStation(position) {
-	let closest = 0;
-	for(let i in getGameConfig().policeStations[getServerGame()]) {
-		if(getDistance(getGameConfig().policeStations[getServerGame()][i].position, position) < getDistance(getGameConfig().policeStations[getServerGame()][closest].position, position)) {
-			closest = i;
+	if(typeof getGameConfig().policeStations[getServerGame()] == "undefined") {
+		return {position: getServerConfig().newCharacter.spawnPosition};
+	} else {
+		let closest = 0;
+		for(let i in getGameConfig().policeStations[getServerGame()]) {
+			if(getDistance(getGameConfig().policeStations[getServerGame()][i].position, position) < getDistance(getGameConfig().policeStations[getServerGame()][closest].position, position)) {
+				closest = i;
+			}
 		}
-	}
 
-	return getGameConfig().policeStations[getServerGame()][closest];
+		return getGameConfig().policeStations[getServerGame()][closest];
+	}
 }
 
 // ===========================================================================

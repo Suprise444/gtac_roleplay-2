@@ -343,6 +343,11 @@ function setHouseInteriorTypeCommand(command, params, client) {
 		return false;
 	}
 
+	if(typeof getGameData().interiors[getGame()] == "undefined") {
+		messagePlayerError(client, `There are no interiors available for this game!`);
+		return false;
+	}
+
 	if(isNaN(typeParam)) {
 		let tempHouseLocation = new HouseLocationData(false);
 

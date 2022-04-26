@@ -55,3 +55,22 @@ function saveRaceToDatabase(raceData) {
 }
 
 // ===========================================================================
+
+function createRaceCommand(command, params, client) {
+	if(areParamsEmpty(params)) {
+		messagePlayerSyntax(client, getCommandSyntaxText(command));
+		return false;
+	}
+
+	let raceId = getRaceFromParams(params);
+
+	if(raceId == false) {
+		messagePlayerError(client, "A race with that name already exists!");
+		return false;
+	}
+
+	createRace(params);
+	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} created race {ALTCOLOUR}${params}`);
+}
+
+// ===========================================================================

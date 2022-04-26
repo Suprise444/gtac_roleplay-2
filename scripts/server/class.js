@@ -7,8 +7,6 @@
 // TYPE: Server (JavaScript)
 // ===========================================================================
 
-// ===========================================================================
-
 function initClassScript() {
 	logToConsole(LOG_INFO, "[VRR.Class]: Initializing class script ...");
 	logToConsole(LOG_INFO, "[VRR.Class]: Class script initialized successfully!");

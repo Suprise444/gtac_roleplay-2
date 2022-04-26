@@ -7,8 +7,6 @@
 // TYPE: Server (JavaScript)
 // ===========================================================================
 
-// ===========================================================================
-
 function initBanScript() {
 	logToConsole(LOG_INFO, "[VRR.Ban]: Initializing ban script ...");
 	logToConsole(LOG_INFO, "[VRR.Ban]: Ban script initialized!");

@@ -1398,16 +1398,6 @@ function getMultiplayerMod() {
 
 // ===========================================================================
 
-function getGame() {
-	if(isServerScript()) {
-		return server.game;
-	} else {
-		return game.game;
-	}
-}
-
-// ===========================================================================
-
 function isSnowSupported(gameId) {
 	return supportedFeatures.snow[getGame()];
 }
@@ -1487,6 +1477,10 @@ function isGameFeatureSupported(featureName) {
 // ===========================================================================
 
 function getAllowedSkins(gameId = getGame()) {
+	logToConsole(getGame());
+	logToConsole(gameId);
+	logToConsole(typeof gameId);
+
 	return getGameConfig().skins[gameId].filter(skin => skin[2] == true);
 }
 

@@ -1,6 +1,7 @@
 {
     "apiEmail": "example@example.com",
-    "defaultLanguage": "en",
+    "defaultLanguageId": 0,
+	"translateURL": "http://api.mymemory.translated.net/get?de={3}&q={0}&langpair={1}|{2}",
     "locales": [
         {
 			"englishName": "English",

@@ -9,7 +9,6 @@
 	<script src="scripts/shared/gamedata.js" type="server" language="javascript" />
 	<script src="scripts/shared/gamedata.js" type="client" language="javascript" />
 
-
 	<!-- Multiplayer Mod (Wrapped Natives) -->
 	<script src="scripts/server/native/connected.js" type="server" language="javascript" />
 	<script src="scripts/client/native/connected.js" type="client" language="javascript" />

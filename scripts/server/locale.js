@@ -7,22 +7,8 @@
 // TYPE: Server (JavaScript)
 // ===========================================================================
 
-let translateURL = "http://api.mymemory.translated.net/get?de={3}&q={0}&langpair={1}|{2}";
-
-// ===========================================================================
-
 function initLocaleScript() {
 	logToConsole(LOG_INFO, "[VRR.Locale]: Initializing locale script ...");
-	getServerData().localeStrings = loadAllLocaleStrings();
-
-	// Translation Cache
-	getServerData().cachedTranslations = new Array(getGlobalConfig().locale.locales.length);
-	getServerData().cachedTranslationFrom = new Array(getGlobalConfig().locale.locales.length);
-	getServerData().cachedTranslationFrom.fill([]);
-	getServerData().cachedTranslations.fill(getServerData().cachedTranslationFrom);
-
-	getGlobalConfig().locale.defaultLanguageId = getLocaleFromParams(getGlobalConfig().locale.defaultLanguageId);
-
 	logToConsole(LOG_INFO, "[VRR.Locale]: Locale script initialized!");
 }
 
@@ -209,7 +195,7 @@ async function translateMessage(messageText, translateFrom = getGlobalConfig().l
 			}
 		}
 
-		let thisTranslationURL = translateURL.format(encodeURI(messageText), toUpperCase(getGlobalConfig().locale.locales[translateFrom].isoCode), toUpperCase(getGlobalConfig().locale.locales[translateTo].isoCode), getGlobalConfig().locale.apiEmail);
+		let thisTranslationURL = getGlobalConfig().locale.translateURL.format(encodeURI(messageText), toUpperCase(getGlobalConfig().locale.locales[translateFrom].isoCode), toUpperCase(getGlobalConfig().locale.locales[translateTo].isoCode), getGlobalConfig().locale.apiEmail);
 		httpGet(
 			thisTranslationURL,
 			"",

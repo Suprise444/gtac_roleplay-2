@@ -40,8 +40,7 @@ let serverData = {
 
 // ===========================================================================
 
-// Pre-cache allowed skins
-let allowedSkins = getAllowedSkins(getGame());
+let allowedSkins = [];
 
 // ===========================================================================
 

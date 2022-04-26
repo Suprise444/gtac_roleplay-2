@@ -40,10 +40,16 @@ function initServerScripts() {
 	initLocaleScript();
 	initCommandScript();
 
+	// Load config, commands, and data
+	loadGlobalConfig();
+	loadCommands();
 	loadServerDataFromDatabase();
+
+	// Set indexes and cache necessary data
 	setAllServerDataIndexes();
 	createAllServerElements();
 
+	applyConfigToServer(serverConfig);
 	initAllClients();
 	initTimers();
 
@@ -108,8 +114,20 @@ function checkForAllRequiredModules() {
 // ===========================================================================
 
 function loadServerDataFromDatabase() {
-	getServerData().itemTypes = loadItemTypesFromDatabase();
+	logToConsole(LOG_INFO, "[VRR.Config]: Loading server config ...");
+	serverConfig = loadServerConfigFromGameAndPort(server.game, server.port, getMultiplayerMod());
 
+	// Always load these regardless of "test server" status
+	getServerData().itemTypes = loadItemTypesFromDatabase();
+	getServerData().localeStrings = loadAllLocaleStrings();
+
+	// Translation Cache
+	getServerData().cachedTranslations = new Array(getGlobalConfig().locale.locales.length);
+	getServerData().cachedTranslationFrom = new Array(getGlobalConfig().locale.locales.length);
+	getServerData().cachedTranslationFrom.fill([]);
+	getServerData().cachedTranslations.fill(getServerData().cachedTranslationFrom);
+
+	// Only load these if the server isn't a testing/dev server
 	if(!getServerConfig().devServer) {
 		getServerData().items = loadItemsFromDatabase();
 		getServerData().businesses = loadBusinessesFromDatabase();
@@ -121,6 +139,9 @@ function loadServerDataFromDatabase() {
 		getServerData().races = loadRacesFromDatabase();
 		getServerData().radioStations = loadRadioStationsFromDatabase();
 	}
+
+	getServerData().commands = loadCommands();
+	allowedSkins = getAllowedSkins(getGame());
 }
 
 // ===========================================================================
@@ -137,6 +158,7 @@ function setAllServerDataIndexes() {
 	setAllRadioStationIndexes();
 	cacheAllGroundItems();
 	cacheAllBusinessItems();
+	cacheAllCommandsAliases();
 }
 
 // ===========================================================================
@@ -151,6 +173,7 @@ function createAllServerElements() {
 	createAllGroundItemObjects();
 	spawnAllVehicles();
 	spawnAllNPCs();
+	addAllCommandHandlers();
 }
 
 // ===========================================================================

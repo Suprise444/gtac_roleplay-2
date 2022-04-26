@@ -87,39 +87,13 @@ let globalConfig = {
 
 function initConfigScript() {
 	logToConsole(LOG_INFO, "[VRR.Config]: Initializing config script ...");
-	logToConsole(LOG_DEBUG, "[VRR.Config]: Loading global config ...");
-	loadGlobalConfig();
-
-	logToConsole(LOG_INFO, "[VRR.Config]: Loading server config ...");
-	serverConfig = loadServerConfigFromGameAndPort(server.game, server.port, getMultiplayerMod());
-
-	logToConsole(LOG_INFO, "[VRR.Config]: Applying server config ...");
-	getServerConfig().devServer = intToBool(toInteger(server.getCVar("vrr_devserver")));
-	getServerConfig().fallingSnow = intToBool(toInteger(server.getCVar("vrr_fallingsnow")));
-	getServerConfig().groundSnow = intToBool(toInteger(server.getCVar("vrr_groundsnow")));
-	getServerConfig().useGUI = intToBool(toInteger(server.getCVar("vrr_gui")));
-	getServerConfig().showLogo = false;
-	getServerConfig().testerOnly = intToBool(toInteger(server.getCVar("vrr_testeronly")));
-	getServerConfig().discordEnabled = false;
-	getServerConfig().createJobPickups = intToBool(toInteger(server.getCVar("vrr_jobpickups")));
-	getServerConfig().createBusinessPickups = intToBool(toInteger(server.getCVar("vrr_businesspickups")));
-	getServerConfig().createHousePickups = intToBool(toInteger(server.getCVar("vrr_housepickups")));
-	getServerConfig().createJobBlips = intToBool(toInteger(server.getCVar("vrr_jobblips")));
-	getServerConfig().createBusinessBlips = intToBool(toInteger(server.getCVar("vrr_businessblips")));
-	getServerConfig().createHouseBlips = intToBool(toInteger(server.getCVar("vrr_houseblips")));
-	getServerConfig().useRealTime = intToBool(toInteger(server.getCVar("vrr_realtime")));
-	getServerConfig().antiCheat.enabled = intToBool(toInteger(server.getCVar("vrr_anticheat")));
-
-	applyConfigToServer(serverConfig);
-	logToConsole(LOG_DEBUG, "[VRR.Config]: Server config applied successfully!");
-
 	logToConsole(LOG_INFO, "[VRR.Config]: Config script initialized!");
 }
-
 
 // ===========================================================================
 
 function loadGlobalConfig() {
+	getGlobalConfig().database = loadDatabaseConfig();
 	getGlobalConfig().economy = loadEconomyConfig();
 	getGlobalConfig().locale = loadLocaleConfig();
 	getGlobalConfig().accents = loadAccentConfig();
@@ -169,6 +143,24 @@ function loadServerConfigFromId(tempServerId) {
 // ===========================================================================
 
 function applyConfigToServer(tempServerConfig) {
+	logToConsole(LOG_INFO, "[VRR.Config]: Applying server config ...");
+	getServerConfig().devServer = intToBool(toInteger(server.getCVar("vrr_devserver")));
+	getServerConfig().fallingSnow = intToBool(toInteger(server.getCVar("vrr_fallingsnow")));
+	getServerConfig().groundSnow = intToBool(toInteger(server.getCVar("vrr_groundsnow")));
+	getServerConfig().useGUI = intToBool(toInteger(server.getCVar("vrr_gui")));
+	getServerConfig().showLogo = false;
+	getServerConfig().testerOnly = intToBool(toInteger(server.getCVar("vrr_testeronly")));
+	getServerConfig().discordEnabled = false;
+	getServerConfig().createJobPickups = intToBool(toInteger(server.getCVar("vrr_jobpickups")));
+	getServerConfig().createBusinessPickups = intToBool(toInteger(server.getCVar("vrr_businesspickups")));
+	getServerConfig().createHousePickups = intToBool(toInteger(server.getCVar("vrr_housepickups")));
+	getServerConfig().createJobBlips = intToBool(toInteger(server.getCVar("vrr_jobblips")));
+	getServerConfig().createBusinessBlips = intToBool(toInteger(server.getCVar("vrr_businessblips")));
+	getServerConfig().createHouseBlips = intToBool(toInteger(server.getCVar("vrr_houseblips")));
+	getServerConfig().useRealTime = intToBool(toInteger(server.getCVar("vrr_realtime")));
+	getServerConfig().antiCheat.enabled = intToBool(toInteger(server.getCVar("vrr_anticheat")));
+	logToConsole(LOG_DEBUG, "[VRR.Config]: Server config applied successfully!");
+
 	if(isTimeSupported()) {
 		logToConsole(LOG_DEBUG, `[VRR.Config]: Setting time to to ${tempServerConfig.hour}:${tempServerConfig.minute} with minute duration of ${tempServerConfig.minuteDuration}`);
 		setGameTime(tempServerConfig.hour, tempServerConfig.minute, tempServerConfig.minuteDuration);
@@ -707,16 +699,16 @@ function reloadEmailConfigurationCommand(command, params, client) {
  *
  */
 function reloadDatabaseConfigurationCommand(command, params, client) {
-	if(databaseConfig.usePersistentConnection && isDatabaseConnected(persistentDatabaseConnection)) {
+	if(getDatabaseConfig().usePersistentConnection && isDatabaseConnected(persistentDatabaseConnection)) {
 		console.warn(`[VRR.Database] Closing persistent database connection`);
 		persistentDatabaseConnection.close();
 		persistentDatabaseConnection = null;
 	}
 	databaseEnabled = false;
-	databaseConfig = loadEmailConfig();
+	getGlobalConfig().database = loadDatabaseConfig();
 	messagePlayerSuccess(client, `You reloaded the database configuration!`);
 	databaseEnabled = true;
-	if(databaseConfig.usePersistentConnection) {
+	if(getDatabaseConfig().usePersistentConnection) {
 		connectToDatabase();
 	}
 
@@ -829,6 +821,19 @@ function doesServerHaveFallingSnowEnabled() {
 
 function doesServerHaveGroundSnowEnabled() {
 	return getServerConfig().groundSnow;
+}
+
+// ===========================================================================
+
+function loadDatabaseConfig() {
+	let databaseConfigFile = loadTextFile("config/database.json");
+	return JSON.parse(databaseConfigFile);
+}
+
+// ===========================================================================
+
+function getDatabaseConfig() {
+	return getGlobalConfig().database;
 }
 
 // ===========================================================================

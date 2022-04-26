@@ -748,10 +748,10 @@ function getPlayerWeapon(client) {
 // ===========================================================================
 
 function connectToDatabase() {
-	if(databaseConfig.usePersistentConnection) {
+	if(getDatabaseConfig().usePersistentConnection) {
 		if(persistentDatabaseConnection == null) {
 			logToConsole(LOG_DEBUG, "[VRR.Database] Initializing database connection ...");
-			persistentDatabaseConnection = module.mysql.connect(databaseConfig.host, databaseConfig.user, databaseConfig.pass, databaseConfig.name, databaseConfig.port);
+			persistentDatabaseConnection = module.mysql.connect(getDatabaseConfig().host, getDatabaseConfig().user, getDatabaseConfig().pass, getDatabaseConfig().name, getDatabaseConfig().port);
 			if(persistentDatabaseConnection.error) {
 				console.warn("[VRR.Database] Database connection error: " + toString(persistentDatabaseConnection.error));
 				persistentDatabaseConnection = null;
@@ -765,7 +765,7 @@ function connectToDatabase() {
 			return persistentDatabaseConnection;
 		}
 	} else {
-		let databaseConnection = module.mysql.connect(databaseConfig.host, databaseConfig.user, databaseConfig.pass, databaseConfig.name, databaseConfig.port);
+		let databaseConnection = module.mysql.connect(getDatabaseConfig().host, getDatabaseConfig().user, getDatabaseConfig().pass, getDatabaseConfig().name, getDatabaseConfig().port);
 		if(databaseConnection.error) {
 			console.warn("[VRR.Database] Database connection error: " + toString(persistentDatabaseConnection.error));
 			return false;
@@ -778,7 +778,7 @@ function connectToDatabase() {
 // ===========================================================================
 
 function disconnectFromDatabase(dbConnection) {
-	if(!databaseConfig.usePersistentConnection) {
+	if(!getDatabaseConfig().usePersistentConnection) {
 		try {
 			dbConnection.close();
 			logToConsole(LOG_DEBUG, `[VRR.Database] Database connection closed successfully`);
@@ -917,13 +917,6 @@ function setConstantsAsGlobalVariablesInDatabase() {
 			logToConsole(LOG_DEBUG, `[VRR.Database] Adding ${i} (${entries[i]}) to database global variables`);
 		}
 	}
-}
-
-// ===========================================================================
-
-function loadDatabaseConfiguration() {
-	let databaseConfigFile = loadTextFile("config/database.json");
-	return JSON.parse(databaseConfigFile);
 }
 
 // ===========================================================================
@@ -1200,6 +1193,12 @@ function setPlayerNativeAdminState(client, state) {
 
 function despawnPlayer(client) {
 	client.despawnPlayer();
+}
+
+// ===========================================================================
+
+function getGame() {
+	return server.game;
 }
 
 // ===========================================================================

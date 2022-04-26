@@ -2229,7 +2229,7 @@ function saveJobUniformToDatabase(jobUniformData) {
 
 // ===========================================================================
 
-function saveJobsToDatabase() {
+function saveAllJobsToDatabase() {
 	for(let i in getServerData().jobs) {
 		saveJobToDatabase(getServerData().jobs[i]);
 

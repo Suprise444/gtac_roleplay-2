@@ -677,7 +677,7 @@ function getPlayerHouse(client) {
 
 // ===========================================================================
 
-function saveHousesToDatabase() {
+function saveAllHousesToDatabase() {
 	if(getServerConfig().devServer) {
 		return false;
 	}

@@ -145,7 +145,7 @@ function createBusinessCommand(command, params, client) {
 	let businessId = getServerData().businesses.push(tempBusinessData);
 	setBusinessDataIndexes();
 
-	saveBusinessesToDatabase();
+	saveAllBusinessesToDatabase();
 
 	createBusinessEntrancePickup(businessId-1);
 	createBusinessExitPickup(businessId-1);
@@ -1535,7 +1535,7 @@ function getPlayerBusiness(client) {
  * @return {Boolean} Whether or not the businesses were saved
  *
  */
-function saveBusinessesToDatabase() {
+function saveAllBusinessesToDatabase() {
 	if(getServerConfig().devServer) {
 		return false;
 	}

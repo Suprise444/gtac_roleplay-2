@@ -197,39 +197,27 @@ function onPedExitingVehicle(event, ped, vehicle) {
 // ===========================================================================
 
 function onResourceStart(event, resource) {
-	logToConsole(LOG_WARN, `[VRR.Event] ${resource.name} started!`);
+	logToConsole(LOG_WARN, `[VRR.Event] Resource ${resource.name} started!`);
 
 	if(resource != thisResource) {
-		messageAdmins(`{MAINCOLOUR}Resource {ALTCOLOUR}${resource.name} {MAINCOLOUR}started!`);
+		messageAdmins(`{MAINCOLOUR}Resource {ALTCOLOUR}${resource.name}{MAINCOLOUR} started!`);
 	}
 }
 
 // ===========================================================================
 
 function onResourceStop(event, resource) {
-	logToConsole(LOG_WARN, `[VRR.Event] ${resource.name} stopped!`);
+	logToConsole(LOG_WARN, `[VRR.Event] Resource ${resource.name} stopped!`);
 
 	if(resource != thisResource) {
-		messageAdmins(`{MAINCOLOUR}Resource {ALTCOLOUR}${resource.name} {MAINCOLOUR}stopped!`);
+		messageAdmins(`{MAINCOLOUR}Resource {ALTCOLOUR}${resource.name}{MAINCOLOUR} stopped!`);
 	}
 
 	if(resource == thisResource) {
-		saveServerDataToDatabase();
-		clearArray(getServerData().vehicles);
-		clearArray(getServerData().clients);
-		clearArray(getServerData().businesses);
-		clearArray(getServerData().houses);
-		clearArray(getServerData().factions);
-		clearArray(getServerData().jobs);
-		clearArray(getServerData().clans);
-		clearArray(getServerData().items);
-		clearArray(getServerData().itemTypes);
-		clearArray(getServerData().groundItemCache);
-		clearArray(getServerData().groundPlantCache);
 		kickAllClients();
+		saveServerDataToDatabase();
+		collectAllGarbage();
 	}
-
-	collectAllGarbage();
 }
 
 // ===========================================================================

@@ -7,15 +7,8 @@
 // TYPE: Server (JavaScript)
 // ===========================================================================
 
-let serverCommands = [];
-
-// ===========================================================================
-
 function initCommandScript() {
 	logToConsole(LOG_INFO, "[VRR.Command]: Initializing commands script ...");
-	serverCommands = loadCommands();
-	cacheAllCommandsAliases(serverCommands);
-	addAllCommandHandlers();
 	logToConsole(LOG_INFO, "[VRR.Command]: Initialized commands script!");
 }
 
@@ -396,16 +389,17 @@ function loadCommands() {
 			//new CommandData("npcrespawn", respawnNPCCommand, "", getStaffFlagValue("ManageNPCs"), true, false, "Respawns the nearest NPC"),
 		],
 		race: [
-			new CommandData("addrace", createRaceCommand, "<name>", getStaffFlagValue("ManageRaces"), true, false, "Creates a race"),
-			new CommandData("delrace", deleteRaceCommand, "", getStaffFlagValue("ManageRaces"), true, false, "Deletes a race by name"),
-			new CommandData("addracecp", createRaceCheckPointCommand, "<name>", getStaffFlagValue("ManageRaces"), true, false, "Creates a race checkpoint"),
-			new CommandData("addracestart", createRaceStartPositionCommand, "<name>", getStaffFlagValue("ManageRaces"), true, false, "Creates a starting position for a race"),
-			new CommandData("delracestart", deleteRaceStartPositionCommand, "", getStaffFlagValue("ManageRaces"), true, false, "Deletes the closest starting position for a race"),
-			new CommandData("delracecp", deleteRaceCheckPointCommand, "", getStaffFlagValue("ManageRaces"), true, false, "Deletes the closest race checkpoint"),
-			new CommandData("racename", setRaceNameCommand, "<name>", getStaffFlagValue("ManageRaces"), true, false, "Sets a race's name"),
-			new CommandData("startrace", startRaceCommand, "", getStaffFlagValue("None"), true, false, "Starts a race"),
-			new CommandData("stoprace", stopRaceCommand, "", getStaffFlagValue("None"), true, false, "Stops racing (forfeits if in an active race)"),
-			new CommandData("stopAllRacesCommand", stopAllRacesCommand, "", getStaffFlagValue("ManageRaces"), true, false, "Stops a race"),
+			// Unfinished!
+			//new CommandData("addrace", createRaceCommand, "<name>", getStaffFlagValue("ManageRaces"), true, false, "Creates a race"),
+			//new CommandData("delrace", deleteRaceCommand, "", getStaffFlagValue("ManageRaces"), true, false, "Deletes a race by name"),
+			//new CommandData("addracecp", createRaceCheckPointCommand, "<name>", getStaffFlagValue("ManageRaces"), true, false, "Creates a race checkpoint"),
+			//new CommandData("addracestart", createRaceStartPositionCommand, "<name>", getStaffFlagValue("ManageRaces"), true, false, "Creates a starting position for a race"),
+			//new CommandData("delracestart", deleteRaceStartPositionCommand, "", getStaffFlagValue("ManageRaces"), true, false, "Deletes the closest starting position for a race"),
+			//new CommandData("delracecp", deleteRaceCheckPointCommand, "", getStaffFlagValue("ManageRaces"), true, false, "Deletes the closest race checkpoint"),
+			//new CommandData("racename", setRaceNameCommand, "<name>", getStaffFlagValue("ManageRaces"), true, false, "Sets a race's name"),
+			//new CommandData("startrace", startRaceCommand, "", getStaffFlagValue("None"), true, false, "Starts a race"),
+			//new CommandData("stoprace", stopRaceCommand, "", getStaffFlagValue("None"), true, false, "Stops racing (forfeits if in an active race)"),
+			//new CommandData("stopAllRacesCommand", stopAllRacesCommand, "", getStaffFlagValue("ManageRaces"), true, false, "Stops a race"),
 		],
 		radio: [
 			new CommandData("radiostation", playStreamingRadioCommand, "<radio station id>", getStaffFlagValue("None"), true, false, "Plays a radio station in your vehicle, house, or business (depending on which one you're in)"),
@@ -494,7 +488,7 @@ function loadCommands() {
 			new CommandData("oldcar", getLastVehicleInfoCommand, "", getStaffFlagValue("None"), true, false),
 			new CommandData("lastcar", getLastVehicleInfoCommand, "", getStaffFlagValue("None"), true, false),
 
-			new CommandData("unlock", vehicleLockCommand, "", getStaffFlagValue("None"), true, false),
+			//new CommandData("unlock", vehicleLockCommand, "", getStaffFlagValue("None"), true, false),
 			new CommandData("engine", vehicleEngineCommand, "", getStaffFlagValue("None"), true, false),
 			new CommandData("siren", vehicleSirenCommand, "", getStaffFlagValue("None"), true, false),
 
@@ -547,10 +541,11 @@ function loadCommands() {
 
 function addAllCommandHandlers() {
 	let commandCount = 0;
-	for(let i in serverCommands) {
-		for(let j in serverCommands[i]) {
-			logToConsole(LOG_DEBUG, `[VRR.Command] Adding command handler for ${i} - ${serverCommands[i][j].command}`);
-			addCommandHandler(serverCommands[i][j].command, processPlayerCommand);
+	let commands = getCommands();
+	for(let i in commands) {
+		for(let j in commands[i]) {
+			logToConsole(LOG_DEBUG, `[VRR.Command] Adding command handler for ${i} - ${commands[i][j].command}`);
+			addCommandHandler(commands[i][j].command, processPlayerCommand);
 			commandCount++;
 		}
 	}
@@ -583,7 +578,7 @@ function getCommandData(command) {
 // ===========================================================================
 
 function getCommands() {
-	return serverCommands;
+	return getServerData().commands;
 }
 
 // ===========================================================================
@@ -785,9 +780,10 @@ addCommandHandler("cmd", function(command, params, client) {
 // ===========================================================================
 
 function listAllCommands() {
-	for(let i in serverCommands) {
-		for(let j in serverCommands[i]) {
-			logToConsole(LOG_DEBUG, serverCommands[i][j].command);
+	let commands = getCommands();
+	for(let i in commands) {
+		for(let j in commands[i]) {
+			logToConsole(LOG_DEBUG, commands[i][j].command);
 		}
 	}
 }
@@ -796,9 +792,10 @@ function listAllCommands() {
 
 function getAllCommandsInSingleArray() {
 	let tempCommands = [];
-	for(let i in serverCommands) {
-		for(let j in serverCommands[i]) {
-			tempCommands.push(serverCommands[i][j].command);
+	let commands = getCommands();
+	for(let i in commands) {
+		for(let j in commands[i]) {
+			tempCommands.push(commands[i][j].command);
 		}
 	}
 
@@ -809,9 +806,10 @@ function getAllCommandsInSingleArray() {
 
 function getAllCommandsInGroupInSingleArray(groupName, staffFlag = "None") {
 	let tempCommands = [];
-	for(let i in serverCommands[groupName]) {
-		if(getCommandRequiredPermissions(serverCommands[groupName][i].command) == 0) {
-			tempCommands.push(serverCommands[groupName][i].command);
+	let commands = getCommands();
+	for(let i in commands[groupName]) {
+		if(getCommandRequiredPermissions(commands[groupName][i].command) == 0) {
+			tempCommands.push(commands[groupName][i].command);
 		}
 	}
 
@@ -822,11 +820,12 @@ function getAllCommandsInGroupInSingleArray(groupName, staffFlag = "None") {
 
 function getAllCommandsForStaffFlagInSingleArray(staffFlagName) {
 	let tempCommands = [];
-	for(let i in serverCommands) {
-		for(let j in serverCommands[i]) {
-			if(getCommandRequiredPermissions(serverCommands[i][j].command) != 0) {
-				if(hasBitFlag(getCommandRequiredPermissions(serverCommands[i][j].command), getStaffFlagValue(staffFlagName))) {
-					tempCommands.push(serverCommands[i][j].command);
+	let commands = getCommands();
+	for(let i in commands) {
+		for(let j in commands[i]) {
+			if(getCommandRequiredPermissions(commands[i][j].command) != 0) {
+				if(hasBitFlag(getCommandRequiredPermissions(commands[i][j].command), getStaffFlagValue(staffFlagName))) {
+					tempCommands.push(commands[i][j].command);
 				}
 			}
 		}
@@ -848,13 +847,14 @@ function doesCommandExist(command) {
 // ===========================================================================
 
 function cacheAllCommandsAliases() {
-	for(let i in serverCommands) {
-		for(let j in serverCommands[i]) {
-			for(let k in serverCommands) {
-				for(let m in serverCommands[k]) {
-					if(serverCommands[i][j].handlerFunction == serverCommands[k][m].handlerFunction) {
-						serverCommands[i][j].aliases.push(serverCommands[k][m]);
-						serverCommands[k][m].aliases.push(serverCommands[i][j]);
+	let commands = getCommands();
+	for(let i in commands) {
+		for(let j in commands[i]) {
+			for(let k in commands) {
+				for(let m in commands[k]) {
+					if(commands[i][j].handlerFunction == commands[k][m].handlerFunction) {
+						commands[i][j].aliases.push(commands[k][m]);
+						commands[k][m].aliases.push(commands[i][j]);
 					}
 				}
 			}
@@ -904,10 +904,11 @@ function getParam(params, delimiter, index) {
 // ===========================================================================
 
 function getCommandFromParams(params) {
-	for(let i in serverCommands) {
-		for(let j in serverCommands[i]) {
-			if(toLowerCase(serverCommands[i][j].command).indexOf(toLowerCase(params)) != -1) {
-				return serverCommands[i][j];
+	let commands = getCommands();
+	for(let i in commands) {
+		for(let j in commands[i]) {
+			if(toLowerCase(commands[i][j].command).indexOf(toLowerCase(params)) != -1) {
+				return commands[i][j];
 			}
 		}
 	}

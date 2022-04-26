@@ -9,12 +9,6 @@
 
 function initVehicleScript() {
 	logToConsole(LOG_INFO, "[VRR.Vehicle]: Initializing vehicle script ...");
-	if(!getServerConfig().devServer) {
-		getServerData().vehicles = loadVehiclesFromDatabase();
-	}
-
-	spawnAllVehicles();
-	setAllVehicleIndexes();
 	logToConsole(LOG_INFO, "[VRR.Vehicle]: Vehicle script initialized successfully!");
 	return true;
 }

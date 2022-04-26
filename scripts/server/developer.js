@@ -444,9 +444,9 @@ function testErrorGUICommand(command, params, client) {
 // ===========================================================================
 
 function saveServerDataCommand(command, params, client) {
-	messageAdmins(`{clanOrange}Vortrex has forced a manual save of all data. Initiating ...`);
+	messageAdmins(`{adminOrange}Vortrex{MAINCOLOUR} has forced a manual save of all data. Initiating ...`);
 	saveServerDataToDatabase();
-	messageAdmins(`{clanOrange}All server data saved to database successfully!`);
+	messageAdmins(`{MAINCOLOUR}All server data saved to database successfully!`);
 	return true;
 }
 
@@ -461,7 +461,6 @@ function testEmailCommand(command, params, client) {
 
 function restartGameModeCommand(command, params, client) {
 	messagePlayerNormal(null, `The server game mode is restarting!`, getColourByName("orange"));
-	consoleCommand("/refresh");
 	thisResource.restart();
 	return true;
 }

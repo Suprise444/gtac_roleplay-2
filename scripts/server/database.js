@@ -15,7 +15,6 @@ let persistentDatabaseConnection = null;
 
 function initDatabaseScript() {
 	logToConsole(LOG_INFO, "[VRR.Database]: Initializing database script ...");
-	databaseConfig = loadDatabaseConfiguration();
 	logToConsole(LOG_INFO, "[VRR.Database]: Database script initialized successfully!");
 }
 

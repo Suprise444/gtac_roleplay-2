@@ -583,7 +583,7 @@ function loginSuccess(client) {
 
 	if(doesPlayerHaveStaffPermission(client, "Developer") || doesPlayerHaveStaffPermission(client, "ManageServer")) {
 		logToConsole(LOG_WARN, `[VRR.Account] ${getPlayerDisplayForConsole(client)} has needed permissions and is being given administrator access`);
-		setPlayerAsNativeAdmin(client);
+		setPlayerNativeAdminState(client, true);
 	}
 
 	if(doesServerHaveTesterOnlyEnabled()) {
@@ -623,10 +623,15 @@ function loginSuccess(client) {
 
 	messageDiscordChatChannel(`👋 ${getPlayerName(client)} has joined the server`);
 
-	let clients = getClients();
-	for(let i in clients) {
-		messagePlayerNormal(clients[i], getLocaleString(clients[i], "PlayerJoined", `{ALTCOLOUR}${getPlayerName(client)}{MAINCOLOUR}`), getColourByName("softYellow"));
-	}
+	//let countryName = "Unknown";
+	//if(getCountryNameFromIP(getPlayerIP(client))) {
+	//	countryName = getCountryNameFromIP(getPlayerIP(client));
+	//}
+
+	//let clients = getClients();
+	//for(let i in clients) {
+	//	messagePlayerNormal(clients[i], getLocaleString(clients[i], "PlayerJoinedServer", `{ALTCOLOUR}${getPlayerName(client)}{MAINCOLOUR}`, `{ALTCOLOUR}${countryName}{MAINCOLOUR}`), getColourByName("softYellow"));
+	//}
 }
 
 // ===========================================================================
@@ -1173,7 +1178,7 @@ function initClient(client) {
 			requestClientInfo(client);
 
 			if(tempAccountData != false) {
-				if(isAccountAutoIPLoginEnabled(tempAccountData) && getPlayerData(client).accountData.ipAddress == getPlayerIp(client)) {
+				if(isAccountAutoIPLoginEnabled(tempAccountData) && getPlayerData(client).accountData.ipAddress == getPlayerIP(client)) {
 					messagePlayerAlert(client, getLocaleString(client, "AutoLoggedInIP"));
 					loginSuccess(client);
 					playRadioStreamForPlayer(client, getServerIntroMusicURL(), true, getPlayerStreamingRadioVolume(client));
@@ -1186,7 +1191,7 @@ function initClient(client) {
 						messagePlayerNormal(client, getLocaleString(client, "WelcomeBack", getServerName(), getPlayerName(client), "/login"),getColourByName("softGreen"));
 
 						//if(checkForGeoIPModule()) {
-						//	let iso = module.geoip.getCountryISO(getPlayerIp(client));
+						//	let iso = module.geoip.getCountryISO(getPlayerIP(client));
 						//	let localeId = getLocaleFromCountryISO(iso);
 						//}
 						//showGameMessage(client, getLocaleString(client, "LocaleOffer", `/lang ${getLocaleData(localeId)[2]}`), getColourByName("white"), 10000, "Roboto");

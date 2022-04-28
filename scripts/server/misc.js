@@ -678,11 +678,33 @@ function lockCommand(command, params, client) {
 		}
 
 		getVehicleData(vehicle).locked = !getVehicleData(vehicle).locked;
-		vehicle.locked = getVehicleData(vehicle).locked;
+		setVehicleLocked(vehicle, getVehicleData(vehicle).locked);
 		getVehicleData(vehicle).needsSaved = true;
 
 		meActionToNearbyPlayers(client, `${toLowerCase(getLockedUnlockedFromBool(getVehicleData(vehicle).locked))} the ${getVehicleName(vehicle)}`);
+		return true;
 	} else {
+		let vehicle = getClosestVehicle(getPlayerPosition(client));
+		if(getDistance(getPlayerPosition(client), getVehiclePosition(vehicle)) <= getGlobalConfig().vehicleLockDistance) {
+			if(!getVehicleData(vehicle)) {
+				messagePlayerError(client, getLocaleString(client, "RandomVehicleCommandsDisabled"));
+				return false;
+			}
+
+			if(!doesPlayerHaveVehicleKeys(client, vehicle)) {
+				messagePlayerError(client, getLocaleString(client, "DontHaveVehicleKey"));
+				return false;
+			}
+
+			getVehicleData(vehicle).locked = !getVehicleData(vehicle).locked;
+			setVehicleLocked(vehicle, getVehicleData(vehicle).locked);
+			getVehicleData(vehicle).needsSaved = true;
+
+			meActionToNearbyPlayers(client, `${toLowerCase(getLockedUnlockedFromBool(getVehicleData(vehicle).locked))} the ${getVehicleName(vehicle)}`);
+
+			return true;
+		}
+
 		let businessId = getPlayerBusiness(client);
 		if(businessId != false) {
 			if(!canPlayerManageBusiness(client, businessId)) {
@@ -713,26 +735,6 @@ function lockCommand(command, params, client) {
 			return true;
 		}
 
-		let vehicle = getClosestVehicle(getPlayerPosition(client));
-		if(getDistance(getPlayerPosition(client), getVehiclePosition(vehicle) <= getGlobalConfig().vehicleLockDistance)) {
-			if(!getVehicleData(vehicle)) {
-				messagePlayerError(client, getLocaleString(client, "RandomVehicleCommandsDisabled"));
-				return false;
-			}
-
-			if(!doesPlayerHaveVehicleKeys(client, vehicle)) {
-				messagePlayerError(client, getLocaleString(client, "DontHaveVehicleKey"));
-				return false;
-			}
-
-			getVehicleData(vehicle).locked = !getVehicleData(vehicle).locked;
-			vehicle.locked = getVehicleData(vehicle).locked;
-			getVehicleData(vehicle).needsSaved = true;
-
-			meActionToNearbyPlayers(client, `${toLowerCase(getLockedUnlockedFromBool(getVehicleData(vehicle).locked))} the ${getVehicleName(vehicle)}`);
-
-			return false;
-		}
 	}
 }
 
@@ -767,9 +769,10 @@ function lockCommand(command, params, client) {
 
 		meActionToNearbyPlayers(client, `${toLowerCase(getLockedUnlockedFromBool(getVehicleData(vehicle).lights))} the ${getVehicleName(vehicle)}`);
 	} else {
+		/*
 		let vehicle = getClosestVehicle(getPlayerPosition(client));
 		if(vehicle != false) {
-			if(getDistance(getPlayerPosition(client), getVehiclePosition(vehicle) <= getGlobalConfig().vehicleLockDistance)) {
+			if(getDistance(getPlayerPosition(client), getVehiclePosition(vehicle)) <= getGlobalConfig().vehicleLockDistance) {
 				return false;
 			}
 
@@ -783,12 +786,14 @@ function lockCommand(command, params, client) {
 				return false;
 			}
 
-			getVehicleData(vehicle).locked = !getVehicleData(vehicle).locked;
-			vehicle.locked = getVehicleData(vehicle).locked;
+			getVehicleData(vehicle).lights = !getVehicleData(vehicle).lights;
+			setVehicleLights(vehicle, getVehicleData(vehicle).lights);
 			getVehicleData(vehicle).needsSaved = true;
 
 			meActionToNearbyPlayers(client, `${toLowerCase(getLockedUnlockedFromBool(getVehicleData(vehicle).locked))} the ${getVehicleName(vehicle)}`);
+			return true;
 		}
+		*/
 
 		let businessId = getPlayerBusiness(client);
 		if(businessId != false) {

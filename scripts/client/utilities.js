@@ -364,6 +364,8 @@ function setLocalPlayerInterior(interior) {
 				natives.activateInterior(interiorId, true);
 				natives.loadAllObjectsNow();
 			}
+			let interiorId = natives.getInteriorAtCoords(localPlayer.position);
+			natives.activateInterior(interiorId, true);
 		}
 	}
 
@@ -396,6 +398,15 @@ function setLocalPlayerHealth(health) {
 
 function isSnowEnabled() {
 	return (typeof snowing != "undefined");
+}
+
+// ===========================================================================
+
+function playPedSpeech(pedName, speechId) {
+	logToConsole(LOG_DEBUG, `[VRR.Utilities] Making ${pedName}'s ped talk (${speechId})`);
+	if(getMultiplayerMod() == VRR_MPMOD_GTAC) {
+		game.SET_CHAR_SAY(int, int);
+	}
 }
 
 // ===========================================================================
@@ -809,6 +820,7 @@ function setVehiclePurchaseState(state, vehicleId, position) {
 // ===========================================================================
 
 function processVehicleFires() {
+	/*
 	let vehicles = getElementsByType(ELEMENT_VEHICLE);
 	for(let i in vehicles) {
 		if(vehicles[i].isSyncer) {
@@ -819,6 +831,7 @@ function processVehicleFires() {
 			}
 		}
 	}
+	*/
 }
 
 // ===========================================================================

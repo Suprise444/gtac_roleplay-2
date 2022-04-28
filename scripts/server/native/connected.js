@@ -377,11 +377,12 @@ function getElementDimension(element) {
 // ===========================================================================
 
 function setElementDimension(element, dimension) {
-	if(typeof element.dimension != "undefined") {
-		element.dimension = dimension;
-		return true;
-	}
-	return false;
+    if(typeof element.dimension != "undefined") {
+		logToConsole(LOG_DEBUG, `Setting element ${element} (${element.id}) dimension to ${dimension}`);
+        element.dimension = dimension;
+        return true;
+    }
+    return false;
 }
 
 // ===========================================================================

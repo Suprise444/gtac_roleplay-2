@@ -171,9 +171,9 @@ function spawnAllVehicles() {
 // ===========================================================================
 
 /**
- * @param {Vehicle} vehicle - The vehicle element
- * @return {VehicleData} The vehicles's data (class instance)
- */
+	* @param {Vehicle} vehicle - The vehicle element
+	* @return {VehicleData} The vehicles's data (class instance)
+	*/
 function getVehicleData(vehicle) {
 	if(getGame() != VRR_GAME_GTA_IV) {
 		if(isVehicleObject(vehicle)) {
@@ -1208,8 +1208,10 @@ function spawnVehicle(vehicleData) {
 		return false;
 	}
 
-	setVehicleHeading(vehicle, vehicleData.spawnRotation)
+	setVehicleHeading(vehicle, vehicleData.spawnRotation);
+	setElementDimension(vehicle, vehicleData.dimension);
 	addToWorld(vehicle);
+
 	vehicleData.vehicle = vehicle;
 
 	if(isGameFeatureSupported("vehicleColours")) {
@@ -1237,7 +1239,6 @@ function spawnVehicle(vehicleData) {
 		logToConsole(LOG_VERBOSE, `[VRR.Vehicle]: Setting vehicle ${vehicle.id}'s lock state to ${toUpperCase(getOnOffFromBool(getVehicleLocked(vehicle)))}`);
 	}
 
-	setElementDimension(vehicle.dimension, vehicleData.dimension);
 	//setVehicleHealth(vehicle, 1000);
 	repairVehicle(vehicle);
 
@@ -1247,6 +1248,8 @@ function spawnVehicle(vehicleData) {
 	setEntityData(vehicle, "vrr.engine", vehicleData.engine, true);
 
 	forcePlayerToSyncElementProperties(null, vehicle);
+
+
 	return vehicle;
 }
 

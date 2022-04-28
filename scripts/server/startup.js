@@ -40,16 +40,18 @@ function initServerScripts() {
 	initLocaleScript();
 	initCommandScript();
 
-	// Load config, commands, and data
+	// Load config and stuff
 	loadGlobalConfig();
-	loadCommands();
+	loadServerConfig();
+	applyConfigToServer(getServerConfig());
+
+	// Load all the server data
 	loadServerDataFromDatabase();
 
 	// Set indexes and cache necessary data
 	setAllServerDataIndexes();
 	createAllServerElements();
 
-	applyConfigToServer(serverConfig);
 	initAllClients();
 	initTimers();
 
@@ -114,8 +116,7 @@ function checkForAllRequiredModules() {
 // ===========================================================================
 
 function loadServerDataFromDatabase() {
-	logToConsole(LOG_INFO, "[VRR.Config]: Loading server config ...");
-	serverConfig = loadServerConfigFromGameAndPort(server.game, server.port, getMultiplayerMod());
+	logToConsole(LOG_INFO, "[VRR.Config]: Loading server data ...");
 
 	// Always load these regardless of "test server" status
 	getServerData().itemTypes = loadItemTypesFromDatabase();
@@ -141,7 +142,6 @@ function loadServerDataFromDatabase() {
 	}
 
 	getServerData().commands = loadCommands();
-	allowedSkins = getAllowedSkins(getGame());
 }
 
 // ===========================================================================

@@ -7,7 +7,7 @@
 // TYPE: Server (JavaScript)
 // ===========================================================================
 
-let scriptVersion = "1.0";
+let scriptVersion = "1.1";
 let serverStartTime = 0;
 let logLevel = LOG_INFO|LOG_DEBUG|LOG_VERBOSE|LOG_WARN|LOG_ERROR;
 
@@ -33,14 +33,8 @@ let serverData = {
 	cachedTranslationFrom: [],
 	triggers: [],
 	npcs: [],
-	locales: [],
-	accents: [],
 	races: [],
 };
-
-// ===========================================================================
-
-let allowedSkins = [];
 
 // ===========================================================================
 

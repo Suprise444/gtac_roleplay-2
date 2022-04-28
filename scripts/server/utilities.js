@@ -28,7 +28,7 @@ function getPositionArea(position) {
 		position = vec3ToVec2(position);
 	}
 
-	let gameAreas = getGameAreas(getServerGame());
+	let gameAreas = getGameAreas(getGame());
 	for(let i in gameAreas) {
 		if(isPositionInArea(position, gameAreas[i][1])) {
 			return i;
@@ -94,9 +94,11 @@ function updateServerRules() {
 
 	if(isWeatherSupported()) {
 		if(getServerConfig() != false) {
-			let value = getGameConfig().weatherNames[getServerGame()][getServerConfig().weather];
-			logToConsole(LOG_DEBUG, `[VRR.Utilities]: Setting server rule "Weather" as ${value}`);
-			server.setRule("Weather", value);
+			if(typeof getGameConfig().weatherNames[getGame()] != "undefined") {
+				let value = getGameConfig().weatherNames[getGame()][getServerConfig().weather];
+				logToConsole(LOG_DEBUG, `[VRR.Utilities]: Setting server rule "Weather" as ${value}`);
+				server.setRule("Weather", value);
+			}
 		}
 	}
 
@@ -114,13 +116,13 @@ function updateServerRules() {
 
 function getWeatherFromParams(params) {
 	if(isNaN(params)) {
-		for(let i in getGameConfig().weatherNames[getServerGame()]) {
-			if(toLowerCase(getGameConfig().weatherNames[getServerGame()][i]).indexOf(toLowerCase(params)) != -1) {
+		for(let i in getGameConfig().weatherNames[getGame()]) {
+			if(toLowerCase(getGameConfig().weatherNames[getGame()][i]).indexOf(toLowerCase(params)) != -1) {
 				return i;
 			}
 		}
 	} else {
-		if(typeof getGameConfig().weatherNames[getServerGame()][params] != "undefined") {
+		if(typeof getGameConfig().weatherNames[getGame()][params] != "undefined") {
 			return toInteger(params);
 		}
 	}
@@ -132,13 +134,13 @@ function getWeatherFromParams(params) {
 
 function getFightStyleFromParams(params) {
 	if(isNaN(params)) {
-		for(let i in getGameConfig().fightStyles[getServerGame()]) {
-			if(toLowerCase(getGameConfig().fightStyles[getServerGame()][i][0]).indexOf(toLowerCase(params)) != -1) {
+		for(let i in getGameConfig().fightStyles[getGame()]) {
+			if(toLowerCase(getGameConfig().fightStyles[getGame()][i][0]).indexOf(toLowerCase(params)) != -1) {
 				return i;
 			}
 		}
 	} else {
-		if(typeof getGameConfig().fightStyles[getServerGame()][params] != "undefined") {
+		if(typeof getGameConfig().fightStyles[getGame()][params] != "undefined") {
 			return toInteger(params);
 		}
 	}
@@ -149,34 +151,34 @@ function getFightStyleFromParams(params) {
 // ===========================================================================
 
 function getClosestHospital(position) {
-	if(typeof getGameConfig().hospitals[getServerGame()] == "undefined") {
+	if(typeof getGameConfig().hospitals[getGame()] == "undefined") {
 		return {position: getServerConfig().newCharacter.spawnPosition};
 	} else {
 		let closest = 0;
-		for(let i in getGameConfig().hospitals[getServerGame()]) {
-			if(getDistance(getGameConfig().hospitals[getServerGame()][i].position, position) < getDistance(getGameConfig().hospitals[getServerGame()][closest].position, position)) {
+		for(let i in getGameConfig().hospitals[getGame()]) {
+			if(getDistance(getGameConfig().hospitals[getGame()][i].position, position) < getDistance(getGameConfig().hospitals[getGame()][closest].position, position)) {
 				closest = i;
 			}
 		}
 
-		return getGameConfig().hospitals[getServerGame()][closest];
+		return getGameConfig().hospitals[getGame()][closest];
 	}
 }
 
 // ===========================================================================
 
 function getClosestPoliceStation(position) {
-	if(typeof getGameConfig().policeStations[getServerGame()] == "undefined") {
+	if(typeof getGameConfig().policeStations[getGame()] == "undefined") {
 		return {position: getServerConfig().newCharacter.spawnPosition};
 	} else {
 		let closest = 0;
-		for(let i in getGameConfig().policeStations[getServerGame()]) {
-			if(getDistance(getGameConfig().policeStations[getServerGame()][i].position, position) < getDistance(getGameConfig().policeStations[getServerGame()][closest].position, position)) {
+		for(let i in getGameConfig().policeStations[getGame()]) {
+			if(getDistance(getGameConfig().policeStations[getGame()][i].position, position) < getDistance(getGameConfig().policeStations[getGame()][closest].position, position)) {
 				closest = i;
 			}
 		}
 
-		return getGameConfig().policeStations[getServerGame()][closest];
+		return getGameConfig().policeStations[getGame()][closest];
 	}
 }
 
@@ -216,8 +218,8 @@ function getPlayerIsland(client) {
 // ===========================================================================
 
 function isAtPayAndSpray(position) {
-	for(let i in getGameConfig().payAndSprays[getServerGame()]) {
-		if(getDistance(position, getGameConfig().payAndSprays[getServerGame()][i]) <= getGlobalConfig().payAndSprayDistance) {
+	for(let i in getGameConfig().payAndSprays[getGame()]) {
+		if(getDistance(position, getGameConfig().payAndSprays[getGame()][i]) <= getGlobalConfig().payAndSprayDistance) {
 			return true;
 		}
 	}

@@ -480,7 +480,7 @@ function onPlayerSpawn(client) {
 
 	logToConsole(LOG_DEBUG, `[VRR.Event] ${getPlayerDisplayForConsole(client)}'s player data is valid. Continuing spawn processing ...`);
 
-	if(getServerGame() == VRR_GAME_GTA_IV) {
+	if(getGame() == VRR_GAME_GTA_IV) {
 		logToConsole(LOG_DEBUG, `[VRR.Event] Setting ${getPlayerDisplayForConsole(client)}'s ped body parts and props`);
 		setEntityData(getPlayerPed(client), "vrr.bodyParts", getPlayerCurrentSubAccount(client).bodyParts, true);
 		setEntityData(getPlayerPed(client), "vrr.bodyProps", getPlayerCurrentSubAccount(client).bodyProps, true);
@@ -538,7 +538,7 @@ function onPlayerSpawn(client) {
 		updatePlayerSnowState(client);
 	}
 
-	if(areServerElementsSupported() && getServerGame() == VRR_GAME_GTA_SA) {
+	if(areServerElementsSupported() && getGame() == VRR_GAME_GTA_SA) {
 		logToConsole(LOG_DEBUG, `[VRR.Event] Setting player walk and fightstyle for ${getPlayerDisplayForConsole(client)}`);
 		setEntityData(getPlayerPed(client), "vrr.walkStyle", getPlayerCurrentSubAccount(client).walkStyle, true);
 

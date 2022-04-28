@@ -835,7 +835,7 @@ function checkLogin(client, password) {
 		}
 
 		if(isAccountEmailVerified(getPlayerData(client).accountData) && isAccountSettingFlagEnabled(getPlayerData(client).accountData, getAccountSettingsFlagValue("AuthAttemptAlert"))) {
-			sendAccountLoginFailedNotification(getPlayerData(client).accountData.emailAddress, getPlayerName(client), getPlayerIP(client), getServerGame());
+			sendAccountLoginFailedNotification(getPlayerData(client).accountData.emailAddress, getPlayerName(client), getPlayerIP(client), getGame());
 		}
 		return false;
 	}
@@ -851,7 +851,7 @@ function checkLogin(client, password) {
 		}
 
 		if(isAccountEmailVerified(getPlayerData(client).accountData) && isAccountSettingFlagEnabled(getPlayerData(client).accountData, getAccountSettingsFlagValue("AuthAttemptAlert"))) {
-			sendAccountLoginFailedNotification(getPlayerData(client).accountData.emailAddress, getPlayerName(client), getPlayerIP(client), getServerGame());
+			sendAccountLoginFailedNotification(getPlayerData(client).accountData.emailAddress, getPlayerName(client), getPlayerIP(client), getGame());
 		}
 		return false;
 	}
@@ -869,7 +869,7 @@ function checkLogin(client, password) {
 	loginSuccess(client);
 
 	if(isAccountEmailVerified(getPlayerData(client).accountData) && isAccountSettingFlagEnabled(getPlayerData(client).accountData, getAccountSettingsFlagValue("AuthAttemptAlert"))) {
-		sendAccountLoginSuccessNotification(getPlayerData(client).accountData.emailAddress, getPlayerName(client), getPlayerIP(client), getServerGame());
+		sendAccountLoginSuccessNotification(getPlayerData(client).accountData.emailAddress, getPlayerName(client), getPlayerIP(client), getGame());
 	}
 }
 
@@ -1468,7 +1468,7 @@ function verifyAccountEmail(accountData, verificationCode) {
 
 // ===========================================================================
 
-function sendAccountLoginFailedNotification(emailAddress, name, ip, game = getServerGame()) {
+function sendAccountLoginFailedNotification(emailAddress, name, ip, game = getGame()) {
 	let countryName = module.geoip.getCountryName(getGlobalConfig().geoIPCountryDatabaseFilePath, ip);
 	let subDivisionName = module.geoip.getSubdivisionName(getGlobalConfig().geoIPCityDatabaseFilePath, ip);
 	let cityName = module.geoip.getCityName(getGlobalConfig().geoIPCityDatabaseFilePath, ip);
@@ -1486,7 +1486,7 @@ function sendAccountLoginFailedNotification(emailAddress, name, ip, game = getSe
 
 // ===========================================================================
 
-function sendAccountLoginSuccessNotification(emailAddress, name, ip, game = getServerGame()) {
+function sendAccountLoginSuccessNotification(emailAddress, name, ip, game = getGame()) {
 	let countryName = module.geoip.getCountryName(getGlobalConfig().geoIPCountryDatabaseFilePath, ip);
 	let subDivisionName = module.geoip.getSubdivisionName(getGlobalConfig().geoIPCityDatabaseFilePath, ip);
 	let cityName = module.geoip.getCityName(getGlobalConfig().geoIPCityDatabaseFilePath, ip);

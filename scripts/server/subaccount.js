@@ -531,7 +531,7 @@ function setFightStyleCommand(command, params, client) {
 
 	if(!fightStyle) {
 		messagePlayerError(client, `That fight style doesn't exist!`);
-		messagePlayerError(client, `Fight styles: ${getGameConfig().fightStyles[getServerGame()].map(fs => fs[0]).join(", ")}`);
+		messagePlayerError(client, `Fight styles: ${getGameConfig().fightStyles[getGame()].map(fs => fs[0]).join(", ")}`);
 		return false;
 	}
 
@@ -543,7 +543,7 @@ function setFightStyleCommand(command, params, client) {
 	}
 
 	setPlayerFightStyle(client, fightStyleId);
-	messagePlayerSuccess(client, `Your fight style has been set to ${getGameConfig().fightStyles[getServerGame()][fightStyleId][0]}`)
+	messagePlayerSuccess(client, `Your fight style has been set to ${getGameConfig().fightStyles[getGame()][fightStyleId][0]}`)
 
 	return true;
 }

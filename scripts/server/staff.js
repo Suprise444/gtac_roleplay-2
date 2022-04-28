@@ -500,19 +500,19 @@ function gotoGameLocationCommand(command, params, client) {
 	}
 
 	setPlayerVelocity(client, toVector3(0.0, 0.0, 0.0));
-	setPlayerPosition(client, getGameConfig().locations[getServerGame()][gameLocationId][1]);
+	setPlayerPosition(client, getGameConfig().locations[getGame()][gameLocationId][1]);
 	setPlayerInterior(client, 0);
 	setPlayerDimension(client, 0);
 	updateInteriorLightsForPlayer(client, true);
 
 	//setTimeout(function() {
-	//	setPlayerPosition(client, getGameConfig().locations[getServerGame()][gameLocationId][1]);
+	//	setPlayerPosition(client, getGameConfig().locations[getGame()][gameLocationId][1]);
 	//	setPlayerInterior(client, 0);
 	//	setPlayerDimension(client, 0);
 	//	updateInteriorLightsForPlayer(client, true);
 	//}, 500);
 
-	messagePlayerSuccess(client, `You teleported to game location {ALTCOLOUR}${getGameConfig().locations[getServerGame()][gameLocationId][0]}`);
+	messagePlayerSuccess(client, `You teleported to game location {ALTCOLOUR}${getGameConfig().locations[getGame()][gameLocationId][0]}`);
 }
 
 // ===========================================================================
@@ -1714,13 +1714,13 @@ function forceFightStyleCommand(command, params, client) {
 
 	if(!fightStyleId) {
 		messagePlayerError(client, `That fight style doesn't exist!`);
-		messagePlayerError(client, `Fight styles: ${getGameConfig().fightStyles[getServerGame()].map(fs => fs[0]).join(", ")}`);
+		messagePlayerError(client, `Fight styles: ${getGameConfig().fightStyles[getGame()].map(fs => fs[0]).join(", ")}`);
 		return false;
 	}
 
 	getPlayerCurrentSubAccount(client).fightStyle = fightStyleId;
 	setPlayerFightStyle(client, fightStyleId);
-	messagePlayerSuccess(client, `You set ${getCharacterFullName(targetClient)}'s fight style to ${getGameConfig().fightStyles[getServerGame()][fightStyleId][0]}`)
+	messagePlayerSuccess(client, `You set ${getCharacterFullName(targetClient)}'s fight style to ${getGameConfig().fightStyles[getGame()][fightStyleId][0]}`)
 
 	return true;
 }

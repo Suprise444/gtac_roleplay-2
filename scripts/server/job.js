@@ -1071,7 +1071,7 @@ function setJobBlipCommand(command, params, client) {
 		if(toLowerCase(blipParam) == "none") {
 			blipId = -1;
 		} else {
-			let blipTypes = Object.keys(getGameConfig().blipSprites[getServerGame()]).join(", ");
+			let blipTypes = Object.keys(getGameConfig().blipSprites[getGame()]).join(", ");
 			let chunkedList = splitArrayIntoChunks(blipTypes, 10);
 
 			messagePlayerNormal(client, makeChatBoxSectionHeader(getLocaleString(client, "HeaderBlipTypes")));
@@ -1079,7 +1079,7 @@ function setJobBlipCommand(command, params, client) {
 				messagePlayerInfo(client, chunkedList[i].join(", "));
 			}
 
-			blipId = getGameConfig().blipSprites[getServerGame()][blipParam];
+			blipId = getGameConfig().blipSprites[getGame()][blipParam];
 			blipString = toString(blipParam);
 		}
 	} else {
@@ -1116,7 +1116,7 @@ function setJobPickupCommand(command, params, client) {
 		if(toLowerCase(pickupParam) == "none") {
 			pickupId = -1;
 		} else {
-			let pickupTypes = Object.keys(getGameConfig().pickupModels[getServerGame()]).join(", ");
+			let pickupTypes = Object.keys(getGameConfig().pickupModels[getGame()]).join(", ");
 			let chunkedList = splitArrayIntoChunks(pickupTypes, 10);
 
 			messagePlayerNormal(client, makeChatBoxSectionHeader(getLocaleString(client, "HeaderPickupTypes")));
@@ -1124,7 +1124,7 @@ function setJobPickupCommand(command, params, client) {
 				messagePlayerInfo(client, chunkedList[i].join(", "));
 			}
 
-			pickupId = getGameConfig().pickupModels[getServerGame()][pickupParam];
+			pickupId = getGameConfig().pickupModels[getGame()][pickupParam];
 			pickupString = toString(pickupParam);
 		}
 	} else {
@@ -2287,7 +2287,7 @@ function createJobLocationPickup(jobId, locationId) {
 	let tempJobData = getJobData(jobId);
 
 	if(tempJobData.pickupModel != -1) {
-		let pickupModelId = getGameConfig().pickupModels[getServerGame()].Job;
+		let pickupModelId = getGameConfig().pickupModels[getGame()].Job;
 
 		if(tempJobData.pickupModel != 0) {
 			pickupModelId = tempJobData.pickupModel;
@@ -2296,7 +2296,7 @@ function createJobLocationPickup(jobId, locationId) {
 		logToConsole(LOG_VERBOSE, `[VRR.Job]: Creating pickup for location ${locationId} of the ${tempJobData.name} job`);
 
 		if(areServerElementsSupported()) {
-			let pickup = createGamePickup(pickupModelId, tempJobData.locations[locationId].position, getGameConfig().pickupTypes[getServerGame()].job);
+			let pickup = createGamePickup(pickupModelId, tempJobData.locations[locationId].position, getGameConfig().pickupTypes[getGame()].job);
 			if(pickup != false) {
 				tempJobData.locations[locationId].pickup = pickup;
 				setElementDimension(pickup, tempJobData.locations[locationId].dimension);
@@ -2324,7 +2324,7 @@ function createJobLocationBlip(jobId, locationId) {
 	let tempJobData = getJobData(jobId);
 
 	if(getJobData(jobId).blipModel != -1) {
-		let blipModelId = getGameConfig().blipSprites[getServerGame()].Job;
+		let blipModelId = getGameConfig().blipSprites[getGame()].Job;
 
 		if(getJobData(jobId).blipModel != 0) {
 			blipModelId = getJobData(jobId).blipModel;
@@ -2731,7 +2731,7 @@ function getClosestJobRouteLocation(position) {
 // ===========================================================================
 
 function getJobPointsInRange(position, distance) {
-	return getServerData().jobs[getServerGame()].filter(x => x.position.distance(position) <= distance);
+	return getServerData().jobs[getGame()].filter(x => x.position.distance(position) <= distance);
 }
 
 // ===========================================================================

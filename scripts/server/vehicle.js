@@ -39,7 +39,7 @@ function loadVehiclesFromDatabase() {
 
 // ===========================================================================
 
-function saveVehiclesToDatabase() {
+function saveAllVehiclesToDatabase() {
 	if(getServerConfig().devServer) {
 		return false;
 	}
@@ -1253,8 +1253,8 @@ function spawnVehicle(vehicleData) {
 // ===========================================================================
 
 function isVehicleAtPayAndSpray(vehicle) {
-	for(let i in getServerData().payAndSprays[getServerGame()]) {
-		if(getDistance(getVehiclePosition(vehicle), getServerData().payAndSprays[getServerGame()][i].position) <= getGlobalConfig().payAndSprayDistance) {
+	for(let i in getServerData().payAndSprays[getGame()]) {
+		if(getDistance(getVehiclePosition(vehicle), getServerData().payAndSprays[getGame()][i].position) <= getGlobalConfig().payAndSprayDistance) {
 			return true;
 		}
 	}

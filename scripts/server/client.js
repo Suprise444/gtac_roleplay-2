@@ -216,7 +216,7 @@ function syncPlayerProperties(client) {
 // ===========================================================================
 
 function updatePlayerSnowState(client) {
-	if(isSnowSupported(getServerGame())) {
+	if(isSnowSupported(getGame())) {
 		logToConsole(LOG_DEBUG, `[VRR.Client] Setting ${getPlayerDisplayForConsole(client)}'s snow state (Falling: ${toUpperCase(getOnOffFromBool(getServerConfig().fallingSnow))}, Ground: ${toUpperCase(getOnOffFromBool(getServerConfig().groundSnow))})`);
 		sendNetworkEventToPlayer("vrr.snow", client, getServerConfig().fallingSnow, getServerConfig().groundSnow);
 	}
@@ -729,16 +729,16 @@ function updateHeadingInVehicleData(client, vehicle, heading) {
 // ===========================================================================
 
 function forcePlayerIntoSkinSelect(client) {
-	if(typeof getGameConfig().skinChangePosition[getServerGame()] != "undefined") {
+	if(typeof getGameConfig().skinChangePosition[getGame()] != "undefined") {
 		getPlayerData(client).returnToPosition = getPlayerPosition(client);
 		getPlayerData(client).returnToHeading = getPlayerHeading(client);
 		getPlayerData(client).returnToInterior = getPlayerInterior(client);
 		getPlayerData(client).returnToDimension = getPlayerDimension(client);
 		getPlayerData(client).returnToType = VRR_RETURNTO_TYPE_SKINSELECT;
 
-		setPlayerPosition(client, getGameConfig().skinChangePosition[getServerGame()][0]);
-		setPlayerHeading(client, getGameConfig().skinChangePosition[getServerGame()][1]);
-		setPlayerInterior(client, getGameConfig().skinChangePosition[getServerGame()][2]);
+		setPlayerPosition(client, getGameConfig().skinChangePosition[getGame()][0]);
+		setPlayerHeading(client, getGameConfig().skinChangePosition[getGame()][1]);
+		setPlayerInterior(client, getGameConfig().skinChangePosition[getGame()][2]);
 		setPlayerDimension(client, getPlayerId(client)+500);
 	}
 
@@ -754,14 +754,14 @@ function updatePlayerCash(client) {
 // ===========================================================================
 
 function sendAllPoliceStationBlips(client) {
-	if(getGameConfig().blipSprites[getServerGame()].policeStation != -1) {
+	if(getGameConfig().blipSprites[getGame()].policeStation != -1) {
 		let tempBlips = [];
-		for(let i in getServerData().policeStations[getServerGame()]) {
+		for(let i in getServerData().policeStations[getGame()]) {
 			tempBlips.push([
-				getGameConfig().blipSprites[getServerGame()].policeStation,
-				getServerData().policeStations[getServerGame()][i].position.x,
-				getServerData().policeStations[getServerGame()][i].position.y,
-				getServerData().policeStations[getServerGame()][i].position.z,
+				getGameConfig().blipSprites[getGame()].policeStation,
+				getServerData().policeStations[getGame()][i].position.x,
+				getServerData().policeStations[getGame()][i].position.y,
+				getServerData().policeStations[getGame()][i].position.z,
 				3,
 				getColourByName("policeBlue"),
 			]);
@@ -773,14 +773,14 @@ function sendAllPoliceStationBlips(client) {
 // ===========================================================================
 
 function sendAllFireStationBlips(client) {
-	if(getGameConfig().blipSprites[getServerGame()].fireStation != -1) {
+	if(getGameConfig().blipSprites[getGame()].fireStation != -1) {
 		let tempBlips = [];
-		for(let i in getServerData().fireStations[getServerGame()]) {
+		for(let i in getServerData().fireStations[getGame()]) {
 			tempBlips.push([
-				getGameConfig().blipSprites[getServerGame()].fireStation,
-				getServerData().fireStations[getServerGame()][i].position.x,
-				getServerData().fireStations[getServerGame()][i].position.y,
-				getServerData().fireStations[getServerGame()][i].position.z,
+				getGameConfig().blipSprites[getGame()].fireStation,
+				getServerData().fireStations[getGame()][i].position.x,
+				getServerData().fireStations[getGame()][i].position.y,
+				getServerData().fireStations[getGame()][i].position.z,
 				3,
 				getColourByName("firefighterRed"),
 			]);
@@ -792,14 +792,14 @@ function sendAllFireStationBlips(client) {
 // ===========================================================================
 
 function sendAllHospitalBlips(client) {
-	if(getGameConfig().blipSprites[getServerGame()].hospital != -1) {
+	if(getGameConfig().blipSprites[getGame()].hospital != -1) {
 		let tempBlips = [];
-		for(let i in getServerData().hospitals[getServerGame()]) {
+		for(let i in getServerData().hospitals[getGame()]) {
 			tempBlips.push([
-				getGameConfig().blipSprites[getServerGame()].hospital,
-				getServerData().hospitals[getServerGame()][i].position.x,
-				getServerData().hospitals[getServerGame()][i].position.y,
-				getServerData().hospitals[getServerGame()][i].position.z,
+				getGameConfig().blipSprites[getGame()].hospital,
+				getServerData().hospitals[getGame()][i].position.x,
+				getServerData().hospitals[getGame()][i].position.y,
+				getServerData().hospitals[getGame()][i].position.z,
 				3,
 				getColourByName("medicPink"),
 			]);
@@ -811,14 +811,14 @@ function sendAllHospitalBlips(client) {
 // ===========================================================================
 
 function sendAllAmmunationBlips(client) {
-	if(getGameConfig().blipSprites[getServerGame()].ammunation != -1) {
+	if(getGameConfig().blipSprites[getGame()].ammunation != -1) {
 		let tempBlips = [];
-		for(let i in getServerData().ammunations[getServerGame()]) {
+		for(let i in getServerData().ammunations[getGame()]) {
 			tempBlips.push([
-				getGameConfig().blipSprites[getServerGame()].ammunation,
-				getServerData().ammunations[getServerGame()][i].position.x,
-				getServerData().ammunations[getServerGame()][i].position.y,
-				getServerData().ammunations[getServerGame()][i].position.z,
+				getGameConfig().blipSprites[getGame()].ammunation,
+				getServerData().ammunations[getGame()][i].position.x,
+				getServerData().ammunations[getGame()][i].position.y,
+				getServerData().ammunations[getGame()][i].position.z,
 				3,
 				0
 			]);
@@ -830,14 +830,14 @@ function sendAllAmmunationBlips(client) {
 // ===========================================================================
 
 function sendAllPayAndSprayBlips(client) {
-	if(getGameConfig().blipSprites[getServerGame()].payAndSpray != -1) {
+	if(getGameConfig().blipSprites[getGame()].payAndSpray != -1) {
 		let tempBlips = [];
-		for(let i in getServerData().payAndSprays[getServerGame()]) {
+		for(let i in getServerData().payAndSprays[getGame()]) {
 			tempBlips.push([
-				getGameConfig().blipSprites[getServerGame()].payAndSpray,
-				getServerData().payAndSprays[getServerGame()][i].position.x,
-				getServerData().payAndSprays[getServerGame()][i].position.y,
-				getServerData().payAndSprays[getServerGame()][i].position.z,
+				getGameConfig().blipSprites[getGame()].payAndSpray,
+				getServerData().payAndSprays[getGame()][i].position.x,
+				getServerData().payAndSprays[getGame()][i].position.y,
+				getServerData().payAndSprays[getGame()][i].position.z,
 				3,
 				0
 			]);
@@ -849,14 +849,14 @@ function sendAllPayAndSprayBlips(client) {
 // ===========================================================================
 
 function sendAllFuelStationBlips(client) {
-	if(getGameConfig().blipSprites[getServerGame()].fuelStation != -1) {
+	if(getGameConfig().blipSprites[getGame()].fuelStation != -1) {
 		let tempBlips = [];
-		for(let i in getServerData().fuelStations[getServerGame()]) {
+		for(let i in getServerData().fuelStations[getGame()]) {
 			tempBlips.push([
-				getGameConfig().blipSprites[getServerGame()].fuelStation,
-				getServerData().fuelStations[getServerGame()][i].position.x,
-				getServerData().fuelStations[getServerGame()][i].position.y,
-				getServerData().fuelStations[getServerGame()][i].position.z,
+				getGameConfig().blipSprites[getGame()].fuelStation,
+				getServerData().fuelStations[getGame()][i].position.x,
+				getServerData().fuelStations[getGame()][i].position.y,
+				getServerData().fuelStations[getGame()][i].position.z,
 				3,
 				getColourByName("burntOrange"),
 			]);

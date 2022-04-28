@@ -420,12 +420,6 @@ function givePlayerArmour(client, amount) {
 
 // ===========================================================================
 
-function getServerGame() {
-	return getGame();
-}
-
-// ===========================================================================
-
 function consolePrint(text) {
 	console.log(text);
 }
@@ -495,7 +489,7 @@ function destroyGameElement(element) {
 
 // ===========================================================================
 
-function isMeleeWeapon(weaponId, gameId = getServerGame()) {
+function isMeleeWeapon(weaponId, gameId = getGame()) {
 	return (getGameConfig().meleeWeapons[gameId].indexOf(weaponId) != -1);
 }
 
@@ -608,7 +602,7 @@ function createGameCivilian(modelIndex, position, heading, toClient = null) {
 // ===========================================================================
 
 function getIsland(position) {
-	if(getServerGame() == VRR_GAME_GTA_III) {
+	if(getGame() == VRR_GAME_GTA_III) {
 		if(position.x > 616) {
 			return VRR_ISLAND_PORTLAND;
 		} else if(position.x < -283) {
@@ -653,7 +647,7 @@ function setPlayerFightStyle(client, fightStyleId) {
 		return false;
 	}
 
-	setEntityData(getPlayerElement(client), "vrr.fightStyle", [getGameConfig().fightStyles[getServerGame()][fightStyleId][1][0], getGameConfig().fightStyles[getServerGame()][fightStyleId][1][1]]);
+	setEntityData(getPlayerElement(client), "vrr.fightStyle", [getGameConfig().fightStyles[getGame()][fightStyleId][1][0], getGameConfig().fightStyles[getGame()][fightStyleId][1][1]]);
 	forcePlayerToSyncElementProperties(null, getPlayerElement(client));
 }
 
@@ -750,24 +744,24 @@ function getPlayerWeapon(client) {
 function connectToDatabase() {
 	if(getDatabaseConfig().usePersistentConnection) {
 		if(persistentDatabaseConnection == null) {
-			logToConsole(LOG_DEBUG, "[VRR.Database] Initializing database connection ...");
+			logToConsole(LOG_DEBUG, `[VRR.Database] Initializing database connection ...`);
 			persistentDatabaseConnection = module.mysql.connect(getDatabaseConfig().host, getDatabaseConfig().user, getDatabaseConfig().pass, getDatabaseConfig().name, getDatabaseConfig().port);
 			if(persistentDatabaseConnection.error) {
-				console.warn("[VRR.Database] Database connection error: " + toString(persistentDatabaseConnection.error));
+				console.warn(`[VRR.Database] Database connection error: ${persistentDatabaseConnection.error}`);
 				persistentDatabaseConnection = null;
 				return false;
 			}
 
-			logToConsole(LOG_DEBUG, "[VRR.Database] Database connection successful!");
+			logToConsole(LOG_DEBUG, `[VRR.Database] Database connection successful!`);
 			return persistentDatabaseConnection;
 		} else {
-			logToConsole(LOG_DEBUG, "[VRR.Database] Using existing database connection.");
+			logToConsole(LOG_DEBUG, `[VRR.Database] Using existing database connection.`);
 			return persistentDatabaseConnection;
 		}
 	} else {
 		let databaseConnection = module.mysql.connect(getDatabaseConfig().host, getDatabaseConfig().user, getDatabaseConfig().pass, getDatabaseConfig().name, getDatabaseConfig().port);
 		if(databaseConnection.error) {
-			console.warn("[VRR.Database] Database connection error: " + toString(persistentDatabaseConnection.error));
+			console.warn(`[VRR.Database] Database connection error: ${persistentDatabaseConnection.error}`);
 			return false;
 		} else {
 			return databaseConnection;

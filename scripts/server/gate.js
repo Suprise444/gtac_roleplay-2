@@ -7,6 +7,13 @@
 // TYPE: Server (JavaScript)
 // ===========================================================================
 
+function initGateScript() {
+	logToConsole(LOG_INFO, `[VRR.Gate]: Initializing gate script ...`);
+	logToConsole(LOG_INFO, `[VRR.Gate]: Gate script initialized successfully!`);
+}
+
+// ===========================================================================
+
 function doesPlayerHaveGateKeys(client, vehicle) {
 	let gateData = getGateData(vehicle);
 
@@ -91,7 +98,7 @@ function getGateData(gateId) {
 
 function getClosestGate(position) {
 	let closest = 0;
-	for(let i in getServerData().gates[getServerGame()]) {
+	for(let i in getServerData().gates[getGame()]) {
 		if(getDistance(getServerData().gates[i].position, position) < getDistance(getServerData().gates[closest].position, position)) {
 			closest = i;
 		}
@@ -185,7 +192,7 @@ function saveGateToDatabase(gateId) {
 	}
 	logToConsole(LOG_VERBOSE, `[VRR.Gate]: Saved gate ${gateDataId} to database!`);
 
-	return false;
+	return true;
 }
 
 // ===========================================================================

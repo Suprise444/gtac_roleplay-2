@@ -517,7 +517,7 @@ function gpsCommand(command, params, client) {
 			} else {
 				let gameLocationId = getGameLocationFromParams(params);
 				if(gameLocationId != false) {
-					position = getGameConfig().locations[getServerGame()][gameLocationId][1]
+					position = getGameConfig().locations[getGame()][gameLocationId][1]
 				}
 			}
 		}
@@ -575,7 +575,7 @@ function stuckPlayerCommand(command, params, client) {
 
 	messagePlayerAlert(client, getLocaleString(client, "FixingStuck"));
 
-	if(getGameConfig().skinChangePosition[getServerGame()].length > 0) {
+	if(getGameConfig().skinChangePosition[getGame()].length > 0) {
 		if(getPlayerData(client).returnToPosition != null && getPlayerData(client).returnToType == VRR_RETURNTO_TYPE_SKINSELECT) {
 			messagePlayerAlert(client, "You canceled the skin change.");
 			restorePlayerCamera(client);

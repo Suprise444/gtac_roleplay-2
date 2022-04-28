@@ -63,8 +63,9 @@ function onPlayerJoin(event, client) {
 	let messageText = `👋 ${getPlayerName(client)} is connecting to the server ...`;
 	messageDiscordEventChannel(messageText);
 
+	let clients = getClients();
 	for(let i in clients) {
-		messagePlayerNormal(clients[i], getLocaleString(clients[i], "PlayerConnecting"));
+		messagePlayerNormal(clients[i], getLocaleString(clients[i], "PlayerConnecting", getPlayerName(client)));
 	}
 
 	//messageDiscordEventChannel(`👋 ${getPlayerDisplayForConsole(client)} has joined the server.`);

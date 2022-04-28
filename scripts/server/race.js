@@ -70,7 +70,7 @@ function createRaceCommand(command, params, client) {
 	}
 
 	createRace(params);
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} created race {ALTCOLOUR}${params}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} created race {ALTCOLOUR}${params}`);
 }
 
 // ===========================================================================

@@ -91,7 +91,7 @@ function getAccentFromParams(params) {
 
 function reloadAccentConfigurationCommand(command, params, client) {
 	getGlobalConfig().accents = loadAccentConfig();
-	messageAdmins(`{adminRed}${getPlayerName(client)} {MAINCOLOUR}has reloaded the accent list`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)} {MAINCOLOUR}has reloaded the accent list`);
 }
 
 // ===========================================================================
@@ -111,7 +111,7 @@ function addAccentCommand(command, params, client) {
 
 	getGlobalConfig().accents.push(newAccentName);
 	saveAccentConfig();
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} added a new accent: {ALTCOLOUR}${newAccentName}{MAINCOLOUR}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} added a new accent: {ALTCOLOUR}${newAccentName}{MAINCOLOUR}`);
 }
 
 // ===========================================================================
@@ -131,7 +131,7 @@ function removeAccentCommand(command, params, client) {
 
 	getGlobalConfig().accents.push(newAccentName);
 	saveAccentConfig();
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} removed an accent: {ALTCOLOUR}${newAccentName}{MAINCOLOUR}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} removed an accent: {ALTCOLOUR}${newAccentName}{MAINCOLOUR}`);
 }
 
 // ===========================================================================

@@ -111,7 +111,7 @@ function forcePlayerPayDayCommand(command, params, client) {
 		return false;
 	}
 
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} gave {ALTCOLOUR}${getPlayerName(targetClient)}{MAINCOLOUR} an instant payday`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} gave {ALTCOLOUR}${getPlayerName(targetClient)}{MAINCOLOUR} an instant payday`);
 	playerPayDay(targetClient);
 }
 
@@ -132,7 +132,7 @@ function setPayDayBonusMultiplier(command, params, client) {
 
 	getGlobalConfig().economy.grossIncomeMultiplier = newMultiplier;
 
-	announceAdminAction(`PaydayBonusSet`, `{adminRed}${getPlayerName(client)}{MAINCOLOUR}`, `{ALTCOLOUR}${newMultiplier*100}%{MAINCOLOUR}`);
+	announceAdminAction(`PaydayBonusSet`, `{adminOrange}${getPlayerName(client)}{MAINCOLOUR}`, `{ALTCOLOUR}${newMultiplier*100}%{MAINCOLOUR}`);
 }
 
 // ===========================================================================

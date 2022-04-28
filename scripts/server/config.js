@@ -527,7 +527,7 @@ function toggleServerLogoCommand(command, params, client) {
 	getServerConfig().createJobBlips = !getServerConfig().createJobBlips;
 	getServerConfig().needsSaved = true;
 
-	announceAdminAction("ServerJobBlipsSet", `{adminRed}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createJobBlips)}${toUpperCase(getOnOffFromBool(getServerConfig().createJobBlips))}{MAINCOLOUR}`);
+	announceAdminAction("ServerJobBlipsSet", `{adminOrange}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createJobBlips)}${toUpperCase(getOnOffFromBool(getServerConfig().createJobBlips))}{MAINCOLOUR}`);
 	resetAllJobBlips();
 	return true;
 }
@@ -547,7 +547,7 @@ function toggleServerLogoCommand(command, params, client) {
 	getServerConfig().createJobPickups = !getServerConfig().createJobPickups;
 	getServerConfig().needsSaved = true;
 
-	announceAdminAction("ServerJobPickupsSet", `{adminRed}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createJobPickups)}${toUpperCase(getOnOffFromBool(getServerConfig().createJobPickups))}{MAINCOLOUR}`);
+	announceAdminAction("ServerJobPickupsSet", `{adminOrange}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createJobPickups)}${toUpperCase(getOnOffFromBool(getServerConfig().createJobPickups))}{MAINCOLOUR}`);
 	resetAllJobPickups();
 	return true;
 }
@@ -567,7 +567,7 @@ function toggleServerLogoCommand(command, params, client) {
 	getServerConfig().createBusinessBlips = !getServerConfig().createBusinessBlips;
 	getServerConfig().needsSaved = true;
 
-	announceAdminAction("ServerBusinessBlipsSet", `{adminRed}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createBusinessBlips)}${toUpperCase(getOnOffFromBool(getServerConfig().createBusinessBlips))}{MAINCOLOUR}`);
+	announceAdminAction("ServerBusinessBlipsSet", `{adminOrange}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createBusinessBlips)}${toUpperCase(getOnOffFromBool(getServerConfig().createBusinessBlips))}{MAINCOLOUR}`);
 	resetAllBusinessBlips();
 	return true;
 }
@@ -587,7 +587,7 @@ function toggleServerLogoCommand(command, params, client) {
 	getServerConfig().createBusinessPickups = !getServerConfig().createBusinessPickups;
 	getServerConfig().needsSaved = true;
 
-	announceAdminAction("ServerBusinessPickupsSet", `{adminRed}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createBusinessPickups)}${toUpperCase(getOnOffFromBool(getServerConfig().createBusinessPickups))}{MAINCOLOUR}`);
+	announceAdminAction("ServerBusinessPickupsSet", `{adminOrange}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createBusinessPickups)}${toUpperCase(getOnOffFromBool(getServerConfig().createBusinessPickups))}{MAINCOLOUR}`);
 	resetAllBusinessPickups();
 	return true;
 }
@@ -607,7 +607,7 @@ function toggleServerLogoCommand(command, params, client) {
 	getServerConfig().createHouseBlips = !getServerConfig().createHouseBlips;
 	getServerConfig().needsSaved = true;
 
-	announceAdminAction("ServerHouseBlipsSet", `{adminRed}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createHouseBlips)}${toUpperCase(getOnOffFromBool(getServerConfig().createHouseBlips))}{MAINCOLOUR}`);
+	announceAdminAction("ServerHouseBlipsSet", `{adminOrange}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createHouseBlips)}${toUpperCase(getOnOffFromBool(getServerConfig().createHouseBlips))}{MAINCOLOUR}`);
 	resetAllHouseBlips();
 	return true;
 }
@@ -627,7 +627,7 @@ function toggleServerLogoCommand(command, params, client) {
 	getServerConfig().createHousePickups = !getServerConfig().createHousePickups;
 	getServerConfig().needsSaved = true;
 
-	announceAdminAction("ServerHousePickupsSet", `{adminRed}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createHousePickups)}${toUpperCase(getOnOffFromBool(getServerConfig().createHousePickups))}{MAINCOLOUR}`);
+	announceAdminAction("ServerHousePickupsSet", `{adminOrange}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().createHousePickups)}${toUpperCase(getOnOffFromBool(getServerConfig().createHousePickups))}{MAINCOLOUR}`);
 	resetAllHousePickups();
 	return true;
 }

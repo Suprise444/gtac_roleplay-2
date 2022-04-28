@@ -979,7 +979,7 @@ function createJobLocationCommand(command, params, client) {
 	}
 
 	createJobLocation(jobId, getPlayerPosition(client), getPlayerInterior(client), getPlayerDimension(client));
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} created a location for the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} created a location for the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
 	return true;
 }
 
@@ -988,7 +988,7 @@ function createJobLocationCommand(command, params, client) {
 function deleteJobLocationCommand(command, params, client) {
 	let closestJobLocation = getClosestJobLocation(getPlayerPosition(client));
 
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} deleted location {ALTCOLOUR}${closestJobLocation.index} (DB ID ${closestJobLocation.databaseId}){MAINCOLOUR} for the {jobYellow}${getJobData(closestJobLocation.jobIndex).name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} deleted location {ALTCOLOUR}${closestJobLocation.index} (DB ID ${closestJobLocation.databaseId}){MAINCOLOUR} for the {jobYellow}${getJobData(closestJobLocation.jobIndex).name}{MAINCOLOUR} job`);
 
 
 	deleteJobLocation(closestJobLocation);
@@ -1005,7 +1005,7 @@ function toggleJobLocationEnabledCommand(command, params, client) {
 	let closestJobLocation = getClosestJobLocation(getPlayerPosition(client));
 
 	closestJobLocation.enabled = !closestJobLocation.enabled;
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} ${getEnabledDisabledFromBool(closestJobLocation.enabled)} location {ALTCOLOUR}${closestJobLocation.databaseId} {MAINCOLOUR}for the {jobYellow}${getJobData(closestJobLocation.jobIndex).name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} ${getEnabledDisabledFromBool(closestJobLocation.enabled)} location {ALTCOLOUR}${closestJobLocation.databaseId} {MAINCOLOUR}for the {jobYellow}${getJobData(closestJobLocation.jobIndex).name}{MAINCOLOUR} job`);
 }
 
 // ===========================================================================
@@ -1019,7 +1019,7 @@ function toggleJobEnabledCommand(command, params, client) {
 	let jobId = getJobFromParams(params) || getClosestJobLocation(getPlayerPosition(client)).jobIndex;
 
 	getJobData(jobId).enabled = !getJobData(jobId).enabled;
-	messageAdmins(`{adminRed}${getPlayerName(client)} {MAINCOLOUR}${getEnabledDisabledFromBool(getJobData(jobId).enabled)}{MAINCOLOUR} the {jobYellow}${getJobData(jobId).name} {MAINCOLOUR}job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)} {MAINCOLOUR}${getEnabledDisabledFromBool(getJobData(jobId).enabled)}{MAINCOLOUR} the {jobYellow}${getJobData(jobId).name} {MAINCOLOUR}job`);
 }
 
 // ===========================================================================
@@ -1042,7 +1042,7 @@ function setJobColourCommand(command, params, client) {
 
 	getJobData(jobId).colour = toColour(toInteger(red), toInteger(green), toInteger(blue), 255);
 	getJobData(jobId).needsSaved = true;
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set job {jobYellow}${getJobData(jobId).name}'s{MAINCOLOUR} colour to ${red}, ${green}, ${blue}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} set job {jobYellow}${getJobData(jobId).name}'s{MAINCOLOUR} colour to ${red}, ${green}, ${blue}`);
 
 	// Force nametag update in case somebody is using this job
 	updateAllPlayerNameTags();
@@ -1089,7 +1089,7 @@ function setJobBlipCommand(command, params, client) {
 
 	getJobData(jobId).blipModel = blipId;
 	getJobData(jobId).needsSaved = true;
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set job {jobYellow}${getJobData(jobId).name}'s{MAINCOLOUR} blip model to ${blipString}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} set job {jobYellow}${getJobData(jobId).name}'s{MAINCOLOUR} blip model to ${blipString}`);
 	resetAllJobBlips();
 }
 
@@ -1134,7 +1134,7 @@ function setJobPickupCommand(command, params, client) {
 
 	getJobData(jobId).pickupModel = pickupId;
 	getJobData(jobId).needsSaved = true;
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set job {jobYellow}${getJobData(jobId).name}'s{MAINCOLOUR} pickup to ${pickupString}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} set job {jobYellow}${getJobData(jobId).name}'s{MAINCOLOUR} pickup to ${pickupString}`);
 	resetAllJobPickups();
 }
 
@@ -1157,7 +1157,7 @@ function toggleJobRouteEnabledCommand(command, params, client) {
 	}
 
 	getJobData(jobId).routes[jobRoute].enabled = !getJobData(jobId).routes[jobRoute].enabled;
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} ${getEnabledDisabledFromBool(getJobRouteData(jobId, jobRoute).enabled)} route {ALTCOLOUR}${getJobRouteData(jobId, jobRoute).name}{MAINCOLOUR} for the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} ${getEnabledDisabledFromBool(getJobRouteData(jobId, jobRoute).enabled)} route {ALTCOLOUR}${getJobRouteData(jobId, jobRoute).name}{MAINCOLOUR} for the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
 }
 
 // ===========================================================================
@@ -1183,7 +1183,7 @@ function setJobRouteNameCommand(command, params, client) {
 
 	let oldName = getJobData(jobId).routes[jobRoute].name;
 	getJobData(jobId).routes[jobRoute].name = params;
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set route {ALTCOLOUR}${oldName}{MAINCOLOUR} to {ALTCOLOUR}${getJobRouteData(jobId, jobRoute).name}{MAINCOLOUR} for the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} set route {ALTCOLOUR}${oldName}{MAINCOLOUR} to {ALTCOLOUR}${getJobRouteData(jobId, jobRoute).name}{MAINCOLOUR} for the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
 }
 
 // ===========================================================================
@@ -1218,7 +1218,7 @@ function setJobRouteAllLocationDelaysCommand(command, params, client) {
 		getJobData(jobId).routes[jobRoute].locations[i].needsSaved = true;
 	}
 
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set route {ALTCOLOUR}${oldName}{MAINCOLOUR} location's stop delays to {ALTCOLOUR}${delay/1000}{MAINCOLOUR} seconds for the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} set route {ALTCOLOUR}${oldName}{MAINCOLOUR} location's stop delays to {ALTCOLOUR}${delay/1000}{MAINCOLOUR} seconds for the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
 }
 
 // ===========================================================================
@@ -1262,7 +1262,7 @@ function setJobRouteVehicleColoursCommand(command, params, client) {
 		}
 	}
 
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set the vehicle colours to {ALTCOLOUR}${colour1}, ${colour2}{MAINCOLOUR} for route {ALTCOLOUR}${getJobRouteData(jobId, jobRoute).name}{MAINCOLOUR} of the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} set the vehicle colours to {ALTCOLOUR}${colour1}, ${colour2}{MAINCOLOUR} for route {ALTCOLOUR}${getJobRouteData(jobId, jobRoute).name}{MAINCOLOUR} of the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
 }
 
 // ===========================================================================
@@ -1288,7 +1288,7 @@ function setJobRouteFinishMessageCommand(command, params, client) {
 
 	getJobData(jobId).routes[jobRoute].finishMessage = params;
 	getJobData(jobId).routes[jobRoute].needsSaved = true;
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set the finish message to {ALTCOLOUR}"${params}"{MAINCOLOUR} for route {ALTCOLOUR}${getJobRouteData(jobId, jobRoute).name}{MAINCOLOUR} of the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} set the finish message to {ALTCOLOUR}"${params}"{MAINCOLOUR} for route {ALTCOLOUR}${getJobRouteData(jobId, jobRoute).name}{MAINCOLOUR} of the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
 }
 
 // ===========================================================================
@@ -1314,7 +1314,7 @@ function setJobRouteStartMessageCommand(command, params, client) {
 
 	getJobData(jobId).routes[jobRoute].startMessage = params;
 	getJobData(jobId).routes[jobRoute].needsSaved = true;
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set the start message to {ALTCOLOUR}"${params}"{MAINCOLOUR} for route {ALTCOLOUR}${getJobRouteData(jobId, jobRoute).name}{MAINCOLOUR} of the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} set the start message to {ALTCOLOUR}"${params}"{MAINCOLOUR} for route {ALTCOLOUR}${getJobRouteData(jobId, jobRoute).name}{MAINCOLOUR} of the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
 }
 
 // ===========================================================================
@@ -1340,7 +1340,7 @@ function setJobRouteLocationArriveMessageCommand(command, params, client) {
 
 	getJobData(jobId).routes[jobRoute].locationArriveMessage = params;
 	getJobData(jobId).routes[jobRoute].needsSaved = true;
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} ${getEnabledDisabledFromBool(getJobData(jobId).enabled)} set the location arrival message to {ALTCOLOUR}"${params}"{MAINCOLOUR} for route {ALTCOLOUR}${getJobRouteData(jobId, jobRoute).name}{MAINCOLOUR} of the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} ${getEnabledDisabledFromBool(getJobData(jobId).enabled)} set the location arrival message to {ALTCOLOUR}"${params}"{MAINCOLOUR} for route {ALTCOLOUR}${getJobRouteData(jobId, jobRoute).name}{MAINCOLOUR} of the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
 }
 
 // ===========================================================================
@@ -1366,7 +1366,7 @@ function setJobRouteLocationNextMessageCommand(command, params, client) {
 
 	getJobData(jobId).routes[jobRoute].locationNextMessage = params;
 	getJobData(jobId).routes[jobRoute].needsSaved = true;
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} ${getEnabledDisabledFromBool(getJobData(jobId).enabled)}{MAINCOLOUR} set the location next message to {ALTCOLOUR}"${params}"{MAINCOLOUR} for route {ALTCOLOUR}${getJobRouteData(jobId, jobRoute).name}{MAINCOLOUR} of the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} ${getEnabledDisabledFromBool(getJobData(jobId).enabled)}{MAINCOLOUR} set the location next message to {ALTCOLOUR}"${params}"{MAINCOLOUR} for route {ALTCOLOUR}${getJobRouteData(jobId, jobRoute).name}{MAINCOLOUR} of the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
 }
 
 // ===========================================================================
@@ -1398,7 +1398,7 @@ function setJobRoutePayCommand(command, params, client) {
 
 	getJobData(jobId).routes[jobRoute].pay = amount;
 	getJobData(jobId).routes[jobRoute].needsSaved = true;
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set the start message to {ALTCOLOUR}"${params}"{MAINCOLOUR} for route {ALTCOLOUR}${getJobRouteData(jobId, jobRoute).name}{MAINCOLOUR} of the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} set the start message to {ALTCOLOUR}"${params}"{MAINCOLOUR} for route {ALTCOLOUR}${getJobRouteData(jobId, jobRoute).name}{MAINCOLOUR} of the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
 }
 
 // ===========================================================================
@@ -1412,7 +1412,7 @@ function toggleJobWhiteListCommand(command, params, client) {
 	let jobId = getJobFromParams(params) || getClosestJobLocation(getPlayerPosition(client)).jobIndex;
 
 	getJobData(jobId).whiteListEnabled = !getJobData(jobId).whiteListEnabled;
-	messageAdmins(`{adminRed}${getPlayerName(client)} {MAINCOLOUR}${getEnabledDisabledFromBool(getJobData(jobId).whiteListEnabled)} {MAINCOLOUR}the whitelist for the {ALTCOLOUR}${getJobData(jobId).name} {MAINCOLOUR}job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)} {MAINCOLOUR}${getEnabledDisabledFromBool(getJobData(jobId).whiteListEnabled)} {MAINCOLOUR}the whitelist for the {ALTCOLOUR}${getJobData(jobId).name} {MAINCOLOUR}job`);
 }
 
 // ===========================================================================
@@ -1426,7 +1426,7 @@ function toggleJobBlackListCommand(command, params, client) {
 	let jobId = getJobFromParams(params) || getClosestJobLocation(getPlayerPosition(client)).jobIndex;
 
 	getJobData(jobId).blackListEnabled = !getJobData(jobId).blackListEnabled;
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} ${getEnabledDisabledFromBool(getJobData(jobId).blackListEnabled)} the blacklist for the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} ${getEnabledDisabledFromBool(getJobData(jobId).blackListEnabled)} the blacklist for the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
 }
 
 // ===========================================================================
@@ -1456,7 +1456,7 @@ function addPlayerToJobBlackListCommand(command, params, client) {
 	}
 
 	addPlayerToJobBlackList(targetClient, jobId);
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} added {ALTCOLOUR}${getCharacterFullName(targetClient)}{MAINCOLOUR} to the blacklist for the {jobYellow}${jobData.name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} added {ALTCOLOUR}${getCharacterFullName(targetClient)}{MAINCOLOUR} to the blacklist for the {jobYellow}${jobData.name}{MAINCOLOUR} job`);
 }
 
 // ===========================================================================
@@ -1486,7 +1486,7 @@ function removePlayerFromJobBlackListCommand(command, params, client) {
 	}
 
 	removePlayerFromJobBlackList(targetClient, jobId);
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} removed {ALTCOLOUR}${getCharacterFullName(targetClient)}{MAINCOLOUR} from the blacklist for the {jobYellow}${jobData.name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} removed {ALTCOLOUR}${getCharacterFullName(targetClient)}{MAINCOLOUR} from the blacklist for the {jobYellow}${jobData.name}{MAINCOLOUR} job`);
 }
 
 // ===========================================================================
@@ -1516,7 +1516,7 @@ function addPlayerToJobWhiteListCommand(command, params, client) {
 	}
 
 	addPlayerToJobWhiteList(targetClient, jobId);
-	messageAdmins(`{adminRed}${getPlayerName(client)} {MAINCOLOUR}added {ALTCOLOUR}${getCharacterFullName(targetClient)}{MAINCOLOUR} to the whitelist for the {jobYellow}${jobData.name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)} {MAINCOLOUR}added {ALTCOLOUR}${getCharacterFullName(targetClient)}{MAINCOLOUR} to the whitelist for the {jobYellow}${jobData.name}{MAINCOLOUR} job`);
 }
 
 // ===========================================================================
@@ -1546,7 +1546,7 @@ function removePlayerFromJobWhiteListCommand(command, params, client) {
 	}
 
 	removePlayerFromJobWhiteList(targetClient, jobId);
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} removed {ALTCOLOUR}${getCharacterFullName(targetClient)}{MAINCOLOUR} from the whitelist for the {jobYellow}${jobData.name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} removed {ALTCOLOUR}${getCharacterFullName(targetClient)}{MAINCOLOUR} from the whitelist for the {jobYellow}${jobData.name}{MAINCOLOUR} job`);
 }
 
 // ===========================================================================
@@ -2538,7 +2538,7 @@ function createJobRouteCommand(command, params, client) {
 	}
 
 	createJobRoute(params, closestJobLocation);
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} created route {ALTCOLOUR}${params}{MAINCOLOUR} for job {jobYellow}${getJobData(jobId).name}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} created route {ALTCOLOUR}${params}{MAINCOLOUR} for job {jobYellow}${getJobData(jobId).name}`);
 	return true;
 }
 
@@ -2572,7 +2572,7 @@ function createJobRouteLocationCommand(command, params, client) {
 	let routeLocationName = params;
 
 	createJobRouteLocation(routeLocationName, getPlayerPosition(client), jobRouteData);
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} created location {ALTCOLOUR}${routeLocationName}{MAINCOLOUR} for route {ALTCOLOUR}${jobRouteData.name}{MAINCOLOUR} for job {jobYellow}${getJobData(jobId).name}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} created location {ALTCOLOUR}${routeLocationName}{MAINCOLOUR} for route {ALTCOLOUR}${jobRouteData.name}{MAINCOLOUR} for job {jobYellow}${getJobData(jobId).name}`);
 	return true;
 }
 
@@ -2620,7 +2620,7 @@ function createJobRouteLocation(routeLocationName, position, jobRouteData) {
 function deleteJobRouteLocationCommand(command, params, client) {
 	let closestJobRouteLocation = getClosestJobRouteLocation(getPlayerPosition(client));
 
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} deleted route location {ALTCOLOUR}${closestJobRouteLocation.index} (DB ID ${closestJobRouteLocation.databaseId}){MAINCOLOUR} for the {ALTCOLOUR}${closestJobRouteLocation.name}{jobYellow} route of the {jobYellow}${getJobData(closestJobLocation.jobIndex).name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} deleted route location {ALTCOLOUR}${closestJobRouteLocation.index} (DB ID ${closestJobRouteLocation.databaseId}){MAINCOLOUR} for the {ALTCOLOUR}${closestJobRouteLocation.name}{jobYellow} route of the {jobYellow}${getJobData(closestJobLocation.jobIndex).name}{MAINCOLOUR} job`);
 
 	if(closestJobRouteLocation.databaseId > 0) {
 		quickDatabaseQuery(`DELETE FROM job_route_loc WHERE job_route_loc_id = ${closestJobRouteLocation.databaseId}`);
@@ -2658,7 +2658,7 @@ function deleteJobRouteCommand(command, params, client) {
 		}
 	}
 
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} deleted route {ALTCOLOUR}${jobRouteData.name} (DB ID ${jobRouteData.databaseId}){MAINCOLOUR} for the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} deleted route {ALTCOLOUR}${jobRouteData.name} (DB ID ${jobRouteData.databaseId}){MAINCOLOUR} for the {jobYellow}${getJobData(jobId).name}{MAINCOLOUR} job`);
 
 	if(jobRouteData.databaseId > 0) {
 		quickDatabaseQuery(`DELETE FROM job_route WHERE job_route_id = ${jobRouteData.databaseId}`);

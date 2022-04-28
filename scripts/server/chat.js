@@ -173,7 +173,7 @@ function adminChatCommand(command, params, client) {
 		return false;
 	}
 
-	messageAdmins(`{jobYellow}[Admin Chat] {ALTCOLOUR}${getPlayerName(client)} [#CCCCCC](${getPlayerStaffTitle(client)}){MAINCOLOUR}: ${params}`);
+	messageAdmins(`{jobYellow}[Admin Chat] {ALTCOLOUR}${getPlayerName(client)}: ${params}`);
 }
 
 // ===========================================================================

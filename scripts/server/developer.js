@@ -666,7 +666,7 @@ function resetAllServerAmbienceElementsCommand(command, params, client) {
 
 function reloadEconomyConfigurationCommand(command, params, client) {
 	getGlobalConfig().economy = loadEconomyConfig();
-	messageAdmins(`{adminRed}${getPlayerName(client)} {MAINCOLOUR}has reloaded the economy settings`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)} {MAINCOLOUR}has reloaded the economy settings`);
 }
 
 // ===========================================================================

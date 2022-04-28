@@ -178,6 +178,7 @@ let serverColours = {
 			clanOrange: "FF9900",
 			vehiclePurple: "960096",
 			jobYellow: "FFFF00",
+			adminOrange: "ED4337",
 		},
 	},
 
@@ -223,6 +224,7 @@ let serverColours = {
 		houseGreen: toColour(17, 204, 17, 255),
 		clanOrange: toColour(255, 153, 0, 255),
 		npcPink: toColour(219, 112, 147, 255),
+		adminOrange: toColour(205, 60, 60, 255),
 	},
 };
 
@@ -2675,6 +2677,14 @@ function replaceColoursInMessage(messageText) {
  */
 function removeColoursInMessage(messageText) {
 	if(messageText == null) {
+		return "";
+	}
+
+	if(typeof messageText != "string") {
+		return "";
+	}
+
+	if(messageText == "") {
 		return "";
 	}
 

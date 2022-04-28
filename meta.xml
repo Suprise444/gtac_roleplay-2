@@ -33,6 +33,7 @@
 	<script src="scripts/server/email.js" type="server" language="javascript" />
 	<script src="scripts/server/event.js" type="server" language="javascript" />
 	<script src="scripts/server/fishing.js" type="server" language="javascript" />
+	<script src="scripts/server/gate.js" type="server" language="javascript" />
 	<script src="scripts/server/gui.js" type="server" language="javascript" />
 	<script src="scripts/server/help.js" type="server" language="javascript" />
 	<script src="scripts/server/house.js" type="server" language="javascript" />

@@ -49,7 +49,7 @@ function loadBusinessesFromDatabase() {
 			if(dbQuery.numRows > 0) {
 				while(dbAssoc = fetchQueryAssoc(dbQuery)) {
 					let tempBusinessData = new BusinessData(dbAssoc);
-					tempBusinessData.locations = loadBusinessLocationsFromDatabase(tempBusinessData.databaseId);
+					//tempBusinessData.locations = loadBusinessLocationsFromDatabase(tempBusinessData.databaseId);
 					//tempBusinessData.gameScripts = loadBusinessGameScriptsFromDatabase(tempBusinessData.databaseId);
 					tempBusinesses.push(tempBusinessData);
 					logToConsole(LOG_INFO, `[VRR.Business]: Business '${tempBusinessData.name}' (ID ${tempBusinessData.databaseId}) loaded from database successfully!`);
@@ -152,7 +152,7 @@ function createBusinessCommand(command, params, client) {
 	createBusinessEntranceBlip(businessId-1);
 	createBusinessExitBlip(businessId-1);
 
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} created business {businessBlue}${tempBusinessData.name}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} created business {businessBlue}${tempBusinessData.name}`);
 }
 
 // ===========================================================================
@@ -187,7 +187,7 @@ function createBusinessLocationCommand(command, params, client) {
 	let tempBusinessLocationData = createBusinessLocation(locationType, businessId);
 	getServerData().businesses[businessId].push(tempBusinessLocationData);
 
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} created location {businessBlue}${params}{MAINCOLOUR} for business {businessBlue}${tempBusinessData.name}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} created location {businessBlue}${params}{MAINCOLOUR} for business {businessBlue}${tempBusinessData.name}`);
 }
 
 // ===========================================================================
@@ -237,7 +237,7 @@ function deleteBusinessCommand(command, params, client) {
 		return false;
 	}
 
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} deleted business {businessBlue}${getBusinessData(businessId).name}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} deleted business {businessBlue}${getBusinessData(businessId).name}`);
 	deleteBusiness(businessId, getPlayerData(client).accountData.databaseId);
 }
 
@@ -288,7 +288,7 @@ function setBusinessNameCommand(command, params, client) {
 	getBusinessData(businessId).name = newBusinessName;
 	setEntityData(getBusinessData(businessId).entrancePickup, "vrr.label.name", getBusinessData(businessId).name, true);
 	getBusinessData(businessId).needsSaved = true;
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} renamed business {businessBlue}${oldBusinessName}{MAINCOLOUR} to {businessBlue}${newBusinessName}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} renamed business {businessBlue}${oldBusinessName}{MAINCOLOUR} to {businessBlue}${newBusinessName}`);
 }
 
 // ===========================================================================
@@ -817,7 +817,7 @@ function setBusinessPickupCommand(command, params, client) {
 
 	getBusinessData(businessId).needsSaved = true;
 
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set business {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR} pickup display to {ALTCOLOUR}${typeParam}!`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} set business {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR} pickup display to {ALTCOLOUR}${typeParam}!`);
 }
 
 // ===========================================================================
@@ -853,7 +853,7 @@ function setBusinessInteriorTypeCommand(command, params, client) {
 			getBusinessData(businessId).hasInterior = false;
 			getBusinessData(businessId).interiorCutscene = "";
 			getBusinessData(businessId).exitPickupModel = -1;
-			messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} removed business {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR} interior`);
+			messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} removed business {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR} interior`);
 			return false;
 		}
 
@@ -888,7 +888,7 @@ function setBusinessInteriorTypeCommand(command, params, client) {
 
 	getBusinessData(businessId).needsSaved = true;
 
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set business {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR} interior type to {ALTCOLOUR}${typeParam}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} set business {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR} interior type to {ALTCOLOUR}${typeParam}`);
 }
 
 // ===========================================================================
@@ -933,7 +933,7 @@ function setBusinessBlipCommand(command, params, client) {
 	resetBusinessBlips(businessId);
 	getBusinessData(businessId).needsSaved = true;
 
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set business {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR} blip display to {ALTCOLOUR}${typeParam}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} set business {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR} blip display to {ALTCOLOUR}${typeParam}`);
 }
 
 // ===========================================================================
@@ -984,7 +984,7 @@ function giveDefaultItemsToBusinessCommand(command, params, client) {
 
 	cacheBusinessItems(businessId);
 	updateBusinessPickupLabelData(businessId);
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} gave business {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR} the default items for ${toLowerCase(typeParam)}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} gave business {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR} the default items for ${toLowerCase(typeParam)}`);
 }
 
 // ===========================================================================
@@ -1008,7 +1008,7 @@ function setBusinessEntranceLabelToDealershipCommand(command, params, client) {
 
 	getBusinessData(businessId).labelHelpType == VRR_PROPLABEL_INFO_ENTERVEHICLE;
 	updateBusinessPickupLabelData(businessId);
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} set the business type of {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR} to dealership`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} set the business type of {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR} to dealership`);
 }
 
 // ===========================================================================
@@ -1037,7 +1037,7 @@ function deleteBusinessFloorItemsCommand(command, params, client) {
 
 	cacheBusinessItems(businessId);
 
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} deleted all on-sale items for business {businessBlue}${getBusinessData(businessId).name}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} deleted all on-sale items for business {businessBlue}${getBusinessData(businessId).name}`);
 }
 
 // ===========================================================================
@@ -1066,7 +1066,7 @@ function deleteBusinessStorageItemsCommand(command, params, client) {
 
 	cacheBusinessItems(businessId);
 
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} deleted all stored items for business {businessBlue}${getBusinessData(businessId).name}`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} deleted all stored items for business {businessBlue}${getBusinessData(businessId).name}`);
 }
 
 // ===========================================================================
@@ -1389,7 +1389,7 @@ function moveBusinessEntranceCommand(command, params, client) {
 
 	getBusinessData(businessId).needsSaved = true;
 
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} moved business {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR} entrance to their position`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} moved business {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR} entrance to their position`);
 }
 
 // ===========================================================================
@@ -1427,7 +1427,7 @@ function moveBusinessExitCommand(command, params, client) {
 
 	getBusinessData(businessId).needsSaved = true;
 
-	messageAdmins(`{adminRed}${getPlayerName(client)}{MAINCOLOUR} moved business {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR}exit to their position`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} moved business {businessBlue}${getBusinessData(businessId).name}{MAINCOLOUR}exit to their position`);
 }
 
 // ===========================================================================
@@ -1681,6 +1681,10 @@ function createBusinessEntrancePickup(businessId) {
 	}
 
 	if(getBusinessData(businessId).entrancePickupModel != -1) {
+		console.log(getGameConfig().pickupModels);
+		console.warn(typeof getGame());
+		console.warn(typeof VRR_GAME_GTA_VC);
+		console.warn(Object.keys(getGameConfig().pickupModels))
 		let pickupModelId = getGameConfig().pickupModels[getGame()].Business;
 
 		if(getServerData().businesses[businessId].entrancePickupModel != 0) {

@@ -45,22 +45,22 @@ let supportedFeatures = {
 
 // Connected MP mods only
 let extraContentResource = {
-	VRR_GAME_GTA_III: "connectedrp-gta3",
-	VRR_GAME_GTA_VC: "connectedrp-gtavc",
-	VRR_GAME_GTA_SA: "connectedrp-gtasa",
-	VRR_GAME_GTA_IV: "connectedrp-gtaiv",
-	VRR_GAME_GTA_IV_EFLC: "connectedrp-gtaiv",
-	VRR_GAME_MAFIA_ONE: "connectedrp-mafia1",
-	VRR_GAME_MAFIA_TWO: "connectedrp-mafia2",
-	VRR_GAME_MAFIA_TWO: "connectedrp-mafia3",
-	VRR_GAME_MAFIA_ONE_DE: "connectedrp-mafia1de",
+	[VRR_GAME_GTA_III]: "connectedrp-gta3",
+	[VRR_GAME_GTA_VC]: "connectedrp-gtavc",
+	[VRR_GAME_GTA_SA]: "connectedrp-gtasa",
+	[VRR_GAME_GTA_IV]: "connectedrp-gtaiv",
+	[VRR_GAME_GTA_IV_EFLC]: "connectedrp-gtaiv",
+	[VRR_GAME_MAFIA_ONE]: "connectedrp-mafia1",
+	[VRR_GAME_MAFIA_TWO]: "connectedrp-mafia2",
+	[VRR_GAME_MAFIA_TWO]: "connectedrp-mafia3",
+	[VRR_GAME_MAFIA_ONE_DE]: "connectedrp-mafia1de",
 };
 
 // ===========================================================================
 
 let gameData = {
 	weaponNames: {
-		VRR_GAME_GTA_III: [ // GTA III
+		[VRR_GAME_GTA_III]: [ // GTA III
 			"Fist",
 			"Bat",
 			"Pistol",
@@ -74,7 +74,7 @@ let gameData = {
 			"Molotov",
 			"Grenade"
 		],
-		VRR_GAME_GTA_VC: [ // GTA VC
+		[VRR_GAME_GTA_VC]: [ // GTA VC
 			"Fist",
 			"Brass Knuckles",
 			"Screwdriver",
@@ -110,7 +110,7 @@ let gameData = {
 			"M60",
 			"Minigun"
 		],
-		VRR_GAME_GTA_SA: [ // GTA San Andreas
+		[VRR_GAME_GTA_SA]: [ // GTA San Andreas
 			"Fist",
 			"Brass Knuckles",
 			"Golf Club",
@@ -162,7 +162,7 @@ let gameData = {
 			"Jetpack",
 			"Skateboard"
 		],
-		VRR_GAME_GTA_IV: [ // GTA IV
+		[VRR_GAME_GTA_IV]: [ // GTA IV
 			"Fist",
 			"Bat",
 			"Pool Cue",
@@ -210,7 +210,7 @@ let gameData = {
 			"EFLC Weapon 24",
 			"Camera",
 		],
-		VRR_GAME_GTA_IV_EFLC: [ // GTA IV (EFLC)
+		[VRR_GAME_GTA_IV_EFLC]: [ // GTA IV (EFLC)
 			"Fist",
 			"Bat",
 			"Pool Cue",
@@ -258,7 +258,7 @@ let gameData = {
 			"EFLC Weapon 24",
 			"Camera",
 		],
-		VRR_GAME_MAFIA_ONE: {	// Mafia 1
+		[VRR_GAME_MAFIA_ONE]: {	// Mafia 1
 			2: "Knuckle Duster",
 			3: "Knife",
 			4: "Baseball Bat",
@@ -283,7 +283,7 @@ let gameData = {
 		},
 	},
 	weatherNames: {
-		VRR_GAME_GTA_III: [ // GTA III
+		[VRR_GAME_GTA_III]: [ // GTA III
 			"Clear",
 			"Overcast",
 			"Thunderstorm",
@@ -295,7 +295,7 @@ let gameData = {
 			"Overcast/Cloudy",
 			"Grey/Cloudy"
 		],
-		VRR_GAME_GTA_VC: [ // GTA Vice City
+		[VRR_GAME_GTA_VC]: [ // GTA Vice City
 			"Clear",
 			"Overcast",
 			"Thunderstorm",
@@ -330,7 +330,7 @@ let gameData = {
 			"Sandstorm",
 			"Greenish/Foggy"
 		],
-		VRR_GAME_GTA_IV: [ // GTA IV
+		[VRR_GAME_GTA_IV]: [ // GTA IV
 			"Extra Sunny",
 			"Sunny",
 			"Sunny/Windy",
@@ -342,7 +342,7 @@ let gameData = {
 			"Extra Sunny",
 			"Sunny/Windy",
 		],
-		VRR_GAME_GTA_IV_EFLC: [ // GTA IV EFLC
+		[VRR_GAME_GTA_IV_EFLC]: [ // GTA IV EFLC
 			"Extra Sunny",
 			"Sunny",
 			"Sunny/Windy",
@@ -356,11 +356,11 @@ let gameData = {
 		],
 	},
 	gameNames: {
-		VRR_GAME_GTA_III: "GTA III",
-		VRR_GAME_GTA_VC: "GTA Vice City",
-		VRR_GAME_GTA_SA: "GTA San Andreas",
-		VRR_GAME_GTA_IV: "GTA IV",
-		VRR_GAME_GTA_IV_EFLC: "GTA IV: Episodes from Liberty City",
+		[VRR_GAME_GTA_III]: "GTA III",
+		[VRR_GAME_GTA_VC]: "GTA Vice City",
+		[VRR_GAME_GTA_SA]: "GTA San Andreas",
+		[VRR_GAME_GTA_IV]: "GTA IV",
+		[VRR_GAME_GTA_IV_EFLC]: "GTA IV: Episodes from Liberty City",
 		VRR_GAME_GTA_MAFIA_ONE: "Mafia: The City of Lost Heaven",
 		VRR_GAME_GTA_MAFIA_TWO: "Mafia II",
 		VRR_GAME_GTA_MAFIA_THREE: "Mafia III",
@@ -390,7 +390,7 @@ let gameData = {
 		"rear right"
 	],
 	vehicleRadioStationNames: {
-		VRR_GAME_GTA_III: [  // GTA III
+		[VRR_GAME_GTA_III]: [  // GTA III
 			"Head Radio",
 			"Double Cleff FM",
 			"Jah Radio",
@@ -400,7 +400,7 @@ let gameData = {
 			"Chatterbox 109",
 			"MP3 Player"
 		],
-		VRR_GAME_GTA_VC: [ // GTA Vice City
+		[VRR_GAME_GTA_VC]: [ // GTA Vice City
 			"Wildstyle",
 			"Flash FM",
 			"K CHAT",
@@ -412,7 +412,7 @@ let gameData = {
 			"Wave 103",
 			"MP3 Player"
 		],
-		VRR_GAME_GTA_SA: [ // GTA San Andreas
+		[VRR_GAME_GTA_SA]: [ // GTA San Andreas
 			"K-ROSE",
 			"K-DST",
 			"Bounce FM",
@@ -427,7 +427,7 @@ let gameData = {
 		],
 	},
 	skins: {
-		VRR_GAME_GTA_III: [
+		[VRR_GAME_GTA_III]: [
 			[0  , "Claude"                     , false],
 			[1  , "Police Officer"             , false],
 			[2  , "SWAT Officer"               , false],
@@ -545,7 +545,7 @@ let gameData = {
 			[120, "Darkel"                     , true ],
 			[121, "Chuff Security Officer"     , false],
 		],
-		VRR_GAME_GTA_VC: [
+		[VRR_GAME_GTA_VC]: [
 			[0  , "Tommy Vercetti"                    , false],
 			[1  , "Police Officer"                    , false],
 			[2  , "SWAT Officer"                      , false],
@@ -734,7 +734,7 @@ let gameData = {
 			[186, "Kent Paul"                         , true ],
 			[187, "Big Head Taxi Driver"              , true ],
 		],
-		VRR_GAME_GTA_SA: [
+		[VRR_GAME_GTA_SA]: [
 			[0  , "Carl 'CJ' Johnson"                 , false],
 			[1  , "The Truth"                         , true],
 			[2  , "Maccer"                            , true],
@@ -1036,7 +1036,7 @@ let gameData = {
 			[312, "Army Guy"                          , true],
 			[313, "Barry Big Bear Thorne (Fat)"       , true],
 		],
-		VRR_GAME_GTA_IV: [
+		[VRR_GAME_GTA_IV]: [
 			[-2020305438,"Male Multiplayer"                , false],
 			[-641875910 ,"Female Multiplayer"              , false],
 			[-1370810922,"MODEL_SUPERLOD"                  , false],
@@ -1383,7 +1383,7 @@ let gameData = {
 			[-1139941790,"Tough Guy"                       , true],
 			[ 809067472 ,"Male Tourist"                    , true]
 		],
-		VRR_GAME_MAFIA_ONE: [
+		[VRR_GAME_MAFIA_ONE]: [
 			["Tommy.i3d"               , "Tommy Angelo"               , true ],
 			["TommyBOXER.i3d"          , "Tommy Angelo"               , true ],
 			["TommyCOAT.i3d"           , "Tommy Angelo"               , false],
@@ -1683,7 +1683,7 @@ let gameData = {
 		],
 	},
 	vehicles: {
-		VRR_GAME_GTA_III: [
+		[VRR_GAME_GTA_III]: [
 			[90, "Landstalker"],
 			[91, "Idaho"],
 			[92, "Stinger"],
@@ -1746,7 +1746,7 @@ let gameData = {
 			[149, "Toyz Van"],
 			[150, "Ghost"],
 		],
-		VRR_GAME_GTA_VC: [   // GTA VC
+		[VRR_GAME_GTA_VC]: [   // GTA VC
 			[130, "Landstalker"],
 			[131, "Idaho"],
 			[132, "Stinger"],
@@ -1855,7 +1855,7 @@ let gameData = {
 			[235, "Bloodring Banger 2"],
 			[236, "VCPD Cheetah"],
 		],
-		VRR_GAME_GTA_SA: [   // GTA San Andreas
+		[VRR_GAME_GTA_SA]: [   // GTA San Andreas
 			[400, "Landstalker"      ],
 			[401, "Bravura"          ],
 			[402, "Buffalo"          ],
@@ -2069,7 +2069,7 @@ let gameData = {
 			[610, "Farm Plow"        ],
 			[611, "Utility Trailer"  ],
 		],
-		VRR_GAME_GTA_IV: [ // GTA IV
+		[VRR_GAME_GTA_IV]: [ // GTA IV
 			[ 1264341792, "Admiral"          ],
 			[ 1560980623, "Airtug"           ],
 			[ 1171614426, "Ambulance"        ],
@@ -2198,7 +2198,7 @@ let gameData = {
 			[ 800869680 , "Subway"           ],
 			[-1953988645, "El Train"         ],
 		],
-		VRR_GAME_MAFIA_ONE: [   // Mafia 1
+		[VRR_GAME_MAFIA_ONE]: [   // Mafia 1
 			["fordtTud00.i3d"   , "Blue Bolt Ace Tudor"               ],
 			["fordtTud01.i3d"   , "Dark Blue Bolt Ace Tudor"          ],
 			["fordtTud02.i3d"   , "Brown Bolt Ace Tudor"              ],
@@ -2353,7 +2353,7 @@ let gameData = {
 		],
 	},
 	objects: {
-		VRR_GAME_GTA_III: [
+		[VRR_GAME_GTA_III]: [
 			[172, "BaseballBat"],
 			[173, "Colt45"],
 			[178, "Uzi"],
@@ -2368,7 +2368,7 @@ let gameData = {
 			[182, "RemoteDetonator"],
 			[1319, "GenericPackageWhite"],
 		],
-		VRR_GAME_GTA_VC: [   // GTA VC
+		[VRR_GAME_GTA_VC]: [   // GTA VC
 			[259, "BrassKnuckles"],
 			[260, "Screwdriver"],
 			[261, "GolfClub"],
@@ -2416,7 +2416,7 @@ let gameData = {
 			[597, "SodaBottle"],
 			[502, "GenericPackage2"]
 		],
-		VRR_GAME_GTA_SA: [ // GTA SA
+		[VRR_GAME_GTA_SA]: [ // GTA SA
 			[331, "BrassKnuckles"],
 			[333, "GolfClub"],
 			[334, "Nitestick"],
@@ -2475,7 +2475,7 @@ let gameData = {
 		],
 	},
 	weaponModels: {
-		VRR_GAME_GTA_III: [ // GTA III
+		[VRR_GAME_GTA_III]: [ // GTA III
 			0, 				// Fist
 			172,			// Baseball Bat
 			173,			// Colt 45
@@ -2489,7 +2489,7 @@ let gameData = {
 			174,			// Molotov Cocktail
 			170				// Grenade
 		],
-		VRR_GAME_GTA_VC: [ // GTA Vice City
+		[VRR_GAME_GTA_VC]: [ // GTA Vice City
 			0,
 			259,
 			260,
@@ -2530,7 +2530,7 @@ let gameData = {
 		],
 	},
 	locations: {
-		VRR_GAME_GTA_III: [ // GTA III
+		[VRR_GAME_GTA_III]: [ // GTA III
 			// Police Stations
 			["Portland Police Station", [1143.875, -675.1875, 14.97], 0.0, [1127.95, -666.06, 14.413]],
 			["Staunton Island Police Station", [340.25, -1123.375, 25.98], 0.0, null],
@@ -2590,7 +2590,7 @@ let gameData = {
 			["Hepburn Heights Projects", [913.98, -227.83, 4.413], 0.001, null],
 		],
 
-		VRR_GAME_GTA_VC: [ // GTA VC
+		[VRR_GAME_GTA_VC]: [ // GTA VC
 			// Police Stations
 			["Washington Beach Police Station", [399.77, -468.90, 11.73], 0.0, null],
 			["Vice Point Police Station", [508.96, 512.07, 12.10], 0.0, null],
@@ -2632,7 +2632,7 @@ let gameData = {
 			["Ocean Beach Pay-n-spray", [-18.51, -1256.76, 10.463], -1.556, null]
 		],
 
-		VRR_GAME_GTA_SA: [ // GTA SA
+		[VRR_GAME_GTA_SA]: [ // GTA SA
 			// Police Stations
 			["Los Santos Police Department", [1545.53, -1675.64, 13.561], -1.575, null],
 			["San Fierro Police Department", [-1605.16, 720.79, 11.90], 0.0, null],
@@ -2690,7 +2690,7 @@ let gameData = {
 			["Market Station", [814.26, -1345.38, 13.532], -1.624, null],
 		],
 
-		VRR_GAME_GTA_IV: [ // GTA IV
+		[VRR_GAME_GTA_IV]: [ // GTA IV
 			// Police Stations
 			["Broker Police Station", [894.99, -357.39, 18.185], 2.923, null],
 			["South Bohan Police Station", [435.40, 1592.29, 17.353], 3.087, null],
@@ -2802,7 +2802,7 @@ let gameData = {
 
 			// More will be added soon!
 		],
-		VRR_GAME_MAFIA_ONE: [
+		[VRR_GAME_MAFIA_ONE]: [
 			["Works Quarter Fire Station", [-1883.96, -4.89, -348.49], null],
 			["Salieri's Bar", [-1774.59, -5.62, 3.29], null],
 			["Little Italy Gas Station", [-1781.84, -4.83, -204.96], null],
@@ -2815,7 +2815,7 @@ let gameData = {
 		], // Mafia 1
 	},
 	weaponSlots: {
-		VRR_GAME_GTA_III: [
+		[VRR_GAME_GTA_III]: [
 			0,
 			1,
 			2,
@@ -2829,7 +2829,7 @@ let gameData = {
 			10,
 			11
 		],
-		VRR_GAME_GTA_VC: [
+		[VRR_GAME_GTA_VC]: [
 			0,
 			0,
 			1,
@@ -2868,7 +2868,7 @@ let gameData = {
 			-1,
 			9,
 		],
-		VRR_GAME_GTA_SA: [
+		[VRR_GAME_GTA_SA]: [
 			0,
 			1,
 			1,
@@ -2922,7 +2922,7 @@ let gameData = {
 		]
 	},
 	fightStyles: {
-		VRR_GAME_GTA_SA: [	// GTA SA
+		[VRR_GAME_GTA_SA]: [	// GTA SA
 			["Default", [4, 6]],
 			["Boxing", [5, 6]],
 			["Kung Fu", [6, 6]],
@@ -2931,7 +2931,7 @@ let gameData = {
 		],
 	},
 	walkStyles: {
-		VRR_GAME_GTA_III: [	// GTA III
+		[VRR_GAME_GTA_III]: [	// GTA III
 			"Man",
 			"Ped",
 			"Player",
@@ -2962,7 +2962,7 @@ let gameData = {
 	},
 	animations: {
 		// [name, groupId, animId, animType, deltaTime, null, null, null, null, moveType],
-		VRR_GAME_GTA_III: [ // GTA III
+		[VRR_GAME_GTA_III]: [ // GTA III
 			["walk", 0, 0, VRR_ANIMTYPE_NORMAL, 0.0, null, null, null, null, VRR_ANIMMOVE_NONE],
 			["jog", 0, 1, VRR_ANIMTYPE_NORMAL, 0.0, null, null, null, null, VRR_ANIMMOVE_NONE],
 			["look1", 0, 7, VRR_ANIMTYPE_NORMAL, 0.0, null, null, null, null, VRR_ANIMMOVE_NONE],
@@ -3001,7 +3001,7 @@ let gameData = {
 			["sitarmright", 0, 120, VRR_ANIMTYPE_NORMAL, 0.0, null, null, null, null, VRR_ANIMMOVE_BACK],
 			["tazed", 0, 13, VRR_ANIMTYPE_FORCED, 0.0, null, null, null, null, VRR_ANIMMOVE_NONE],
 		],
-		VRR_GAME_GTA_VC: [ // GTA VC
+		[VRR_GAME_GTA_VC]: [ // GTA VC
 			["walk", 0, 0, VRR_ANIMTYPE_NORMAL, 0.0, null, null, null, null, VRR_ANIMMOVE_NONE],
 			["jog", 0, 1, VRR_ANIMTYPE_NORMAL, 0.0, null, null, null, null, VRR_ANIMMOVE_NONE],
 			["handcuffs", 0, 7, VRR_ANIMTYPE_NORMAL, 0.0, null, null, null, null, VRR_ANIMMOVE_NONE],
@@ -3045,7 +3045,7 @@ let gameData = {
 			["sitback", 0, 169, VRR_ANIMTYPE_NORMAL, 0.0, null, null, null, null, VRR_ANIMMOVE_BACK],
 			["tazed", 0, 13, VRR_ANIMTYPE_FORCED, 0.0, null, null, null, null, VRR_ANIMMOVE_NONE],
 		],
-		VRR_GAME_GTA_SA: [ // GTA SA
+		[VRR_GAME_GTA_SA]: [ // GTA SA
 			["walk", 0, 0, VRR_ANIMTYPE_NORMAL, 0.0, null, null, null, null, VRR_ANIMMOVE_NONE],
 			["jog", 0, 1, VRR_ANIMTYPE_NORMAL, 0.0, null, null, null, null, VRR_ANIMMOVE_NONE],
 			["look1", 0, 4, VRR_ANIMTYPE_NORMAL, 0.0, null, null, null, null, VRR_ANIMMOVE_NONE],
@@ -3111,17 +3111,17 @@ let gameData = {
 			//["facetalk1", 0, 160, VRR_ANIMTYPE_NORMAL, 0.0, null, null, null, null, VRR_ANIMMOVE_NONE],
 			*/
 		],
-		VRR_GAME_GTA_IV: [ // GTA IV
+		[VRR_GAME_GTA_IV]: [ // GTA IV
 			["dance1", "DAN_LOOP_A", "DANCING", 16.0, true, false, true, false],
 		],
 	},
 	meleeWeapons: {
-		VRR_GAME_GTA_III: [1],
-		VRR_GAME_GTA_VC: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-		VRR_GAME_GTA_SA: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+		[VRR_GAME_GTA_III]: [1],
+		[VRR_GAME_GTA_VC]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+		[VRR_GAME_GTA_SA]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
 	},
 	blipSprites: {
-		VRR_GAME_GTA_III: {	// GTA III
+		[VRR_GAME_GTA_III]: {	// GTA III
 			PoliceStation: 8,
 			FireStation: 9,
 			Hospital: 12,
@@ -3135,7 +3135,7 @@ let gameData = {
 			Business: 0,
 			House: 0,
 		},
-		VRR_GAME_GTA_VC: {	// GTA VC
+		[VRR_GAME_GTA_VC]: {	// GTA VC
 			PoliceStation: 0,
 			FireStation: 0,
 			Hospital: 0,
@@ -3149,7 +3149,7 @@ let gameData = {
 			Business: 0,
 			House: 0,
 		},
-		VRR_GAME_GTA_SA: {	// GTA SA
+		[VRR_GAME_GTA_SA]: {	// GTA SA
 			PoliceStation: 30,
 			FireStation: 20,
 			Hospital: 22,
@@ -3180,7 +3180,7 @@ let gameData = {
 			Race: 53,
 			Job: 56,
 		},
-		VRR_GAME_GTA_IV: {	// GTA IV
+		[VRR_GAME_GTA_IV]: {	// GTA IV
 			PoliceStation: 60,
 			FireStation: 61,
 			Hospital: 62,
@@ -3220,7 +3220,7 @@ let gameData = {
 		},
 	},
 	pickupModels: {
-		VRR_GAME_GTA_III: { // GTA 3
+		[VRR_GAME_GTA_III]: { // GTA 3
 			PoliceStation: 1361,
 			FireStation: 1361,
 			Hospital: 1361,
@@ -3238,7 +3238,7 @@ let gameData = {
 			Exit: 1361,
 			Job: 1361,
 		},
-		VRR_GAME_GTA_VC: { // GTA Vice City
+		[VRR_GAME_GTA_VC]: { // GTA Vice City
 			PoliceStation: 375,
 			FireStation: 406,
 			Hospital: 366,
@@ -3260,7 +3260,7 @@ let gameData = {
 			KillFrenzy: 383,
 			Pill: 367,
 		},
-		VRR_GAME_GTA_SA: { // GTA San Andreas
+		[VRR_GAME_GTA_SA]: { // GTA San Andreas
 			PoliceStation: 1247,
 			FireStation: 1318,
 			Hospital: 1240,
@@ -3284,7 +3284,7 @@ let gameData = {
 			RampageSkull: 1254,
 			TwoPlayerRampage: 1313,
 		},
-		VRR_GAME_GTA_IV: {   // GTA IV
+		[VRR_GAME_GTA_IV]: {   // GTA IV
 			PoliceStation: -1,
 			FireStation: -1,
 			Hospital: -1,
@@ -3304,7 +3304,7 @@ let gameData = {
 		}
 	},
 	pickupTypes: {
-		VRR_GAME_GTA_III: { // GTA 3
+		[VRR_GAME_GTA_III]: { // GTA 3
 			business: 255,
 			house: 255,
 			bank: 255,
@@ -3312,7 +3312,7 @@ let gameData = {
 			info: 255,
 			job: 255,
 		},
-		VRR_GAME_GTA_VC: { // GTA Vice City
+		[VRR_GAME_GTA_VC]: { // GTA Vice City
 			business: 255,
 			house: 255,
 			bank: 255,
@@ -3320,7 +3320,7 @@ let gameData = {
 			info: 255,
 			job: 255,
 		},
-		VRR_GAME_GTA_SA: { // GTA San Andreas
+		[VRR_GAME_GTA_SA]: { // GTA San Andreas
 			business: 1,
 			house: 1,
 			bank: 1,
@@ -3328,7 +3328,7 @@ let gameData = {
 			info: 1,
 			job: 1,
 		},
-		VRR_GAME_GTA_IV: { // GTA IV
+		[VRR_GAME_GTA_IV]: { // GTA IV
 			business: -1,
 			house: -1,
 			bank: -1,
@@ -3340,17 +3340,17 @@ let gameData = {
 
 	// THIS IS SCREEN HEIGHT, NOT ACTUAL DOOR POSITION IN THE WORLD
 	propertyLabelHeight: {
-		VRR_GAME_GTA_III: 85,
-		VRR_GAME_GTA_VC: 85,
-		VRR_GAME_GTA_SA: 85,
-		VRR_GAME_GTA_IV: 85,
-		VRR_GAME_GTA_IV_EFLC: 85,
+		[VRR_GAME_GTA_III]: 85,
+		[VRR_GAME_GTA_VC]: 85,
+		[VRR_GAME_GTA_SA]: 85,
+		[VRR_GAME_GTA_IV]: 85,
+		[VRR_GAME_GTA_IV_EFLC]: 85,
 		VRR_GAME_GTA_MAFIA_ONE: 85,
 		VRR_GAME_GTA_MAFIA_TWO: 85,
 		VRR_GAME_GTA_MAFIA_THREE: 85,
 	},
 	defaultBusinessItems: {
-		VRR_GAME_GTA_III: { // GTA III
+		[VRR_GAME_GTA_III]: { // GTA III
 			ClothingStore: [
 				["Outfit", 500, 2]
 			],
@@ -3480,7 +3480,7 @@ let gameData = {
 				["Vehicle Secondary Colour Kit", 500, 2],
 			],
 		},
-		VRR_GAME_GTA_VC: { // GTA VC
+		[VRR_GAME_GTA_VC]: { // GTA VC
 			ClothingStore: [
 				["Outfit", 500, 2]
 			],
@@ -3622,7 +3622,7 @@ let gameData = {
 				["Vehicle Secondary Colour Kit", 500, 2],
 			],
 		},
-		VRR_GAME_GTA_SA: { // GTA SA
+		[VRR_GAME_GTA_SA]: { // GTA SA
 			ClothingStore: [
 				["Outfit", 500, 2]
 			],
@@ -3790,7 +3790,7 @@ let gameData = {
 				["Hydraulics", 500, 2],
 			],
 		},
-		VRR_GAME_GTA_IV: { // GTA IV
+		[VRR_GAME_GTA_IV]: { // GTA IV
 			ClothingStore: [
 				["Outfit", 500, 2]
 			],
@@ -3928,7 +3928,7 @@ let gameData = {
 				["Vehicle Secondary Colour Kit", 500, 2],
 			],
 		},
-		VRR_GAME_MAFIA_ONE: { // Mafia 1
+		[VRR_GAME_MAFIA_ONE]: { // Mafia 1
 			ClothingStore: [
 				["Outfit", 500, 2]
 			],
@@ -4065,7 +4065,7 @@ let gameData = {
 		}
 	},
 	interiors: {
-		VRR_GAME_GTA_VC: { // GTA VC
+		[VRR_GAME_GTA_VC]: { // GTA VC
 			Mall: [toVector3(379.62, 1007.00, 19.22), 4],
 			MalibuClub: [toVector3(489.83, -76.49, 11.48), 17],
 			PoliceStation: [toVector3(396.38, -472.96, 12.34), 12],
@@ -4085,7 +4085,7 @@ let gameData = {
 			PrintWorks: [toVector3(-1064.98, -279.093, 12.0882), 18],
 		},
 
-		VRR_GAME_GTA_SA: { // GTA SA
+		[VRR_GAME_GTA_SA]: { // GTA SA
 			LSPD: [toVector3(247.113, 62.929, 1003.64), 2],
 			LVPD: [toVector3(288.82, 167.39, 1007.17), 3],
 			SFPD: [toVector3(246.40, 110.84, 1003.22), 10],
@@ -4185,7 +4185,7 @@ let gameData = {
 			Courthouse: [toVector3(1219.51, -1792.69, 2431.34), 0],
 		},
 
-		VRR_GAME_GTA_IV: { // GTA IV
+		[VRR_GAME_GTA_IV]: { // GTA IV
 			Office2: [toVector3(-1153.30, 417.37, 5.578), 0],
 			House1: [toVector3(-426.16, 1466.52, 38.971), 0],
 			House2: [toVector3(-969.77, 883.27, 18.817), 0],
@@ -4215,21 +4215,21 @@ let gameData = {
 			Prison: [toVector3(-1082.69, -364.05, 7.404), 0],
 			Ship: [toVector3(-336.53, -1494.56, 9.945), 0],
 		},
-		VRR_GAME_GTA_IV_EFLC: {}, // GTA IV EFLC
-		VRR_GAME_MAFIA_ONE: { // Mafia 1
+		[VRR_GAME_GTA_IV_EFLC]: {}, // GTA IV EFLC
+		[VRR_GAME_MAFIA_ONE]: { // Mafia 1
 		},
-		VRR_GAME_MAFIA_TWO: { // Mafia 2
+		[VRR_GAME_MAFIA_TWO]: { // Mafia 2
 		},
-		VRR_GAME_MAFIA_THREE: { // Mafia 3
+		[VRR_GAME_MAFIA_THREE]: { // Mafia 3
 		},
-		VRR_GAME_MAFIA_ONE_DE: { // Mafia 1 Definitive Edition
+		[VRR_GAME_MAFIA_ONE_DE]: { // Mafia 1 Definitive Edition
 		},
 	},
 	skinChangePosition: {
-		VRR_GAME_GTA_SA: [toVector3(258.14, -41.76, 1002.023), 1.322, 14],
+		[VRR_GAME_GTA_SA]: [toVector3(258.14, -41.76, 1002.023), 1.322, 14],
 	},
 	policeStations: {
-		VRR_GAME_GTA_III: [	// GTA 3
+		[VRR_GAME_GTA_III]: [	// GTA 3
 			{
 				position: toVector3(1143.875, -675.1875, 14.97),
 				heading: 1.5,
@@ -4249,7 +4249,7 @@ let gameData = {
 				name: "Shoreside Vale",
 			},
 		],
-		VRR_GAME_GTA_VC: [	// GTA VC
+		[VRR_GAME_GTA_VC]: [	// GTA VC
 			{
 				position: toVector3(399.77, -468.90, 11.73),
 				heading: 0.0,
@@ -4275,7 +4275,7 @@ let gameData = {
 				name: "Little Havana",
 			},
 		],
-		VRR_GAME_GTA_SA: [	// GTA SA
+		[VRR_GAME_GTA_SA]: [	// GTA SA
 			{
 				position: toVector3(1545.53, -1675.64, 13.561),
 				heading: -1.575,
@@ -4307,7 +4307,7 @@ let gameData = {
 				name: "Dillimore",
 			},
 		],
-		VRR_GAME_GTA_IV: [	// GTA IV
+		[VRR_GAME_GTA_IV]: [	// GTA IV
 
 			{
 				position: toVector3(894.99, -357.39, 18.185),
@@ -4378,7 +4378,7 @@ let gameData = {
 		],
 	},
 	fireStations: {
-		VRR_GAME_GTA_III: [	// GTA 3
+		[VRR_GAME_GTA_III]: [	// GTA 3
 			{
 				position: toVector3(1103.70, -52.45, 7.49),
 				heading: 1.5,
@@ -4398,16 +4398,16 @@ let gameData = {
 				name: "Shoreside Vale",
 			},
 		],
-		VRR_GAME_GTA_VC: [	// GTA VC
+		[VRR_GAME_GTA_VC]: [	// GTA VC
 
 		],
-		VRR_GAME_GTA_SA: [	// GTA SA
+		[VRR_GAME_GTA_SA]: [	// GTA SA
 
 		],
 		VRR_GAME_GTA_UG: [	// GTA UG
 
 		],
-		VRR_GAME_GTA_IV: [	// GTA IV
+		[VRR_GAME_GTA_IV]: [	// GTA IV
 			{
 				position: toVector3(953.13, 95.90, 35.004),
 				heading: 1.595,
@@ -4441,7 +4441,7 @@ let gameData = {
 		],
 	},
 	hospitals: {
-		VRR_GAME_GTA_III: [	// GTA 3
+		[VRR_GAME_GTA_III]: [	// GTA 3
 			{
 				position: toVector3(1144.25, -596.875, 14.97),
 				heading: 1.5,
@@ -4461,7 +4461,7 @@ let gameData = {
 				name: "Shoreside Vale",
 			},
 		],
-		VRR_GAME_GTA_VC: [	// GTA VC
+		[VRR_GAME_GTA_VC]: [	// GTA VC
 			{
 				position: toVector3(493.14, 709.31, 11.80),
 				heading: 1.5,
@@ -4475,7 +4475,7 @@ let gameData = {
 				name: "Unknown",
 			},
 		],
-		VRR_GAME_GTA_SA: [	// GTA SA
+		[VRR_GAME_GTA_SA]: [	// GTA SA
 			{
 				position: toVector3(1172.96, -1323.42, 15.40),
 				heading: 1.5,
@@ -4507,7 +4507,7 @@ let gameData = {
 				name: "Fort Carson Medical Center",
 			},
 		],
-		VRR_GAME_GTA_IV: [	// GTA IV
+		[VRR_GAME_GTA_IV]: [	// GTA IV
 			{
 				position: toVector3(1199.59, 196.78, 33.554),
 				heading: 1.633,
@@ -4533,7 +4533,7 @@ let gameData = {
 				name: "Acter Medical Center",
 			},
 		],
-		VRR_GAME_MAFIA_ONE: [
+		[VRR_GAME_MAFIA_ONE]: [
 			// Mafia 1
 			{
 				position: toVector3(-759.00, 11.40, 747.31),
@@ -4544,7 +4544,7 @@ let gameData = {
 		],
 	},
 	payAndSprays: {
-		VRR_GAME_GTA_III: [	// GTA 3
+		[VRR_GAME_GTA_III]: [	// GTA 3
 			{
 				position: toVector3(925.4, -360.3, 10.83),
 				blip: false,
@@ -4563,7 +4563,7 @@ let gameData = {
 		],
 	},
 	ammunations: {
-		VRR_GAME_GTA_III: [	// GTA 3
+		[VRR_GAME_GTA_III]: [	// GTA 3
 			{
 				position: toVector3(1068.3, -400.9, 15.24),
 				blip: false,
@@ -4577,7 +4577,7 @@ let gameData = {
 		],
 	},
 	fuelStations: {
-		VRR_GAME_GTA_III: [	// GTA 3
+		[VRR_GAME_GTA_III]: [	// GTA 3
 			{
 				position: toVector3(1161.9, -76.73, 7.27),
 				blip: false,
@@ -4586,28 +4586,28 @@ let gameData = {
 		],
 	},
 	taxiModels: {
-		VRR_GAME_GTA_III: [ // GTA III
+		[VRR_GAME_GTA_III]: [ // GTA III
 			110,
 			128,
 			148
 		],
-		VRR_GAME_GTA_VC: [ // GTA VC
+		[VRR_GAME_GTA_VC]: [ // GTA VC
 			150,
 			160,
 			216
 		],
-		VRR_GAME_GTA_SA: [// GTA SA
+		[VRR_GAME_GTA_SA]: [// GTA SA
 			420,
 			438
 		],
-		VRR_GAME_GTA_IV: [ // GTA IV
+		[VRR_GAME_GTA_IV]: [ // GTA IV
 			-1932515764,
 			-956048545,
 			1208856469
 		],
 	},
 	vehicleUpgrades: {
-		VRR_GAME_GTA_SA: {   // GTA SA
+		[VRR_GAME_GTA_SA]: {   // GTA SA
 			1000: "Pro Spoiler",
 			1001: "Win Spoiler",
 			1002: "Drag Spoiler",
@@ -4803,7 +4803,7 @@ let gameData = {
 		},
 	},
 	fishingLocations: {
-		VRR_GAME_GTA_SA: [   // GTA San Andreas
+		[VRR_GAME_GTA_SA]: [   // GTA San Andreas
 			toVector3(403.8266, -2088.7598, 7.8359),
 			toVector3(398.7553, -2088.7490, 7.8359),
 			toVector3(396.2197,-2088.6692,7.8359),
@@ -4817,7 +4817,7 @@ let gameData = {
 		],
 	},
 	fishingCollectables: {
-		VRR_GAME_GTA_SA: [
+		[VRR_GAME_GTA_SA]: [
 			// Fish
 			["Salmon"],
 			["Tuna"],
@@ -4843,7 +4843,7 @@ let gameData = {
 			["Soggy Dildo"],
 			["Clump of Seaweed"],
 		],
-		VRR_GAME_GTA_VC: [
+		[VRR_GAME_GTA_VC]: [
 			// Fish
 			["Salmon"],
 			["Tuna"],
@@ -4869,7 +4869,7 @@ let gameData = {
 			["Soggy Dildo"],
 			["Clump of Seaweed"],
 		],
-		VRR_GAME_GTA_SA: [
+		[VRR_GAME_GTA_SA]: [
 			// Fish
 			["Salmon"],
 			["Tuna"],
@@ -4895,7 +4895,7 @@ let gameData = {
 			["Soggy Dildo"],
 			["Clump of Seaweed"],
 		],
-		VRR_GAME_GTA_IV: [
+		[VRR_GAME_GTA_IV]: [
 			// Fish
 			["Salmon"],
 			["Tuna"],
@@ -4921,7 +4921,7 @@ let gameData = {
 			["Soggy Dildo"],
 			["Clump of Seaweed"],
 		],
-		VRR_GAME_MAFIA_ONE: [
+		[VRR_GAME_MAFIA_ONE]: [
 			// Fish
 			["Salmon"],
 			["Tuna"],
@@ -4949,26 +4949,26 @@ let gameData = {
 		],
 	},
 	mainWorldDimension: {
-		VRR_GAME_GTA_III: 0, // GTA 3
-		VRR_GAME_GTA_VC: 0, // GTA VC
-		VRR_GAME_GTA_SA: 0, // GTA SA
-		VRR_GAME_GTA_IV: 0, // GTA IV
-		VRR_GAME_GTA_IV_EFLC: 0, // GTA IV EFLC
-		VRR_GAME_MAFIA_ONE: 0, // Mafia 1
-		VRR_GAME_MAFIA_TWO: 0, // Mafia 2
-		VRR_GAME_MAFIA_THREE: 0, // Mafia 3
-		VRR_GAME_MAFIA_ONE_DE: 0, // Mafia Definitive Edition
+		[VRR_GAME_GTA_III]: 0, // GTA 3
+		[VRR_GAME_GTA_VC]: 0, // GTA VC
+		[VRR_GAME_GTA_SA]: 0, // GTA SA
+		[VRR_GAME_GTA_IV]: 0, // GTA IV
+		[VRR_GAME_GTA_IV_EFLC]: 0, // GTA IV EFLC
+		[VRR_GAME_MAFIA_ONE]: 0, // Mafia 1
+		[VRR_GAME_MAFIA_TWO]: 0, // Mafia 2
+		[VRR_GAME_MAFIA_THREE]: 0, // Mafia 3
+		[VRR_GAME_MAFIA_ONE_DE]: 0, // Mafia Definitive Edition
 	},
 	mainWorldInterior: {
-		VRR_GAME_GTA_III: 0, // GTA 3
-		VRR_GAME_GTA_VC: 0, // GTA VC
-		VRR_GAME_GTA_SA: 0, // GTA SA
-		VRR_GAME_GTA_IV: 0, // GTA IV
-		VRR_GAME_GTA_IV_EFLC: 0, // GTA IV EFLC
-		VRR_GAME_MAFIA_ONE: 0, // Mafia 1
-		VRR_GAME_MAFIA_TWO: 0, // Mafia 2
-		VRR_GAME_MAFIA_THREE: 0, // Mafia 3
-		VRR_GAME_MAFIA_ONE_DE: 0, // Mafia Definitive Edition
+		[VRR_GAME_GTA_III]: 0, // GTA 3
+		[VRR_GAME_GTA_VC]: 0, // GTA VC
+		[VRR_GAME_GTA_SA]: 0, // GTA SA
+		[VRR_GAME_GTA_IV]: 0, // GTA IV
+		[VRR_GAME_GTA_IV_EFLC]: 0, // GTA IV EFLC
+		[VRR_GAME_MAFIA_ONE]: 0, // Mafia 1
+		[VRR_GAME_MAFIA_TWO]: 0, // Mafia 2
+		[VRR_GAME_MAFIA_THREE]: 0, // Mafia 3
+		[VRR_GAME_MAFIA_ONE_DE]: 0, // Mafia Definitive Edition
 	},
 };
 

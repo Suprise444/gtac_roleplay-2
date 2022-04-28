@@ -16,8 +16,10 @@ function initLocaleScript() {
 
 function getLocaleString(client, stringName, ...args) {
 	let tempString = getRawLocaleString(stringName, getPlayerData(client).locale);
-	if(tempString == "") {
+	if(tempString == "" || tempString == null || typeof tempString == "undefined") {
+		logToConsole(LOG_WARN, `[VRR.Locale] Locale string missing for ${stringName} on language ${getLocaleData(getPlayerData(client).locale).englishName}`);
 		submitBugReport(client, `(AUTOMATED REPORT) Locale string "${stringName}" is missing for "${getPlayerLocaleName(client)}"`);
+		return "";
 	}
 
 	for(let i = 1; i <= args.length; i++) {
@@ -31,7 +33,8 @@ function getLocaleString(client, stringName, ...args) {
 
 function getLanguageLocaleString(localeId, stringName, ...args) {
 	let tempString = getRawLocaleString(stringName, localeId);
-	if(tempString == "") {
+	if(tempString == "" || tempString == null || typeof tempString == "undefined") {
+		logToConsole(LOG_WARN, `[VRR.Locale] Locale string missing for ${stringName} on language ${getLocaleData(getPlayerData(client).locale).englishName}`);
 		submitBugReport(client, `(AUTOMATED REPORT) Locale string "${stringName}" is missing for "${getPlayerLocaleName(client)}"`);
 	}
 

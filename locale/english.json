@@ -185,8 +185,8 @@
     "Kilometers": "Kilometers",
     "Miles": "Miles",
     "MustBeVehicleDriver": "You must be the driver of the vehicle!",
-    "PlayerJoinedServer": "{1} has joined the game from {1}!",
-    "PlayerLeftServer": "{1} has left the game! ({1})",
+    "PlayerJoined": "{1} has joined the game from {2}!",
+    "PlayerLeftServer": "{1} has left the game! ({2})",
     "DisconnectReasons": [
         "Lost Connection",
         "Disconnected",

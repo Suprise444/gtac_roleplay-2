@@ -191,8 +191,8 @@
     "Kilometers": "Kilómetros",
     "Miles": "Millas",
     "MustBeVehicleDriver": "¡Debes ser el conductor del vehículo!",
-    "PlayerJoinedServer": "¡{1} se unió al juego desde {1}!",
-    "PlayerLeftServer": "¡{1} ha abandonado el juego! ({1})",
+    "PlayerJoinedServer": "¡{1} se unió al juego desde {2}!",
+    "PlayerLeftServer": "¡{1} ha abandonado el juego! ({2})",
     "DisconnectReasons": [
         "Conexión perdida",
         "Desconectado",
@@ -478,5 +478,6 @@
 		"Want to make a clan? Use {1} for details",
 		"Legal weapons can be purchased at any ammunation"
 	],
-	"PromptResponseTip": "Use {1} to accept or {2} to decline"
+	"PromptResponseTip": "Use {1} to accept or {2} to decline",
+    "PlayerConnecting": "👋 {1} is connecting to the server"
 }

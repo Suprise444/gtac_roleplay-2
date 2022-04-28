@@ -295,7 +295,7 @@ let gameData = {
 			"Overcast/Cloudy",
 			"Grey/Cloudy"
 		],
-		VRR_GAME_GTA_IV_VC: [ // GTA Vice City
+		VRR_GAME_GTA_VC: [ // GTA Vice City
 			"Clear",
 			"Overcast",
 			"Thunderstorm",
@@ -427,7 +427,7 @@ let gameData = {
 		],
 	},
 	skins: {
-		VRR_GAME_GTA_III: [ 	// GTA III
+		VRR_GAME_GTA_III: [
 			[0  , "Claude"                     , false],
 			[1  , "Police Officer"             , false],
 			[2  , "SWAT Officer"               , false],
@@ -545,7 +545,7 @@ let gameData = {
 			[120, "Darkel"                     , true ],
 			[121, "Chuff Security Officer"     , false],
 		],
-		VRR_GAME_GTA_VC: [ 	// GTA Vice City
+		VRR_GAME_GTA_VC: [
 			[0  , "Tommy Vercetti"                    , false],
 			[1  , "Police Officer"                    , false],
 			[2  , "SWAT Officer"                      , false],
@@ -734,8 +734,7 @@ let gameData = {
 			[186, "Kent Paul"                         , true ],
 			[187, "Big Head Taxi Driver"              , true ],
 		],
-
-		VRR_GAME_GTA_SA: [ // GTA San Andreas
+		VRR_GAME_GTA_SA: [
 			[0  , "Carl 'CJ' Johnson"                 , false],
 			[1  , "The Truth"                         , true],
 			[2  , "Maccer"                            , true],
@@ -1037,8 +1036,7 @@ let gameData = {
 			[312, "Army Guy"                          , true],
 			[313, "Barry Big Bear Thorne (Fat)"       , true],
 		],
-
-		VRR_GAME_GTA_IV: [	// GTA IV
+		VRR_GAME_GTA_IV: [
 			[-2020305438,"Male Multiplayer"                , false],
 			[-641875910 ,"Female Multiplayer"              , false],
 			[-1370810922,"MODEL_SUPERLOD"                  , false],
@@ -1385,7 +1383,7 @@ let gameData = {
 			[-1139941790,"Tough Guy"                       , true],
 			[ 809067472 ,"Male Tourist"                    , true]
 		],
-		VRR_GAME_GTA_III: [ 	// Mafia 1
+		VRR_GAME_MAFIA_ONE: [
 			["Tommy.i3d"               , "Tommy Angelo"               , true ],
 			["TommyBOXER.i3d"          , "Tommy Angelo"               , true ],
 			["TommyCOAT.i3d"           , "Tommy Angelo"               , false],

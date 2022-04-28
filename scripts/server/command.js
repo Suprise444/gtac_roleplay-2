@@ -26,7 +26,6 @@ function loadCommands() {
 			new CommandData("register", registerCommand, "<password>", getStaffFlagValue("None"), false, false, "Creates an account"),
 			new CommandData("changepass", changeAccountPasswordCommand, "<old password> <new password>", getStaffFlagValue("None"), true, false, "Change an account password"),
 			new CommandData("iplogin", toggleAutoLoginByIPCommand, "", getStaffFlagValue("None"), true, false, "Toggle whether to automatically login if you join with the same IP as your last join"),
-			new CommandData("autolastchar", toggleAutoSelectLastCharacterCommand, "", getStaffFlagValue("None"), true, false, "Toggle whether to automatically spawn with the last character you played as"),
 			new CommandData("gui", toggleAccountGUICommand, "", getStaffFlagValue("None"), false, false, "Toggle whether to use GUI. If GUI is disabled on the server, it won't show even if you have GUI enabled."),
 			new CommandData("2fa", toggleAccountTwoFactorAuthCommand, "", getStaffFlagValue("None"), true, false, "Set up and use two-factor authentication."),
 			new CommandData("setemail", setAccountEmailCommand, "<email address>", getStaffFlagValue("None"), true, false, "Sets your email. To reset your password, you must have a valid email set and verified."),
@@ -439,6 +438,7 @@ function loadCommands() {
 			new CommandData("getstaffflags", getPlayerStaffFlagsCommand, "<player name/id>", getStaffFlagValue("ManageAdmins"), true, true, "Shows a list of all staff flags a player has (this server only)."),
 			new CommandData("clearstaffflags", removePlayerStaffFlagsCommand, "<player name/id>", getStaffFlagValue("ManageAdmins"), true, true, "Removes all staff flags for a player (this server only)."),
 			new CommandData("staffflags", getStaffFlagsCommand, "", getStaffFlagValue("ManageAdmins"), true, true, "Shows a list of all valid staff flag names."),
+			new CommandData("stafftitle", setPlayerStaffTitleCommand, "", getStaffFlagValue("ManageAdmins"), true, true, "Sets a player's staff title."),
 			new CommandData("givemoney", givePlayerMoneyCommand, "<player name/id> <amount>", getStaffFlagValue("serverManager"), true, true),
 			new CommandData("nonrpname", forceCharacterNameChangeCommand, "<player name/id>", getStaffFlagValue("BasicModeration"), true, true, "Forces a player to change their current character's name."),
 			new CommandData("setname", setCharacterNameCommand, "<player name/id> <first name> <last name>", getStaffFlagValue("BasicModeration"), true, true, "Changes a character's name directly."),
@@ -462,6 +462,7 @@ function loadCommands() {
 			new CommandData("switchchar", switchCharacterCommand, "", getStaffFlagValue("None"), true, false),
 			new CommandData("newchar", newCharacterCommand, "<first name> <last name>", getStaffFlagValue("None"), true, false),
 			new CommandData("usechar", useCharacterCommand, "<character id>", getStaffFlagValue("None"), true, false),
+			new CommandData("autolastchar", toggleAutoSelectLastCharacterCommand, "", getStaffFlagValue("None"), true, false, "Toggle whether to automatically spawn with the last character you played as"),
 		],
 		translate: [],
 		trigger: [

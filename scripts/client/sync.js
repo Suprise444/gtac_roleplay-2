@@ -27,9 +27,6 @@ function processSync(event, deltaTime) {
 				sendNetworkEventToServer("vrr.playerDeath");
 			}
 		}
-
-		sendNetworkEventToServer("vrr.player.position", localPlayer.position);
-		sendNetworkEventToServer("vrr.player.heading", localPlayer.heading);
 	}
 
 	if(localPlayer.health <= 0) {
@@ -441,8 +438,6 @@ function syncElementProperties(element) {
 	}
 
 }
-
-
 
 // ===========================================================================
 

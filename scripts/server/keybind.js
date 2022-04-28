@@ -10,7 +10,6 @@
 
 function initKeyBindScript() {
 	logToConsole(LOG_INFO, "[VRR.KeyBind]: Initializing key bind script ...");
-	getGlobalConfig().keyBind = loadKeyBindConfiguration();
 	logToConsole(LOG_INFO, "[VRR.KeyBind]: Key bind script initialized!");
 }
 
@@ -191,13 +190,6 @@ function sendAccountKeyBindsToClient(client) {
 	for(let i in getPlayerData(client).keyBinds) {
 		sendAddAccountKeyBindToClient(client, getPlayerData(client).keyBinds[i].key, getPlayerData(client).keyBinds[i].keyState);
 	}
-}
-
-// ===========================================================================
-
-function loadKeyBindConfiguration() {
-	let keyBindConfigFile = loadTextFile("config/keybind.json");
-	return JSON.parse(keyBindConfigFile);
 }
 
 // ===========================================================================

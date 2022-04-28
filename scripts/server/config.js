@@ -8,8 +8,6 @@
 // ===========================================================================
 
 let serverConfig = false;
-let databaseConfig = false;
-let emailConfig = false;
 let gameConfig = false;
 
 // ===========================================================================
@@ -17,6 +15,11 @@ let gameConfig = false;
 let globalConfig = {
 	keyBind: [],
 	economy: {},
+	database: {},
+	locale: {},
+	accents: {},
+	discord: {},
+	email: {},
 	accountPasswordHash: "SHA512",
 	npcFarProximity: 100,
 	npcMediumProximity: 40,
@@ -81,6 +84,8 @@ let globalConfig = {
 	houseBlipStreamOutDistance: 220,
 	jobBlipStreamInDistance: 200,
 	jobBlipStreamOutDistance: 220,
+
+
 };
 
 // ===========================================================================
@@ -93,19 +98,65 @@ function initConfigScript() {
 // ===========================================================================
 
 function loadGlobalConfig() {
-	getGlobalConfig().database = loadDatabaseConfig();
-	getGlobalConfig().economy = loadEconomyConfig();
-	getGlobalConfig().locale = loadLocaleConfig();
-	getGlobalConfig().accents = loadAccentConfig();
-	getGlobalConfig().discord = loadDiscordConfig();
+	logToConsole(LOG_DEBUG, "[VRR.Config] Loading global configuration ...");
+	try {
+		getGlobalConfig().database = loadDatabaseConfig();
+	} catch(error) {
+		logToConsole(LOG_ERROR, `[VRR.Config] Failed to load global configuration. Error: ${error}`);
+		thisResource.stop();
+	}
+
+	try {
+		getGlobalConfig().economy = loadEconomyConfig();
+	} catch(error) {
+		logToConsole(LOG_ERROR, `[VRR.Config] Failed to load economy configuration. Error: ${error}`);
+		thisResource.stop();
+	}
+
+	try {
+		getGlobalConfig().locale = loadLocaleConfig();
+	} catch(error) {
+		logToConsole(LOG_ERROR, `[VRR.Config] Failed to load locale configuration. Error: ${error}`);
+		thisResource.stop();
+	}
+
+	try {
+		getGlobalConfig().accents = loadAccentConfig();
+	} catch(error) {
+		logToConsole(LOG_ERROR, `[VRR.Config] Failed to load accent configuration. Error: ${error}`);
+		thisResource.stop();
+	}
+
+	try {
+		getGlobalConfig().discord = loadDiscordConfig();
+	} catch(error) {
+		logToConsole(LOG_ERROR, `[VRR.Config] Failed to load discord configuration. Error: ${error}`);
+		thisResource.stop();
+	}
+
+	try {
+		getGlobalConfig().keyBind = loadKeyBindConfig();
+	} catch(error) {
+		logToConsole(LOG_ERROR, `[VRR.Config] Failed to load keybind configuration. Error: ${error}`);
+		thisResource.stop();
+	}
+
+	try {
+		getGlobalConfig().email = loadEmailConfig();
+	} catch(error) {
+		logToConsole(LOG_ERROR, `[VRR.Config] Failed to load email configuration. Error: ${error}`);
+		thisResource.stop();
+	}
+
+	logToConsole(LOG_DEBUG, "[VRR.Config] Loaded global configuration successfully!");
 }
 
 // ===========================================================================
 
-function loadServerConfigFromGameAndPort(gameId, port, mpMod) {
+function loadServerConfigFromGameAndPort(gameId, port) {
 	let dbConnection = connectToDatabase();
 	if(dbConnection) {
-		let dbQueryString = `SELECT * FROM svr_main WHERE svr_game = ${gameId} AND svr_port = ${port} AND svr_mpmod = ${mpMod} LIMIT 1;`;
+		let dbQueryString = `SELECT * FROM svr_main WHERE svr_game = ${gameId} AND svr_port = ${port} LIMIT 1;`;
 		let dbQuery = queryDatabase(dbConnection, dbQueryString);
 		if(dbQuery) {
 			if(dbQuery.numRows > 0) {
@@ -365,7 +416,7 @@ function setWeatherCommand(command, params, client) {
 
 	getServerConfig().needsSaved = true;
 
-	announceAdminAction("ServerWeatherSet", getPlayerName(client), getGameConfig().weatherNames[getServerGame()][toInteger(weatherId)]);
+	announceAdminAction("ServerWeatherSet", getPlayerName(client), getGameConfig().weatherNames[getGame()][toInteger(weatherId)]);
 	updateServerRules();
 	return true;
 }
@@ -682,7 +733,7 @@ function reloadServerConfigurationCommand(command, params, client) {
  *
  */
 function reloadEmailConfigurationCommand(command, params, client) {
-	emailConfig = loadEmailConfiguration();
+	getGlobalConfig().email = loadEmailConfig();
 	messagePlayerSuccess(client, `You reloaded the email configuration!`);
 	return true;
 }
@@ -700,7 +751,7 @@ function reloadEmailConfigurationCommand(command, params, client) {
  */
 function reloadDatabaseConfigurationCommand(command, params, client) {
 	if(getDatabaseConfig().usePersistentConnection && isDatabaseConnected(persistentDatabaseConnection)) {
-		console.warn(`[VRR.Database] Closing persistent database connection`);
+		logToConsole(LOG_WARN, `[VRR.Database] Closing persistent database connection`);
 		persistentDatabaseConnection.close();
 		persistentDatabaseConnection = null;
 	}
@@ -724,6 +775,7 @@ function getServerIntroMusicURL() {
 // ===========================================================================
 
 function loadLocaleConfig() {
+	logToConsole(LOG_DEBUG, "[VRR.Config] Loading locale configuration");
 	let localeConfig = JSON.parse(loadTextFile(`config/locale.json`));
 	if(localeConfig != null) {
 		return localeConfig;
@@ -733,6 +785,7 @@ function loadLocaleConfig() {
 // ===========================================================================
 
 function loadEconomyConfig() {
+	logToConsole(LOG_DEBUG, "[VRR.Config] Loading economy configuration");
 	let economyConfig = JSON.parse(loadTextFile(`config/economy.json`));
 	if(economyConfig != null) {
 		return economyConfig;
@@ -742,6 +795,7 @@ function loadEconomyConfig() {
 // ===========================================================================
 
 function loadAccentConfig() {
+	logToConsole(LOG_DEBUG, "[VRR.Config] Loading accents configuration");
 	let accentConfig = JSON.parse(loadTextFile(`config/accents.json`));
 	if(accentConfig != null) {
 		return accentConfig;
@@ -751,10 +805,45 @@ function loadAccentConfig() {
 // ===========================================================================
 
 function loadDiscordConfig() {
+	logToConsole(LOG_DEBUG, "[VRR.Config] Loading discord configuration");
 	let discordConfig = JSON.parse(loadTextFile(`config/discord.json`));
 	if(discordConfig != null) {
 		return discordConfig;
 	}
+	return false;
+}
+
+// ===========================================================================
+
+function loadDatabaseConfig() {
+	logToConsole(LOG_DEBUG, "[VRR.Config] Loading database configuration");
+	let databaseConfig = JSON.parse(loadTextFile("config/database.json"));
+	if(databaseConfig != null) {
+		return databaseConfig;
+	}
+	return false;
+}
+
+// ===========================================================================
+
+function loadKeyBindConfig() {
+	logToConsole(LOG_DEBUG, "[VRR.Config] Loading keybind configuration");
+	let keyBindConfig = JSON.parse(loadTextFile("config/keybind.json"));
+	if(keyBindConfig != null) {
+		return keyBindConfig;
+	}
+	return false;
+}
+
+// ===========================================================================
+
+function loadEmailConfig() {
+	logToConsole(LOG_DEBUG, "[VRR.Config] Loading email configuration");
+	let emailConfig = JSON.parse(loadTextFile("config/email.json"));
+	if(emailConfig != null) {
+		return emailConfig;
+	}
+	return false;
 }
 
 // ===========================================================================
@@ -825,15 +914,20 @@ function doesServerHaveGroundSnowEnabled() {
 
 // ===========================================================================
 
-function loadDatabaseConfig() {
-	let databaseConfigFile = loadTextFile("config/database.json");
-	return JSON.parse(databaseConfigFile);
+function getDatabaseConfig() {
+	return getGlobalConfig().database;
 }
 
 // ===========================================================================
 
-function getDatabaseConfig() {
-	return getGlobalConfig().database;
+function loadServerConfig() {
+	logToConsole(LOG_DEBUG, "[VRR.Config] Loading server configuration");
+	try {
+		serverConfig = loadServerConfigFromGameAndPort(server.game, server.port);
+	} catch(error) {
+		logToConsole(LOG_ERROR, `[VRR.Config] Could not load server configuration for game ${server.game} and port ${server.port}`);
+		thisResource.stop();
+	}
 }
 
 // ===========================================================================

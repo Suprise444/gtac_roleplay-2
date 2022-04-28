@@ -34,6 +34,7 @@ const VRR_GAME_GTA_III = 1;
 const VRR_GAME_GTA_VC = 2;
 const VRR_GAME_GTA_SA = 3;
 const VRR_GAME_GTA_IV = 5;
+const VRR_GAME_GTA_IV_EFLC = 6;
 const VRR_GAME_GTA_V = 50;
 const VRR_GAME_MAFIA_ONE = 10;
 const VRR_GAME_MAFIA_TWO = 11;

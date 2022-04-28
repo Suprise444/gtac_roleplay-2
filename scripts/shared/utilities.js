@@ -1477,16 +1477,13 @@ function isGameFeatureSupported(featureName) {
 // ===========================================================================
 
 function getAllowedSkins(gameId = getGame()) {
-	logToConsole(getGame());
-	logToConsole(gameId);
-	logToConsole(typeof gameId);
-
 	return getGameConfig().skins[gameId].filter(skin => skin[2] == true);
 }
 
 // ===========================================================================
 
 function getAllowedSkinIndexFromSkin(skin) {
+	let allowedSkins = getAllowedSkins();
 	for(let i in allowedSkins) {
 		if(allowedSkins[i][0] == skin) {
 			return i;

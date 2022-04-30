@@ -1124,7 +1124,7 @@ function savePlayerToDatabase(client) {
 		//let subAccountData = getPlayerCurrentSubAccount(client);
 
 		if(getPlayerPed(client) != null) {
-			if(getPlayerData(client).returnToPosition != null) {
+			if(getPlayerData(client).returnToPosition != null && getPlayerData(client).returnToType != VRR_RETURNTO_TYPE_ADMINGET) {
 				getPlayerCurrentSubAccount(client).spawnPosition = getPlayerData(client).returnToPosition;
 				getPlayerCurrentSubAccount(client).spawnHeading = getPlayerData(client).returnToHeading.z;
 				getPlayerCurrentSubAccount(client).interior = getPlayerData(client).returnToInterior;

@@ -167,8 +167,8 @@ function onPedEnteringVehicle(event, ped, vehicle, seat) {
 				messagePlayerNormal(client, `🔒 This ${getVehicleName(vehicle)} is locked and you don't have the keys to unlock it`);
 			}
 
-			getPlayerData(client).enteringVehicle = null;
-			makePlayerStopAnimation(client);
+			//getPlayerData(client).enteringVehicle = null;
+			//makePlayerStopAnimation(client);
 			return false;
 		}
 

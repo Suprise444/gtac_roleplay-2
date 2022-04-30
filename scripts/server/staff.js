@@ -119,7 +119,7 @@ function muteClientCommand(command, params, client) {
 		}
 	}
 
-	messageAdmins(`{adminOrange}${targetgetPlayerName(client)}{MAINCOLOUR} has been muted by {adminOrange}${getPlayerName(client)}`);
+	messageAdmins(`{adminOrange}${getPlayerName(targetClient)}{MAINCOLOUR} has been muted by {adminOrange}${getPlayerName(client)}`);
 	getPlayerData(targetClient).muted = true;
 }
 
@@ -154,7 +154,7 @@ function unMuteClientCommand(command, params, client) {
 		}
 	}
 
-	messageAdmins(`{adminOrange}${targetgetPlayerName(client)}{MAINCOLOUR} has been un-muted by {adminOrange}${getPlayerName(client)}`);
+	messageAdmins(`{adminOrange}${getPlayerName(targetClient)}{MAINCOLOUR} has been un-muted by {adminOrange}${getPlayerName(client)}`);
 	getPlayerData(targetClient).muted = false;
 }
 
@@ -189,7 +189,7 @@ function freezeClientCommand(command, params, client) {
 		}
 	}
 
-	messageAdmins(`{adminOrange}${targetgetPlayerName(client)}{MAINCOLOUR} has been frozen by ${getPlayerName(client)}`);
+	messageAdmins(`{adminOrange}${getPlayerName(targetClient)}{MAINCOLOUR} has been frozen by ${getPlayerName(client)}`);
 	//setPlayerFrozenState(client, state);
 	setPlayerControlState(client, false);
 }
@@ -225,7 +225,7 @@ function unFreezeClientCommand(command, params, client) {
 		}
 	}
 
-	messageAdmins(`{adminOrange}${targetgetPlayerName(client)}{MAINCOLOUR} has been un-frozen by ${getPlayerName(client)}`);
+	messageAdmins(`{adminOrange}${getPlayerName(targetClient)}{MAINCOLOUR} has been un-frozen by ${getPlayerName(client)}`);
 	//sendPlayerFrozenState(client, false);
 	setPlayerControlState(client, true);
 }
@@ -294,11 +294,11 @@ function getPlayerGeoIPInformationCommand(command, params, client) {
 		return false;
 	}
 
-	let countryName = module.geoip.getCountryName(getGlobalConfig().geoIPCountryDatabaseFilePath, targetgetPlayerIP(client));
-	let subDivisionName = module.geoip.getSubdivisionName(getGlobalConfig().geoIPCityDatabaseFilePath, targetgetPlayerIP(client));
-	let cityName = module.geoip.getCityName(getGlobalConfig().geoIPCityDatabaseFilePath, targetgetPlayerIP(client));
+	let countryName = module.geoip.getCountryName(getGlobalConfig().geoIPCountryDatabaseFilePath, getPlayerIP(targetClient));
+	let subDivisionName = module.geoip.getSubdivisionName(getGlobalConfig().geoIPCityDatabaseFilePath, getPlayerIP(targetClient));
+	let cityName = module.geoip.getCityName(getGlobalConfig().geoIPCityDatabaseFilePath, getPlayerIP(targetClient));
 
-	messagePlayerInfo(client, `{ALTCOLOUR}${targetgetPlayerName(client)} {MAINCOLOUR}is from {ALTCOLOUR}${cityName}, ${subDivisionName}, ${countryName}`);
+	messagePlayerInfo(client, `{ALTCOLOUR}${getPlayerName(targetClient)}{MAINCOLOUR} is from {ALTCOLOUR}${cityName}, ${subDivisionName}, ${countryName}`);
 }
 
 // ===========================================================================
@@ -324,7 +324,7 @@ function getPlayerIPInformationCommand(command, params, client) {
 		return false;
 	}
 
-	messagePlayerInfo(client, `{ALTCOLOUR}${targetgetPlayerName(client)}'s{MAINCOLOUR} IP is ${targetgetPlayerIP(client)}`);
+	messagePlayerInfo(client, `{ALTCOLOUR}${getPlayerName(targetClient)}'s{MAINCOLOUR} IP is ${getPlayerIP(targetClient)}`);
 }
 
 // ===========================================================================
@@ -1573,7 +1573,12 @@ function getBusinessesOwnedByPlayerCommand(command, params, client) {
 
 	messagePlayerInfo(client, makeChatBoxSectionHeader(getLocaleString(client, "HeaderPlayerBusinessesList", getCharacterFullName(targetClient))));
 	for(let i in businesses) {
-		messagePlayerNormal(client, `🏢 {businessBlue}[Business Info] {MAINCOLOUR}Name: {ALTCOLOUR}${businesses[i].name}, {MAINCOLOUR}Locked: {ALTCOLOUR}${getYesNoFromBool(intToBool(businesses[i].locked))}, {MAINCOLOUR}ID: {ALTCOLOUR}${businesses[i].index}/${businesses[i].databaseId}`);
+		let info = [
+			`Name: ${businesses[i].name}`,
+			`Locked: ${businesses[i].locked}`,
+			`ID: ${businesses[i].index}/${businesses[i].databaseId}`,
+		]
+		messagePlayerNormal(client, `🏢 {businessBlue}[Business Info] {MAINCOLOUR}${info.join(", ")}`);
 	}
 }
 

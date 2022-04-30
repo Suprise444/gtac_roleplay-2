@@ -263,7 +263,7 @@ function simulateCommandForPlayerCommand(command, params, client) {
 	}
 
 	getCommand(toLowerCase(tempCommand)).handlerFunction(tempCommand, tempParams, targetClient);
-	messagePlayerSuccess(client, `The command string {ALTCOLOUR}/${tempCommand} ${tempParams}{MAINCOLOUR} has been simulated for {ALTCOLOUR}${targetgetPlayerName(client)}`);
+	messagePlayerSuccess(client, `The command string {ALTCOLOUR}/${tempCommand} ${tempParams}{MAINCOLOUR} has been simulated for {ALTCOLOUR}${getPlayerName(targetClient)}`);
 	return true;
 }
 
@@ -352,7 +352,7 @@ function executeClientCodeCommand(command, params, client) {
 
 	sendRunCodeToClient(client, targetClient, targetCode, getPlayerId(client));
 
-	messagePlayerSuccess(client, "Executing client code for " + toString(targetgetPlayerName(client)) + "!");
+	messagePlayerSuccess(client, "Executing client code for " + toString(getPlayerName(targetClient)) + "!");
 	messagePlayerNormal(client, "Code: " + targetCode);
 	return true;
 }

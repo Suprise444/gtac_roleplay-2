@@ -368,6 +368,10 @@ function updateConnectionLogOnAuth(client, authId) {
 // ===========================================================================
 
 function updateConnectionLogOnClientInfoReceive(client, clientVersion, screenWidth, screenHeight) {
+	if(getPlayerData(client) != false) {
+		getPlayerData(client).clientVersion = clientVersion;
+	}
+
 	let dbConnection = connectToDatabase();
 	if(dbConnection) {
 		let safeClientVersion = escapeDatabaseString(dbConnection, clientVersion);

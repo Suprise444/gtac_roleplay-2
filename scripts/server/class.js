@@ -57,6 +57,7 @@ class ServerConfigData {
 		this.inflationMultiplier = 1;
 		this.testerOnly = false;
 		this.devServer = false;
+		this.nameTagDistance = 50.0;
 
 		this.antiCheat = {
 			enabled: false,
@@ -107,27 +108,22 @@ class ServerConfigData {
 			this.minute = toInteger(dbAssoc["svr_start_time_min"]);
 			this.minuteDuration = toInteger(dbAssoc["svr_time_min_duration"]);
 			this.weather = toInteger(dbAssoc["svr_start_weather"]);
-			//this.fallingSnow = intToBool(toInteger(dbAssoc["svr_start_snow_falling"]));
-			//this.groundSnow = intToBool(toInteger(dbAssoc["svr_start_snow_ground"]));
-			//this.useGUI = intToBool(toInteger(dbAssoc["svr_gui_enabled"]));
-			//this.showLogo = intToBool(toInteger(dbAssoc["svr_logo_enabled"]));
-			//this.testerOnly = intToBool(toInteger(dbAssoc["svr_tester_only"]));
-
-			/*
-			this.createJobPickups = intToBool(toInteger(dbAssoc["svr_job_pickups_enabled"]));
-			this.createBusinessPickups = intToBool(toInteger(dbAssoc["svr_biz_pickups_enabled"]));
-			this.createHousePickups = intToBool(toInteger(dbAssoc["svr_house_pickups_enabled"]));
-			this.createJobBlips = intToBool(toInteger(dbAssoc["svr_job_blips_enabled"]));
-			this.createBusinessBlips = intToBool(toInteger(dbAssoc["svr_biz_blips_enabled"]));
-			this.createHouseBlips = intToBool(toInteger(dbAssoc["svr_house_blips_enabled"]));
-			*/
-
+			this.fallingSnow = intToBool(toInteger(dbAssoc["svr_snow_falling"]));
+			this.groundSnow = intToBool(toInteger(dbAssoc["svr_snow_ground"]));
+			this.useGUI = intToBool(toInteger(dbAssoc["svr_gui"]));
+			this.showLogo = intToBool(toInteger(dbAssoc["svr_logo"]));
+			this.createJobPickups = intToBool(toInteger(dbAssoc["svr_job_pickups"]));
+			this.createBusinessPickups = intToBool(toInteger(dbAssoc["svr_biz_pickups"]));
+			this.createHousePickups = intToBool(toInteger(dbAssoc["svr_house_pickups"]));
+			this.createJobBlips = intToBool(toInteger(dbAssoc["svr_job_blips"]));
+			this.createBusinessBlips = intToBool(toInteger(dbAssoc["svr_biz_blips"]));
+			this.createHouseBlips = intToBool(toInteger(dbAssoc["svr_house_blips"]));
 			this.guiColourPrimary = [toInteger(dbAssoc["svr_gui_col1_r"]), toInteger(dbAssoc["svr_gui_col1_g"]), toInteger(dbAssoc["svr_gui_col1_b"])];
 			this.guiColourSecondary = [toInteger(dbAssoc["svr_gui_col2_r"]), toInteger(dbAssoc["svr_gui_col2_g"]), toInteger(dbAssoc["svr_gui_col2_b"])];
 			this.guiTextColourPrimary = [toInteger(dbAssoc["svr_gui_textcol1_r"]), toInteger(dbAssoc["svr_gui_textcol1_g"]), toInteger(dbAssoc["svr_gui_textcol1_b"])];
 			//this.guiTextColourSecondary = [toInteger(dbAssoc["svr_gui_textcol2_r"]), toInteger(dbAssoc["svr_gui_textcol2_g"]), toInteger(dbAssoc["svr_gui_textcol2_b"])];
 			this.inflationMultiplier = toFloat(dbAssoc["svr_inflation_multiplier"]);
-
+			this.nameTagDistance = toFloat(dbAssoc["svr_nametag_distance"]);
 			this.discordBotToken = intToBool(dbAssoc["svr_discord_bot_token"]);
 			this.introMusicURL = dbAssoc["svr_intro_music"];
 

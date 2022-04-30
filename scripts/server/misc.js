@@ -304,8 +304,8 @@ function getPlayerInfoCommand(command, params, client) {
 	let stats = [
 		`{MAINCOLOUR}Account: {ALTCOLOUR}${getPlayerData(targetClient).accountData.name}[${getPlayerData(targetClient).accountData.databaseId}]`,
 		`{MAINCOLOUR}Character: {ALTCOLOUR}${getCharacterFullName(targetClient)}[${getPlayerCurrentSubAccount(targetClient).databaseId}]`,
-		`{MAINCOLOUR}Connected: {ALTCOLOUR}${getTimeDifferenceDisplay(Math.ceil(sdl.tick/1000), getPlayerData(targetClient).connectTime)} ago`,
-		`{MAINCOLOUR}Registered: ${getPlayerData(targetClient).accountData}`,
+		`{MAINCOLOUR}Connected: {ALTCOLOUR}${getTimeDifferenceDisplay(getCurrentUnixTimestamp(), getPlayerData(targetClient).connectTime)} ago`,
+		`{MAINCOLOUR}Registered: ${getPlayerData(targetClient).accountData.registerDate}`,
 		`{MAINCOLOUR}Game Version: {ALTCOLOUR}${targetClient.gameVersion}`,
 		`{MAINCOLOUR}Client Version: {ALTCOLOUR}${getPlayerData(targetClient).clientVersion}`,
 		`{MAINCOLOUR}Skin: {ALTCOLOUR}${getSkinNameFromModel(getPlayerCurrentSubAccount(targetClient).skin)}[${getPlayerCurrentSubAccount(targetClient).skin}]`,
@@ -767,7 +767,7 @@ function lockCommand(command, params, client) {
 		setVehicleLights(vehicle, getVehicleData(vehicle).lights)
 		getVehicleData(vehicle).needsSaved = true;
 
-		meActionToNearbyPlayers(client, `${toLowerCase(getLockedUnlockedFromBool(getVehicleData(vehicle).lights))} the ${getVehicleName(vehicle)}`);
+		meActionToNearbyPlayers(client, `turned ${toLowerCase(getOnOffFromBool(getVehicleData(vehicle).lights))} the ${getVehicleName(vehicle)}'s lights`);
 	} else {
 		/*
 		let vehicle = getClosestVehicle(getPlayerPosition(client));

@@ -515,7 +515,8 @@ function repairVehicle(vehicle) {
 // ===========================================================================
 
 function setVehicleLights(vehicle, lights) {
-	vehicle.lights = lights;
+	setEntityData(vehicle, "vrr.lights", lights, true);
+	sendNetworkEventToPlayer("vrr.veh.lights", null, vehicle.id, lights);
 }
 
 // ===========================================================================
@@ -1194,6 +1195,15 @@ function despawnPlayer(client) {
 
 function getGame() {
 	return server.game;
+}
+
+// ===========================================================================
+
+function getCountryNameFromIP(ip) {
+	if(module.geoip.getCountryName(ip)) {
+		return module.geoip.getCountryName(ip);
+	}
+	return false;
 }
 
 // ===========================================================================

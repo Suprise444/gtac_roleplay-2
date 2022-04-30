@@ -178,6 +178,7 @@ function loadCommands() {
 			new CommandData("setbizpickups", toggleServerBusinessPickupsCommand, "<0/1 state>", getStaffFlagValue("ManageServer"), true, true, "Toggles all business pickups on/off"),
 			new CommandData("sethousepickups", toggleServerHousePickupsCommand, "<0/1 state>", getStaffFlagValue("ManageServer"), true, true, "Toggles all house pickups on/off"),
 			new CommandData("setjobpickups", toggleServerJobPickupsCommand, "<0/1 state>", getStaffFlagValue("ManageServer"), true, true, "Toggles all job pickups on/off"),
+			new CommandData("nametagdistance", setServerNameTagDistanceCommand, "<distance>", getStaffFlagValue("ManageServer"), true, true, "Sets the distance at which name tags are displayed"),
 		],
 		core: [],
 		database: [

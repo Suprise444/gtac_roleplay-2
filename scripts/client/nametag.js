@@ -232,3 +232,9 @@ function createColour(alpha, red, green, blue) {
 }
 
 // ===========================================================================
+
+function setNameTagDistance(distance) {
+	nametagDistance = distance;
+}
+
+// ===========================================================================

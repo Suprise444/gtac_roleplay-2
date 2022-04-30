@@ -605,6 +605,9 @@ function onPlayerSpawn(client) {
 	logToConsole(LOG_DEBUG, `[VRR.Event] Updating all player name tags`);
 	updateAllPlayerNameTags();
 
+	logToConsole(LOG_DEBUG, `[VRR.Event] Sending player nametag distance to ${getPlayerDisplayForConsole(client)}`);
+	sendNameTagDistanceToClient(client, getServerConfig().nameTagDistance);
+
 	if(!areServerElementsSupported()) {
 		sendAllBusinessesToPlayer(client);
 		sendAllHousesToPlayer(client);

@@ -196,20 +196,11 @@ function loadServerConfigFromId(tempServerId) {
 function applyConfigToServer(tempServerConfig) {
 	logToConsole(LOG_INFO, "[VRR.Config]: Applying server config ...");
 	getServerConfig().devServer = intToBool(toInteger(server.getCVar("vrr_devserver")));
-	getServerConfig().fallingSnow = intToBool(toInteger(server.getCVar("vrr_fallingsnow")));
-	getServerConfig().groundSnow = intToBool(toInteger(server.getCVar("vrr_groundsnow")));
-	getServerConfig().useGUI = intToBool(toInteger(server.getCVar("vrr_gui")));
-	getServerConfig().showLogo = false;
 	getServerConfig().testerOnly = intToBool(toInteger(server.getCVar("vrr_testeronly")));
-	getServerConfig().discordEnabled = false;
-	getServerConfig().createJobPickups = intToBool(toInteger(server.getCVar("vrr_jobpickups")));
-	getServerConfig().createBusinessPickups = intToBool(toInteger(server.getCVar("vrr_businesspickups")));
-	getServerConfig().createHousePickups = intToBool(toInteger(server.getCVar("vrr_housepickups")));
-	getServerConfig().createJobBlips = intToBool(toInteger(server.getCVar("vrr_jobblips")));
-	getServerConfig().createBusinessBlips = intToBool(toInteger(server.getCVar("vrr_businessblips")));
-	getServerConfig().createHouseBlips = intToBool(toInteger(server.getCVar("vrr_houseblips")));
+
 	getServerConfig().useRealTime = intToBool(toInteger(server.getCVar("vrr_realtime")));
 	getServerConfig().antiCheat.enabled = intToBool(toInteger(server.getCVar("vrr_anticheat")));
+
 	logToConsole(LOG_DEBUG, "[VRR.Config]: Server config applied successfully!");
 
 	if(isTimeSupported()) {
@@ -648,7 +639,7 @@ function toggleServerGUICommand(command, params, client) {
 
 	getServerConfig().needsSaved = true;
 
-	announceAdminAction(`${getPlayerName(client)}{MAINCOLOUR} turned GUI ${toLowerCase(getOnOffFromBool(getServerConfig().useGUI))} for this server`);
+	announceAdminAction(`ServerGUISet`, `${getPlayerName(client)}{MAINCOLOUR}`, `{adminOrange}${getPlayerName(client)}{MAINCOLOUR}`, `${getBoolRedGreenInlineColour(getServerConfig().useGUI)}${toUpperCase(getOnOffFromBool(getServerConfig().useGUI))}{MAINCOLOUR}`);
 	updateServerRules();
 	return true;
 }
@@ -672,6 +663,7 @@ function toggleServerUseRealWorldTimeCommand(command, params, client) {
 	//announceAdminAction(`${getPlayerName(client)}{MAINCOLOUR} turned real-world time ${getServerConfig().useRealTime} for this server (GMT ${addPositiveNegativeSymbol(getServerConfig().realTimeZone)})`);
 	updateServerGameTime();
 	updateServerRules();
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} turned real-world time ${getOnOffFromBool(getServerConfig().useRealTime)} for this server (GMT ${addPositiveNegativeSymbol(getServerConfig().realTimeZone)})`);
 	return true;
 }
 
@@ -698,6 +690,8 @@ function setServerRealWorldTimeZoneCommand(command, params, client) {
 	//announceAdminAction(`${getPlayerName(client)} {MAINCOLOUR}set the time zone for in-game's real-world time to GMT ${addPositiveNegativeSymbol(getServerConfig().realTimeZone)}`);
 	updateServerGameTime();
 	updateServerRules();
+
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} set the timezone for in-game real-world time to GMT ${addPositiveNegativeSymbol(getServerConfig().realTimeZone)}`);
 	return true;
 }
 
@@ -718,6 +712,7 @@ function reloadServerConfigurationCommand(command, params, client) {
 	updateServerRules();
 
 	messagePlayerSuccess(client, `You reloaded the server configuration!`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} reloaded the server config`);
 	return true;
 }
 
@@ -734,7 +729,7 @@ function reloadServerConfigurationCommand(command, params, client) {
  */
 function reloadEmailConfigurationCommand(command, params, client) {
 	getGlobalConfig().email = loadEmailConfig();
-	messagePlayerSuccess(client, `You reloaded the email configuration!`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} reloaded the email config`);
 	return true;
 }
 
@@ -757,12 +752,36 @@ function reloadDatabaseConfigurationCommand(command, params, client) {
 	}
 	databaseEnabled = false;
 	getGlobalConfig().database = loadDatabaseConfig();
-	messagePlayerSuccess(client, `You reloaded the database configuration!`);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} reloaded the database config`);
 	databaseEnabled = true;
 	if(getDatabaseConfig().usePersistentConnection) {
 		connectToDatabase();
 	}
+	return true;
+}
 
+// ===========================================================================
+
+/**
+ * This is a command handler function.
+ *
+ * @param {string} command - The command name used by the player
+ * @param {string} params - The parameters/args string used with the command by the player
+ * @param {Client} client - The client/player that used the command
+ * @return {bool} Whether or not the command was successful
+ *
+ */
+ function setServerNameTagDistanceCommand(command, params, client) {
+	if(areParamsEmpty(params)) {
+		messagePlayerSyntax(client, getCommandSyntaxText(command));
+		return false;
+	}
+
+	getServerConfig().nameTagDistance = toFloat(params);
+	getServerConfig().needsSaved = true;
+
+	sendNameTagDistanceToClient(null, getServerConfig().nameTagDistance);
+	messageAdmins(`{adminOrange}${getPlayerName(client)}{MAINCOLOUR} set the name tag distance to ${getServerConfig().nameTagDistance}`);
 	return true;
 }
 

@@ -114,6 +114,7 @@ function addAllNetworkHandlers() {
 	addNetworkEventHandler("vrr.logLevel", setLogLevel);
 	addNetworkEventHandler("vrr.hideAllGUI", hideAllGUI);
 	addNetworkEventHandler("vrr.nametag", updatePlayerNameTag);
+	addNetworkEventHandler("vrr.nametagDistance", setNameTagDistance);
 	addNetworkEventHandler("vrr.ping", updatePlayerPing);
 	addNetworkEventHandler("vrr.pedAnim", makePedPlayAnimation);
 	addNetworkEventHandler("vrr.pedStopAnim", makePedStopAnimation);

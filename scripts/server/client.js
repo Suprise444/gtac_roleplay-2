@@ -1178,3 +1178,9 @@ function sendPlayerLocaleStrings(client) {
 }
 
 // ==========================================================================
+
+function sendNameTagDistanceToClient(client, distance) {
+	sendNetworkEventToPlayer("vrr.nameTagDistance", client, distance);
+}
+
+// ==========================================================================

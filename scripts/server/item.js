@@ -1028,10 +1028,10 @@ function playerDropItem(client, hotBarSlot) {
 		meActionToNearbyPlayers(client, `drops ${getProperDeterminerForName(getItemName(itemId))} ${getItemName(itemId)} on the ground`);
 
 		resyncWeaponItemAmmo(client);
-		clearPlayerWeapons(client);
 
 		getPlayerData(client).hotBarItems[hotBarSlot] = -1;
 		updatePlayerHotBar(client);
+		clearPlayerWeapons(client);
 
 		getItemData(itemId).ownerType = VRR_ITEM_OWNER_GROUND;
 		getItemData(itemId).ownerId = 0;
@@ -1540,7 +1540,17 @@ function getBestItemToTake(client, slot) {
  *
  */
 function listPlayerInventoryCommand(command, params, client) {
-	showPlayerInventoryToPlayer(client, client);
+	let targetClient = client;
+	if(doesPlayerHaveStaffPermission(client, getStaffFlagValue("BasicModeration"))) {
+		if(!areParamsEmpty(client)) {
+			targetClient = getPlayerFromParams(params);
+			if(targetClient == false) {
+				sendMessageToPlayer(client, getLocaleString(client, "InvalidPlayer"));
+				return false;
+			}
+		}
+	}
+	showPlayerInventoryToPlayer(client, targetClient);
 }
 
 // ===========================================================================

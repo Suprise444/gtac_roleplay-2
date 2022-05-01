@@ -192,7 +192,7 @@ function createBusinessLocationCommand(command, params, client) {
 
 // ===========================================================================
 
-function createBusiness(name, entrancePosition, exitPosition, entrancePickupModel = -1, entranceBlipModel = -1, entranceInteriorId = 0, entranceVirtualWorld = 0, exitInteriorId = -1, exitVirtualWorld = -1, exitPickupModel = -1, exitBlipModel = -1, entranceCutscene = "") {
+function createBusiness(name, entrancePosition, exitPosition, entrancePickupModel = -1, entranceBlipModel = -1, entranceInteriorId = 0, entranceVirtualWorld = 0, entranceCutscene = "", exitCutscene = "") {
 	let tempBusinessData = new BusinessData(false);
 	tempBusinessData.name = name;
 
@@ -206,10 +206,11 @@ function createBusiness(name, entrancePosition, exitPosition, entrancePickupMode
 
 	tempBusinessData.exitPosition = exitPosition;
 	tempBusinessData.exitRotation = 0.0;
-	tempBusinessData.exitPickupModel = exitPickupModel;
-	tempBusinessData.exitBlipModel = exitBlipModel;
-	tempBusinessData.exitInterior = exitInteriorId;
-	tempBusinessData.exitDimension = exitVirtualWorld;
+	tempBusinessData.exitPickupModel = 0;
+	tempBusinessData.exitBlipModel = -1;
+	tempBusinessData.exitInterior = 0;
+	tempBusinessData.exitDimension = 0;
+	tempBusinessData.exitCutscene = "";
 
 	return tempBusinessData;
 }
@@ -840,7 +841,7 @@ function setBusinessInteriorTypeCommand(command, params, client) {
 		return false;
 	}
 
-	if(typeof getGameData().interiors[getGame()] == "undefined") {
+	if(typeof getGameConfig().interiors[getGame()] == "undefined") {
 		messagePlayerError(client, `There are no interiors available for this game!`);
 		return false;
 	}
@@ -1513,17 +1514,23 @@ function isPlayerInAnyBusiness(client) {
  *
  */
 function getPlayerBusiness(client) {
-	let closestEntrance = getClosestBusinessEntrance(getPlayerPosition(client), getPlayerDimension(client));
-	if(getDistance(getPlayerPosition(client), getBusinessData(closestEntrance).entrancePosition) <= getGlobalConfig().enterPropertyDistance) {
-		return getBusinessData(closestEntrance).index;
-	}
+	if(getPlayerDimension(client) == getGameConfig().mainWorldDimension[getGame()]) {
+		let closestEntrance = getClosestBusinessEntrance(getPlayerPosition(client), getPlayerDimension(client));
+		if(getDistance(getPlayerPosition(client), getBusinessData(closestEntrance).entrancePosition) <= getGlobalConfig().enterPropertyDistance) {
+			return getBusinessData(closestEntrance).index;
+		}
+	} else {
+		let closestEntrance = getClosestBusinessEntrance(getPlayerPosition(client), getPlayerDimension(client));
+		if(getDistance(getPlayerPosition(client), getBusinessData(closestEntrance).entrancePosition) <= getGlobalConfig().enterPropertyDistance) {
+			return getBusinessData(closestEntrance).index;
+		}
 
-	for(let i in getServerData().businesses) {
-		if(getServerData().businesses[i].hasInterior && getServerData().businesses[i].exitDimension == getPlayerDimension(client)) {
-			return i;
+		for(let i in getServerData().businesses) {
+			if(getServerData().businesses[i].hasInterior && getServerData().businesses[i].exitDimension == getPlayerDimension(client)) {
+				return i;
+			}
 		}
 	}
-
 	return -1;
 }
 

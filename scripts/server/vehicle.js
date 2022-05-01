@@ -569,6 +569,11 @@ function rentVehicleCommand(command, params, client) {
 		}
 	}
 
+	if(getVehicleData(vehicle).rentPrice > getPlayerCurrentSubAccount(client).cash) {
+		messagePlayerError(client, getLocaleString(client, "NotEnoughCashNeedAmountMore", getVehicleData(vehicle).rentPrice-getPlayerCurrentSubAccount(client).cash));
+		return false;
+	}
+
 	getVehicleData(vehicle).rentedBy = client;
 	getPlayerData(client).rentingVehicle = vehicle;
 	getVehicleData(vehicle).rentStart = getCurrentUnixTimestamp();

@@ -343,7 +343,7 @@ function setHouseInteriorTypeCommand(command, params, client) {
 		return false;
 	}
 
-	if(typeof getGameData().interiors[getGame()] == "undefined") {
+	if(typeof getGameConfig().interiors[getGame()] == "undefined") {
 		messagePlayerError(client, `There are no interiors available for this game!`);
 		return false;
 	}
@@ -455,7 +455,7 @@ function moveHouseEntranceCommand(command, params, client) {
 	let houseId = getPlayerHouse(client);
 
 	if(!getHouseData(houseId)) {
-		messagePlayer(client, getLocaleString(client, "InvalidHouse"));
+		messagePlayerError(client, getLocaleString(client, "InvalidHouse"));
 		return false;
 	}
 
@@ -488,10 +488,10 @@ function moveHouseEntranceCommand(command, params, client) {
  *
  */
 function moveHouseExitCommand(command, params, client) {
-	let houseId = getPlayerHouse(client);
+	let houseId = getClosestHouseEntrance(getPlayerPosition(client), getPlayerDimension(client));
 
 	if(!getHouseData(houseId)) {
-		messagePlayer(client, getLocaleString(client, "InvalidHouse"));
+		messagePlayerError(client, getLocaleString(client, "InvalidHouse"));
 		return false;
 	}
 
@@ -661,14 +661,21 @@ function getClosestHouseExit(position, dimension) {
 // ===========================================================================
 
 function getPlayerHouse(client) {
-	let closestEntrance = getClosestHouseEntrance(getPlayerPosition(client), getPlayerDimension(client));
-	if(getDistance(getPlayerPosition(client), getHouseData(closestEntrance).entrancePosition) <= getGlobalConfig().enterPropertyDistance) {
-		return getHouseData(closestEntrance).index
-	}
+	if(getPlayerDimension(client) == getGameConfig().mainWorldDimension[getGame()]) {
+		let closestEntrance = getClosestHouseEntrance(getPlayerPosition(client), getPlayerDimension(client));
+		if(getDistance(getPlayerPosition(client), getHouseData(closestEntrance).entrancePosition) <= getGlobalConfig().enterPropertyDistance) {
+			return getHouseData(closestEntrance).index;
+		}
+	} else {
+		let closestEntrance = getClosestHouseEntrance(getPlayerPosition(client), getPlayerDimension(client));
+		if(getDistance(getPlayerPosition(client), getHouseData(closestEntrance).entrancePosition) <= getGlobalConfig().enterPropertyDistance) {
+			return getHouseData(closestEntrance).index;
+		}
 
-	for(let i in getServerData().houses) {
-		if(getServerData().houses[i].exitDimension == getPlayerDimension(client)) {
-			return i;
+		for(let i in getServerData().houses) {
+			if(getServerData().houses[i].hasInterior && getServerData().houses[i].exitDimension == getPlayerDimension(client)) {
+				return i;
+			}
 		}
 	}
 

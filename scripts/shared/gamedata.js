@@ -2610,7 +2610,12 @@ let gameData = {
 			["North Point Mall", [486.50, 1124.89, 16.348], 1.610, null],
 			["Ocean View Hotel", [238.14, -1280.48, 11.071], 1.282, null],
 			["Ocean Beach Fuel Station", [63.32, -1074.50, 10.006], 0.102, null],
-			["Ken Rosenberg's Office", [115.48, -823.76, 10.463], -2.221, null]
+			["Ken Rosenberg's Office", [115.48, -823.76, 10.463], -2.221, null],
+			["Office Building Lower Level", [-579.00, 794.43, 22.88], 0.0, null],
+			["Office Building Upper Level", [-556.13, 788.12, 97.51], 0.0, null],
+			["VCN Roof", [-446.21, 1128.09, 56.69], 0.0, null],
+			["Downtown Building Roof", [-448.37, 1249.13, 77.40], 0.0, null],
+			["Downtown Ammunation Back Lot", [-741.58, 1254.04, 12.18], 0.0, null],
 
 			// Bar, Restaurants and Food
 			["Little Havana Donut Shop", [-856.28, -649.32, 11.047], 1.700, null],
@@ -2629,7 +2634,9 @@ let gameData = {
 			["Ocean Beach Ammunation", [-53.41, -1482.25, 10.293], 1.441, null],
 
 			// Pay-n-sprays
-			["Ocean Beach Pay-n-spray", [-18.51, -1256.76, 10.463], -1.556, null]
+			["Ocean Beach Pay-n-spray", [-18.51, -1256.76, 10.463], -1.556, null],
+
+
 		],
 
 		[VRR_GAME_GTA_SA]: [ // GTA SA

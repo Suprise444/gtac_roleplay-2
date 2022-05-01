@@ -63,7 +63,7 @@ function listAccentsCommand(command, params, client) {
 
 	let chunkedList = splitArrayIntoChunks(accentList, 8);
 
-	messagePlayerInfo(client, makeChatBoxSectionHeader(getLocaleString(client, "AccentList")));
+	messagePlayerInfo(client, makeChatBoxSectionHeader(getLocaleString(client, "AccentsListHeader")));
 	for(let i in chunkedList) {
 		messagePlayerInfo(client, chunkedList[i].join(", "));
 	}

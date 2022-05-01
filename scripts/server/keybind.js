@@ -18,16 +18,19 @@ function initKeyBindScript() {
 function addKeyBindCommand(command, params, client) {
 	let splitParams = params.split(" ");
 
-	let keys = getKeysInComboName(getParam(params, " ", 1));
+	let keyId = getKeyIdFromParams(getParam(params, " ", 1));
 	let tempCommand = getParam(params, " ", 2);
 	let tempParams = (splitParams.length > 2) ? splitParams.slice(2).join(" ") : "";
 
-	if(keys.indexOf(false) != -1) {
-		messagePlayerError(client, "One of the key names you input is invalid!");
-		messagePlayerTip(client, "Use simple key names, letters, or numbers. Don't add spaces. Must be lowercase.");
-		messagePlayerTip(client, "No actual symbols, use a name for those if needed like ampersand, hashtag, tilde, etc");
+	if(!keyId) {
+		messagePlayerError(client, "The key ID or name you input is invalid!");
+		messagePlayerTip(client, "Use simple key names, letters, or numbers. Don't add spaces.");
 		messagePlayerInfo(client, `Examples: {ALTCOLOUR}1, 2, a, b, numplus, num1, f1, f2, pageup, delete, insert, rightshift, leftctrl`);
-		messagePlayerInfo(client, `For combos, use a plus sign between the keys. No spaces! Example: {ALTCOLOUR}rightctrl+num3{MAINCOLOUR}`);
+		return false;
+	}
+
+	if(!keyId) {
+		messagePlayerError(client, "That key name/id is invalid!");
 		return false;
 	}
 
@@ -37,12 +40,14 @@ function addKeyBindCommand(command, params, client) {
 	}
 
 	addPlayerKeyBind(client, keyId, tempCommand, tempParams);
-	messagePlayerSuccess(client, `You binded the {ALTCOLOUR}${toUpperCase(keys.join(" + "))} {MAINCOLOUR}keys to command: {ALTCOLOUR}/${tempCommand} ${tempParams}`);
+	messagePlayerSuccess(client, `You binded the {ALTCOLOUR}${toUpperCase(getKeyNameFromId(keyId))} {MAINCOLOUR}key to command: {ALTCOLOUR}/${tempCommand} ${tempParams}`);
 }
 
 // ===========================================================================
 
 function removeKeyBindCommand(command, params, client) {
+	let splitParams = params.split(" ");
+
 	let keyId = getKeyIdFromParams(getParam(params, " ", 1));
 
 	if(!keyId) {
@@ -68,8 +73,6 @@ function addPlayerKeyBind(client, keys, command, params, tempKey = false) {
 	if(tempKey == true) {
 		keyBindData.databaseId = -1;
 	}
-
-	keyBindData.needsSaved = true;
 
 	getPlayerData(client).keyBinds.push(keyBindData);
 	sendAddAccountKeyBindToClient(client, keys, (keys.length > 1) ? VRR_KEYSTATE_COMBO : VRR_KEYSTATE_UP);
@@ -204,31 +207,6 @@ function showKeyBindListCommand(command, params, client) {
 	for(let i in chunkedList) {
 		messagePlayerInfo(client, chunkedList[i].join(", "));
 	}
-}
-
-// ===========================================================================
-
-function getKeyNamesInComboName(comboName) {
-	if(comboName.indexOf("+") != -1) {
-		return comboName.split("+");
-	} else {
-		return [comboName];
-	}
-}
-
-// ===========================================================================
-
-function getKeysInComboName(comboName) {
-	let keyNames = getKeyNamesInComboName(comboName);
-	let keys = [];
-	for(let i in keyNames) {
-		if(getKeyIdFromParams(keyNames[i])) {
-			keys.push(getKeyIdFromParams(keyNames[i]));
-		} else {
-			keys.push(false);
-		}
-	}
-	return keys
 }
 
 // ===========================================================================

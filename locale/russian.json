@@ -474,5 +474,23 @@
 		"Legal weapons can be purchased at any ammunation"
 	],
 	"PromptResponseTip": "Use {1} to accept or {2} to decline",
-    "PlayerConnecting": "👋 {1} is connecting to the server"
+    "PlayerConnecting": "👋 {1} is connecting to the server",
+    "GetStartedJobVehicle": "Get in a {1} to get started.",
+    "VehicleTypes": {
+        "Car": "Car",
+        "Truck": "Truck",
+        "Van": "Van",
+        "Taxi": "Taxi",
+        "Bus": "Bus",
+        "PoliceCar": "Police Car",
+        "Ambulance": "Ambulance",
+        "FireTruck": "Fire Truck",
+        "Bike": "Bike",
+        "Motorbike": "Motorbike",
+        "Boat": "Boat",
+        "Helicopter": "Helicopter",
+        "Plane": "Plane",
+        "Train": "Train"
+    },
+    "AlreadyOnJobRoute": "You are already doing a job route!"
 }

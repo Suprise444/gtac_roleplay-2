@@ -706,7 +706,7 @@ function lockCommand(command, params, client) {
 		}
 
 		let businessId = getPlayerBusiness(client);
-		if(businessId != false) {
+		if(businessId != -1) {
 			if(!canPlayerManageBusiness(client, businessId)) {
 				messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
 				return false;
@@ -721,7 +721,7 @@ function lockCommand(command, params, client) {
 		}
 
 		let houseId = getPlayerHouse(client);
-		if(houseId != false) {
+		if(houseId != -1) {
 			if(!canPlayerManageHouse(client, houseId)) {
 				messagePlayerError(client, getLocaleString(client, "CantModifyHouse"));
 				return false;
@@ -734,7 +734,6 @@ function lockCommand(command, params, client) {
 			messagePlayerSuccess(client, `House {houseGreen}${getHouseData(houseId).description} {MAINCOLOUR}${getLockedUnlockedFromBool((getHouseData(houseId).locked))}!`);
 			return true;
 		}
-
 	}
 }
 
@@ -796,7 +795,7 @@ function lockCommand(command, params, client) {
 		*/
 
 		let businessId = getPlayerBusiness(client);
-		if(businessId != false) {
+		if(businessId != -1) {
 			if(!canPlayerManageBusiness(client, businessId)) {
 				messagePlayerError(client, getLocaleString(client, "CantModifyBusiness"));
 				return false;
@@ -807,7 +806,7 @@ function lockCommand(command, params, client) {
 			let clients = getClients();
 			for(let i in clients) {
 				if(getPlayerBusiness(client) == getPlayerBusiness(clients[i]) && getPlayerDimension(clients[i]) == getBusinessData(businessId).exitDimension) {
-					setPlayerInteriorLights(clients[i], getBusinessData(businessId).interiorLights);
+					updateInteriorLightsForPlayer(clients[i], getBusinessData(businessId).interiorLights);
 				}
 			}
 
@@ -818,7 +817,7 @@ function lockCommand(command, params, client) {
 		}
 
 		let houseId = getPlayerHouse(client);
-		if(houseId != false) {
+		if(houseId != -1) {
 			if(!canPlayerManageHouse(client, houseId)) {
 				messagePlayerError(client, getLocaleString(client, "CantModifyHouse"));
 				return false;
@@ -829,7 +828,7 @@ function lockCommand(command, params, client) {
 			let clients = getClients();
 			for(let i in clients) {
 				if(getPlayerHouse(client) == getPlayerHouse(clients[i]) && getPlayerDimension(clients[i]) == getHouseData(houseId).exitDimension) {
-					setPlayerInteriorLights(clients[i], getHouseData(houseId).interiorLights);
+					updateInteriorLightsForPlayer(clients[i], getHouseData(houseId).interiorLights);
 				}
 			}
 

@@ -96,12 +96,12 @@ function toggleAccountGUICommand(command, params, client) {
 
 	if(doesPlayerHaveGUIEnabled(client)) {
 		getPlayerData(client).accountData.settings = removeBitFlag(getPlayerData(client).accountData.settings, flagValue);
-		messagePlayerNormal(client, getLocaleString(client, "GUIAccountSettingToggle", `{softRed}${toUpperCase(getLocaleString(client, "Off"))}{MAINCOLOUR}`));
+		messagePlayerNormal(client, getLocaleString(client, "GUIAccountSettingToggle", `{softGreen}${toUpperCase(getLocaleString(client, "On"))}{MAINCOLOUR}`));
 		logToConsole(LOG_DEBUG, `[VRR.Account] ${getPlayerDisplayForConsole(client)} has toggled GUI for their account ON.`);
 	} else {
 		getPlayerData(client).accountData.settings = addBitFlag(getPlayerData(client).accountData.settings, flagValue);
-		messagePlayerNormal(client, getLocaleString(client, "GUIAccountSettingToggle", `{softGreen}${toUpperCase(getLocaleString(client, "On"))}{MAINCOLOUR}`));
-		logToConsole(LOG_DEBUG, `[VRR.Account] ${getPlayerDisplayForConsole(client)} has toggled GUI for their account ON.`);
+		messagePlayerNormal(client, getLocaleString(client, "GUIAccountSettingToggle", `{softRed}${toUpperCase(getLocaleString(client, "Off"))}{MAINCOLOUR}`));
+		logToConsole(LOG_DEBUG, `[VRR.Account] ${getPlayerDisplayForConsole(client)} has toggled GUI for their account OFF.`);
 	}
 
 	if(!isPlayerLoggedIn(client)) {

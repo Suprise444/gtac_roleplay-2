@@ -314,12 +314,14 @@ function giveLocalPlayerWeapon(weaponId, ammo, active) {
 
 // ===========================================================================
 
-function clearLocalPlayerWeapons() {
+function clearLocalPlayerWeapons(clearData) {
 	logToConsole(LOG_DEBUG, `[VRR.Utilities] Clearing weapons`);
 	localPlayer.clearWeapons();
-	forceWeapon = 0;
-	forceWeaponAmmo = 0;
-	forceWeaponClipAmmo = 0;
+	if(clearData == true) {
+		forceWeapon = 0;
+		forceWeaponAmmo = 0;
+		forceWeaponClipAmmo = 0;
+	}
 }
 
 // ===========================================================================
@@ -358,15 +360,15 @@ function setLocalPlayerInterior(interior) {
 		if(!isGTAIV()) {
 			localPlayer.interior = interior;
 			game.cameraInterior = interior;
-		} else {
-			if(getGameConfig().mainWorldInterior != interior) {
-				let interiorId = natives.getInteriorAtCoords(localPlayer.position);
-				natives.activateInterior(interiorId, true);
-				natives.loadAllObjectsNow();
-			}
-			let interiorId = natives.getInteriorAtCoords(localPlayer.position);
-			natives.activateInterior(interiorId, true);
-		}
+		} //else {
+			//if(getGameConfig().mainWorldInterior != interior) {
+			//	let interiorId = natives.getInteriorAtCoords(localPlayer.position);
+			//	natives.activateInterior(interiorId, true);
+			//	natives.loadAllObjectsNow();
+			//}
+			//let interiorId = natives.getInteriorAtCoords(localPlayer.position);
+			//natives.activateInterior(interiorId, true);
+		//}
 	}
 
 	//let vehicles = getElementsByType(ELEMENT_VEHICLE);
@@ -575,24 +577,20 @@ function processWantedLevelReset() {
 function processLocalPlayerVehicleControlState() {
 	if(areServerElementsSupported()) {
 		if(inVehicle && localPlayer.vehicle != null) {
-			if(getEntityData(localPlayer.vehicle, "vrr.engine") == false) {
-				localPlayer.vehicle.engine = false;
-			}
+			if(doesEntityDataExist(localPlayer.vehicle, "vrr.engine")) {
+				if(getEntityData(localPlayer.vehicle, "vrr.engine") == false) {
+					localPlayer.vehicle.engine = false;
+					if(!localPlayer.vehicle.engine) {
+						if(typeof localPlayer.vehicle.velocity != "undefined") {
+							localPlayer.vehicle.velocity = toVector3(0.0, 0.0, 0.0);
+							localPlayer.vehicle.turnVelocity = toVector3(0.0, 0.0, 0.0);
+						}
 
-			if(!localPlayer.vehicle.engine) {
-				if(typeof localPlayer.vehicle.velocity != "undefined") {
-					localPlayer.vehicle.velocity = toVector3(0.0, 0.0, 0.0);
-					localPlayer.vehicle.turnVelocity = toVector3(0.0, 0.0, 0.0);
-				}
-
-				if(parkedVehiclePosition) {
-					localPlayer.vehicle.position = parkedVehiclePosition;
-					localPlayer.vehicle.heading = parkedVehicleHeading;
-				}
-			} else {
-				if(parkedVehiclePosition) {
-					parkedVehiclePosition = false;
-					parkedVehicleHeading = false;
+						//if(parkedVehiclePosition) {
+						//	localPlayer.vehicle.position = parkedVehiclePosition;
+						//	localPlayer.vehicle.heading = parkedVehicleHeading;
+						//}
+					}
 				}
 			}
 		}

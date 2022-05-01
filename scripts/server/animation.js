@@ -25,7 +25,7 @@ function playPlayerAnimationCommand(command, params, client) {
 
 	if(!animationSlot) {
 		messagePlayerError(client, getLocaleString(client, "InvalidAnimation"));
-		messagePlayerInfo(client, getLocaleString(client, "AnimationHelpTip"), `{ALTCOLOUR}/animlist{MAINCOLOUR}`);
+		messagePlayerInfo(client, getLocaleString(client, "AnimationCommandTip"), `{ALTCOLOUR}/animlist{MAINCOLOUR}`);
 		return false;
 	}
 

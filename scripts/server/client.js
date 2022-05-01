@@ -500,9 +500,9 @@ function sendPlayerFrozenState(client, state) {
 
 // ===========================================================================
 
-function clearPlayerWeapons(client) {
+function clearPlayerWeapons(client, clearData = true) {
 	logToConsole(LOG_DEBUG, `[VRR.Client] Sending signal to ${getPlayerDisplayForConsole(client)} to clear weapons`);
-	sendNetworkEventToPlayer("vrr.clearWeapons", client);
+	sendNetworkEventToPlayer("vrr.clearWeapons", client, clearData);
 }
 
 // ===========================================================================
@@ -899,7 +899,7 @@ function playerFinishedSkinSelection(client, allowedSkinIndex) {
 		}
 		return false;
 	} else {
-		getPlayerCurrentSubAccount(client).skin = getSkinIndexFromModel(allowedSkins[allowedSkinIndex][0]);
+		getPlayerCurrentSubAccount(client).skin = getSkinIndexFromModel(getServerData().allowedSkins[allowedSkinIndex][0]);
 		if(isPlayerWorking(client)) {
 			messagePlayerAlert(client, "Your new skin has been saved but won't be shown until you stop working.");
 			setPlayerSkin(client, getJobData(getPlayerCurrentSubAccount(client).job).uniforms[getPlayerData(client).jobUniform].skinId);
@@ -926,7 +926,7 @@ function playerFinishedSkinSelection(client, allowedSkinIndex) {
 		switchPlayerActiveHotBarSlot(client, -1);
 		cachePlayerHotBarItems(client);
 
-		meActionToNearbyPlayers(client, `changes their skin to ${allowedSkins[allowedSkinIndex][1]}`);
+		meActionToNearbyPlayers(client, `changes their skin to ${getServerData().allowedSkins[allowedSkinIndex][1]}`);
 	}
 }
 

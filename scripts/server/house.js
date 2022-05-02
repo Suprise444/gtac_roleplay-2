@@ -251,22 +251,8 @@ function setHouseClanCommand(command, params, client) {
 		return false;
 	}
 
-	let clanRankId = getClanRankFromParams(clanId, params);
-
-	if(!getClanRankData(clanId, clanRankId)) {
-		messagePlayerError(client, getLocaleString(client, "ClanRankInvalid"));
-		return false;
-	}
-
-	if(doesPlayerHaveClanPermission(client, getClanFlagValue("ManageHouses"))) {
-		messagePlayerError(client, getLocaleString(client, "CantModifyHouse"));
-		return false;
-	}
-
-	if(getClanRankData(clanId, clanRankId).level > getPlayerCurrentSubAccount(client).clanRank) {
-		messagePlayerError(client, "That rank is above your level!");
-		return false;
-	}
+	showPlayerPrompt(client, getLocaleString(client, "SetHouseClanConfirmMessage"), getLocaleString(client, "SetHouseClanConfirmTitle"), getLocaleString(client, "Yes"), getLocaleString(client, "No"));
+	getPlayerData(client).promptType = VRR_PROMPT_GIVEHOUSETOCLAN;
 
 	getHouseData(houseId).clanRank = getClanRankData(clanId, clanRankId).level;
 	getHouseData(houseId).needsSaved = true;

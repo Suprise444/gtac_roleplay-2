@@ -82,7 +82,6 @@ function playerPromptAnswerYes(client) {
 					getPlayerData(client).businessOrderBusiness = false;
 					getPlayerData(client).businessOrderItem = -1;
 					getPlayerData(client).businessOrderValue = -1;
-
 				}
 			} else {
 				showPlayerErrorGUI(client, ``, `Business Order Canceled`);
@@ -113,6 +112,52 @@ function playerPromptAnswerYes(client) {
 			getVehicleData(getPlayerVehicle(client)).ownerType = VRR_VEHOWNER_CLAN;
 			getVehicleData(getPlayerVehicle(client)).ownerId = getPlayerCurrentSubAccount(client).clan;
 			messagePlayerSuccess(client, getLocaleString(client, "GaveVehicleToClan"));
+			//messageAdmins(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}set their {vehiclePurple}${getVehicleName(vehicle)} {MAINCOLOUR}owner to the {clanOrange}${getClanData(clanId).name} {MAINCOLOUR}clan`);
+			break;
+
+		case VRR_PROMPT_GIVEHOUSETOCLAN:
+			let house = getPlayerHouse(client);
+			if(!house) {
+				messagePlayerError(client, getLocaleString(client, "InvalidHouse"));
+				return false;
+			}
+
+			if(getHouseData(houseId).ownerType != VRR_VEHOWNER_PLAYER) {
+				messagePlayerError(client, getLocaleString(client, "MustOwnHouse"));
+				return false;
+			}
+
+			if(getHouseData(houseId).ownerId != getPlayerCurrentSubAccount(client).databaseId) {
+				messagePlayerError(client, getLocaleString(client, "MustOwnHouse"));
+				return false;
+			}
+
+			getHouseData(houseId).ownerType = VRR_VEHOWNER_CLAN;
+			getHouseData(houseId).ownerId = getPlayerCurrentSubAccount(client).clan;
+			messagePlayerSuccess(client, getLocaleString(client, "GaveHouseToClan"));
+			//messageAdmins(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}set their {vehiclePurple}${getVehicleName(vehicle)} {MAINCOLOUR}owner to the {clanOrange}${getClanData(clanId).name} {MAINCOLOUR}clan`);
+			break;
+
+		case VRR_PROMPT_GIVEBIZTOCLAN:
+			let business = getPlayerBusiness(client);
+			if(!business) {
+				messagePlayerError(client, getLocaleString(client, "InvalidBusiness"));
+				return false;
+			}
+
+			if(getBusinessData(business).ownerType != VRR_VEHOWNER_PLAYER) {
+				messagePlayerError(client, getLocaleString(client, "MustOwnBusiness"));
+				return false;
+			}
+
+			if(getBusinessData(business).ownerId != getPlayerCurrentSubAccount(client).databaseId) {
+				messagePlayerError(client, getLocaleString(client, "MustOwnBusiness"));
+				return false;
+			}
+
+			getBusinessData(business).ownerType = VRR_VEHOWNER_CLAN;
+			getBusinessData(business).ownerId = getPlayerCurrentSubAccount(client).clan;
+			messagePlayerSuccess(client, getLocaleString(client, "GaveBusinessToClan"));
 			//messageAdmins(`{ALTCOLOUR}${getPlayerName(client)} {MAINCOLOUR}set their {vehiclePurple}${getVehicleName(vehicle)} {MAINCOLOUR}owner to the {clanOrange}${getClanData(clanId).name} {MAINCOLOUR}clan`);
 			break;
 

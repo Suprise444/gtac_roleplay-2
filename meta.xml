@@ -83,7 +83,7 @@
 	<file type="client" src="files/images/skins/none.png" />
 	<file type="client" src="files/images/mafiac-logo.png" />
 	<file type="client" src="files/images/gtac-logo.png" />
-	<file type="client" src="files/images/server-logo.png" />
+	<file type="client" src="files/images/asshat-logo.png" />
 
 	<!-- GUI -->
 	<script src="scripts/client/gui/login.js" type="client" language="javascript" />

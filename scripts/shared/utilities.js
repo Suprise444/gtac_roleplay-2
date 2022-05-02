@@ -1349,13 +1349,13 @@ function logToConsole(tempLogLevel, text) {
 
 	if((logLevel & tempLogLevel)) {
 		if(tempLogLevel & LOG_ERROR) {
-			console.error(text);
+			consoleError(text);
 			return true;
 		} else if(tempLogLevel & LOG_WARN) {
-			console.warn(text);
+			consoleWarn(text);
 			return true;
 		} else {
-			console.log(text);
+			consolePrint(text);
 			return true;
 		}
 	}

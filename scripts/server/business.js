@@ -1688,10 +1688,6 @@ function createBusinessEntrancePickup(businessId) {
 	}
 
 	if(getBusinessData(businessId).entrancePickupModel != -1) {
-		console.log(getGameConfig().pickupModels);
-		console.warn(typeof getGame());
-		console.warn(typeof VRR_GAME_GTA_VC);
-		console.warn(Object.keys(getGameConfig().pickupModels))
 		let pickupModelId = getGameConfig().pickupModels[getGame()].Business;
 
 		if(getServerData().businesses[businessId].entrancePickupModel != 0) {

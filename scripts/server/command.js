@@ -720,7 +720,7 @@ function processPlayerCommand(command, params, client) {
 	}
 
 	if(!doesCommandExist(toLowerCase(command))) {
-		console.warn(`[VRR.Command] ${getPlayerDisplayForConsole(client)} attempted to use command, but failed (invalid command): /${command} ${paramsDisplay}`);
+		logToConsole(LOG_WARN, `[VRR.Command] ${getPlayerDisplayForConsole(client)} attempted to use command, but failed (invalid command): /${command} ${paramsDisplay}`);
 
 		let possibleCommand = getCommandFromParams(command);
 		if(possibleCommand != false && doesPlayerHaveStaffPermission(client, getCommandRequiredPermissions(toLowerCase(possibleCommand.command)))) {
@@ -732,14 +732,14 @@ function processPlayerCommand(command, params, client) {
 	}
 
 	if(!commandData.enabled) {
-		console.warn(`[VRR.Command] ${getPlayerDisplayForConsole(client)} attempted to use command, but failed (command is disabled): /${command} ${paramsDisplay}`);
+		logToConsole(LOG_WARN, `[VRR.Command] ${getPlayerDisplayForConsole(client)} attempted to use command, but failed (command is disabled): /${command} ${paramsDisplay}`);
 		messagePlayerError(client, `The command {ALTCOLOUR}/${command} {MAINCOLOUR}is disabled!`);
 		return false;
 	}
 
 	if(doesCommandRequireLogin(toLowerCase(command))) {
 		if(!isPlayerLoggedIn(client)) {
-			console.warn(`[VRR.Command] ${getPlayerDisplayForConsole(client)} attempted to use command, but failed (requires login first): /${command} ${paramsDisplay}`);
+			logToConsole(LOG_WARN, `[VRR.Command] ${getPlayerDisplayForConsole(client)} attempted to use command, but failed (requires login first): /${command} ${paramsDisplay}`);
 			messagePlayerError(client, `You must be logged in to use the {ALTCOLOUR}/${command} {MAINCOLOUR}command!`);
 			return false;
 		}
@@ -747,7 +747,7 @@ function processPlayerCommand(command, params, client) {
 
 	//if(isClientFromDiscord(client)) {
 	//	if(!isCommandAllowedOnDiscord(command)) {
-	//        console.warn(`[VRR.Command] ${getPlayerDisplayForConsole(client)} attempted to use command from discord, but failed (not available on discord): /${command} ${paramsDisplay}`);
+	//      logToConsole(LOG_WARN, `[VRR.Command] ${getPlayerDisplayForConsole(client)} attempted to use command from discord, but failed (not available on discord): /${command} ${paramsDisplay}`);
 	//		messagePlayerError(client, `The {ALTCOLOUR}/${command} {MAINCOLOUR} command isn't available on discord!`);
 	//		return false;
 	//	}
@@ -755,7 +755,7 @@ function processPlayerCommand(command, params, client) {
 
 	if(!isConsole(client)) {
 		if(!doesPlayerHaveStaffPermission(client, getCommandRequiredPermissions(toLowerCase(command)))) {
-			console.warn(`[VRR.Command] ${getPlayerDisplayForConsole(client)} attempted to use command, but failed (no permission): /${command} ${paramsDisplay}`);
+			logToConsole(LOG_WARN, `[VRR.Command] ${getPlayerDisplayForConsole(client)} attempted to use command, but failed (no permission): /${command} ${paramsDisplay}`);
 			messagePlayerError(client, `You do not have permission to use the {ALTCOLOUR}/${toLowerCase(command)} {MAINCOLOUR}command!`);
 			return false;
 		}

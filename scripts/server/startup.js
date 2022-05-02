@@ -93,20 +93,20 @@ function checkForAllRequiredModules() {
 	logToConsole(LOG_DEBUG, "[VRR.Startup]: Checking for required modules ...");
 
 	if(!checkForHashingModule()) {
-		console.warn("[VRR.Startup]: Hashing module is not loaded!");
-		console.warn("[VRR.Startup]: This resource will now shutdown.");
+		logToConsole(LOG_WARN, "[VRR.Startup]: Hashing module is not loaded!");
+		logToConsole(LOG_WARN, "[VRR.Startup]: This resource will now shutdown.");
 		thisResource.stop();
 	}
 
 	if(!checkForMySQLModule()) {
-		console.warn("[VRR.Startup]: MySQL module is not loaded!");
-		console.warn("[VRR.Startup]: This resource will now shutdown.");
+		logToConsole(LOG_WARN, "[VRR.Startup]: MySQL module is not loaded!");
+		logToConsole(LOG_WARN, "[VRR.Startup]: This resource will now shutdown.");
 		thisResource.stop();
 	}
 
 	if(!checkForSMTPModule()) {
-		console.warn("[VRR.Startup]: SMTP Email module is not loaded!");
-		console.warn("[VRR.Startup]: Email features will NOT be available!");
+		logToConsole(LOG_WARN, "[VRR.Startup]: SMTP Email module is not loaded!");
+		logToConsole(LOG_WARN, "[VRR.Startup]: Email features will NOT be available!");
 	}
 
 	logToConsole(LOG_DEBUG, "[VRR.Startup]: All required modules loaded!");

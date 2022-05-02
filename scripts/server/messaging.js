@@ -58,7 +58,7 @@ function messagePlayerNormal(client, messageText, colour = COLOUR_WHITE) {
 
 function messageAdmins(messageText, colour = getColourByName("softRed")) {
 	//
-	//console.warn(`🛡️ ${plainMessage}`);
+	//logToConsole(LOG_WARN, `🛡️ ${plainMessage}`);
 
 	let clients = getClients();
 	for(let i in clients) {

@@ -777,7 +777,7 @@ function setVehicleClanCommand(command, params, client) {
 		return false;
 	}
 
-	showPlayerPrompt(client, getLocaleString(client, "SetVehicleClanConfirmMessage"), getLocaleString(client, "SetVehicleClanConfirm"), getLocaleString(client, "Yes"), getLocaleString(client, "No"));
+	showPlayerPrompt(client, getLocaleString(client, "SetVehicleClanConfirmMessage"), getLocaleString(client, "SetVehicleClanConfirmTitle"), getLocaleString(client, "Yes"), getLocaleString(client, "No"));
 	getPlayerData(client).promptType = VRR_PROMPT_GIVEVEHTOCLAN;
 
 	getVehicleData(vehicle).needsSaved = true;
@@ -939,7 +939,7 @@ function getVehicleInfoCommand(command, params, client) {
 	ownerType = toLowerCase(getVehicleOwnerTypeText(vehicleData.ownerType));
 	switch(vehicleData.ownerType) {
 		case VRR_VEHOWNER_CLAN:
-			ownerName = getClanData(vehicleData.ownerId).name;
+			ownerName = getClanData(getClanIdFromDatabaseId(vehicleData.ownerId)).name;
 			ownerType = "clan";
 			break;
 
@@ -955,7 +955,7 @@ function getVehicleInfoCommand(command, params, client) {
 			break;
 
 		case VRR_VEHOWNER_BIZ:
-			ownerName = getBusinessData(vehicleData.ownerId).name;
+			ownerName = getBusinessData(getBusinessIdFromDatabaseId(vehicleData.ownerId)).name;
 			ownerType = "business";
 			break;
 

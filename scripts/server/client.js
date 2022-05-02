@@ -868,9 +868,8 @@ function sendAllFuelStationBlips(client) {
 // ===========================================================================
 
 function sendPlayerSetHealth(client, health) {
-	sendNetworkEventToPlayer("vrr.health", client, health);
+	sendNetworkEventToPlayer("vrr.health", client, toInteger(health));
 }
-
 
 // ===========================================================================
 

@@ -1284,17 +1284,16 @@ function setJobRouteVehicleColoursCommand(command, params, client) {
 	let colour1 = getParam(params, " ", 1);
 	let colour2 = getParam(params, " ", 2);
 
-	getJobData(jobId).routes[jobRoute].vehicleColour1 = toInteger(colour1);
-	getJobData(jobId).routes[jobRoute].vehicleColour1 = toInteger(colour2);
-	getJobData(jobId).routes[jobRoute].needsSaved = true;
+	getJobRouteData(getPlayerJob(clients[i]), getPlayerJobRoute(clients[i])).vehicleColour1 = toInteger(colour1);
+	getJobRouteData(getPlayerJob(clients[i]), getPlayerJobRoute(clients[i])).vehicleColour2 = toInteger(colour2);
+	getJobRouteData(getPlayerJob(clients[i]), getPlayerJobRoute(clients[i])).needsSaved = true;
 
 	let clients = getClients();
 	for(let i in clients) {
 		if(isPlayerWorking(clients[i])) {
 			if(isPlayerOnJobRoute(clients[i])) {
 				if(getPlayerJob(clients[i]) == jobId && getPlayerJobRoute(clients[i]) == jobRoute) {
-					setVehicleColours(getPlayerVehicle(clients[i]), getJobRouteData(getPlayerJob(clients[i]), getPlayerJobRoute(clients[i])).vehicleColour1, toInteger(colour1), toInteger(colour2), 1, 1);
-					messagePlayerAlert(clients[i], );
+					setVehicleColours(getPlayerVehicle(clients[i]), toInteger(colour1), toInteger(colour2), 1, 1);
 					messagePlayerAlert(clients[i], getLocaleString(client, "CurrentJobRouteVehicleColoursChanged"));
 				}
 			}
@@ -1775,7 +1774,7 @@ function startReturnToJobVehicleCountdown(client) {
 		//logToConsole(LOG_DEBUG, getPlayerData(client).returnToJobVehicleTick);
 		if(getPlayerData(client).returnToJobVehicleTick > 0) {
 			getPlayerData(client).returnToJobVehicleTick = getPlayerData(client).returnToJobVehicleTick - 1;
-			//console.warn(`You have ${getPlayerData(client).returnToJobVehicleTick} seconds to return to your job vehicle!`);
+			//logToConsole(LOG_WARN, `You have ${getPlayerData(client).returnToJobVehicleTick} seconds to return to your job vehicle!`);
 			showGameMessage(client, `You have ${getPlayerData(client).returnToJobVehicleTick} seconds to return to your job vehicle!`, getColourByName("softRed"), 1500);
 		} else {
 			clearInterval(getPlayerData(client).returnToJobVehicleTimer);

@@ -48,7 +48,7 @@ function updatePlayerNameTag(clientName, characterName, colour, paused, ping) {
 	playerPaused[clientName] = paused;
 	playerPing[clientName] = ping;
 
-	if(game.game == VRR_GAME_GTA_IV) {
+	if(getGame() == VRR_GAME_GTA_IV) {
 		let client = getPlayerFromParams(clientName);
 		if(client != false) {
 			if(getPlayerPed(client) != null) {
@@ -81,7 +81,7 @@ function drawNametag(x, y, health, armour, text, ping, alpha, distance, colour, 
 	// Health Bar
 
 	if(getMultiplayerMod() == VRR_MPMOD_GTAC) {
-		if(game.game == VRR_GAME_GTA_III) {
+		if(getGame() == VRR_GAME_GTA_III) {
 			// Mickey Hamfists is ridiculously tall. Raise the nametag for him a bit
 			if(skin == 109) {
 				y -= 20;
@@ -214,7 +214,7 @@ function getClientFromPlayer(player) {
 // ===========================================================================
 
 function processNameTagRendering(event) {
-	//if(game.game >= GAME_GTA_IV) {
+	//if(getGame() >= GAME_GTA_IV) {
 	//	return false;
 	//}
 

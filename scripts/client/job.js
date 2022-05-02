@@ -52,7 +52,7 @@ function setLocalPlayerWorkingState(tempWorking) {
 function showJobRouteLocation(position, colour) {
 	logToConsole(LOG_DEBUG, `[VRR.Job] Showing job route location`);
 	if(getMultiplayerMod() == VRR_MPMOD_GTAC) {
-		if(game.game == VRR_GAME_GTA_SA) {
+		if(getGame() == VRR_GAME_GTA_SA) {
 			// Server-side spheres don't show in GTA SA for some reason.
 			jobRouteLocationSphere = game.createPickup(1318, position, 1);
 		} else {

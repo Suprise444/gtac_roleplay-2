@@ -117,7 +117,7 @@ let weaponSlots = [
 ];
 
 function openAllGarages() {
-	switch(game.game) {
+	switch(getGame()) {
 		case VRR_GAME_GTA_III:
 			for(let i=0;i<=26;i++) {
 				openGarage(i);
@@ -146,7 +146,7 @@ function openAllGarages() {
 // ===========================================================================
 
 function closeAllGarages() {
-	switch(game.game) {
+	switch(getGame()) {
 		case VRR_GAME_GTA_III:
 			for(let i=0;i<=26;i++) {
 				closeGarage(i);
@@ -185,7 +185,7 @@ function setLocalPlayerControlState(controlState, cursorState = false) {
 	logToConsole(LOG_DEBUG, `[VRR.Utilities] Setting control state to ${controlState} (Cursor: ${cursorState})`);
 	controlsEnabled = controlState;
 	if(getGame() == VRR_GAME_GTA_III || getGame() == VRR_GAME_GTA_VC) {
-		game.SET_PLAYER_CONTROL(getPlayerId(localClient), boolToInt(controlState));
+		game.SET_PLAYER_CONTROL(game.GET_PLAYER_ID(), boolToInt(controlState));
 	}
 
 	if(getGame() != VRR_GAME_GTA_IV) {
@@ -246,7 +246,7 @@ function setCityAmbienceState(state, clearElements = false) {
 
 	if(getMultiplayerMod() == VRR_MPMOD_GTAC) {
 		game.setGenerateCarsAroundCamera(state);
-		if(game.game != VRR_GAME_GTA_SA) {
+		if(getGame() != VRR_GAME_GTA_SA) {
 			game.setCiviliansEnabled(state);
 		}
 
@@ -622,7 +622,7 @@ function processLocalPlayerSphereEntryExitHandling() {
 // ===========================================================================
 
 function processJobRouteSphere() {
-	if(game.game == VRR_GAME_GTA_SA) {
+	if(getGame() == VRR_GAME_GTA_SA) {
 		let position = getLocalPlayerPosition();
 		if(jobRouteLocationSphere != null) {
 			if(getDistance(position, jobRouteLocationSphere.position) <= 2.0) {
@@ -644,10 +644,10 @@ function forceLocalPlayerEquippedWeaponItem() {
 					localPlayer.setWeaponAmmunition(getWeaponSlot(forceWeapon), forceWeaponAmmo);
 				}
 			} else {
-				if(getGame() < VRR_GAME_GTA_IV) {
-					forceWeaponClipAmmo = localPlayer.getWeaponClipAmmunition(getWeaponSlot(forceWeapon));
-					forceWeaponAmmo = localPlayer.getWeaponAmmunition(getWeaponSlot(forceWeapon));
-				}
+				//if(getGame() < VRR_GAME_GTA_IV) {
+				//	forceWeaponClipAmmo = localPlayer.getWeaponClipAmmunition(getWeaponSlot(forceWeapon));
+				//	forceWeaponAmmo = localPlayer.getWeaponAmmunition(getWeaponSlot(forceWeapon));
+				//}
 			}
 		} else {
 			if(localPlayer.weapon > 0) {
@@ -772,7 +772,7 @@ function processNearbyPickups() {
 // ===========================================================================
 
 function processGameSpecifics() {
-	if(game.game < VRR_GAME_GTA_IV) {
+	if(getGame() < VRR_GAME_GTA_IV) {
 		game.clearMessages();
 	}
 

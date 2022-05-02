@@ -493,5 +493,15 @@
         "Plane": "Plane",
         "Train": "Train"
     },
-    "AlreadyOnJobRoute": "You are already doing a job route!"
+    "AlreadyOnJobRoute": "You are already doing a job route!",
+    "GaveVehicleToClan": "You gave this {1} to your clan!",
+    "JobDisabled": "This job is disabled!",
+    "SetHouseClanConfirmMessage": "Are you sure you want to give this house to your clan?",
+	"SetHouseClanConfirmTitle": "Warning!",
+    "SetBusinessClanConfirmMessage": "Are you sure you want to give this business to your clan?",
+	"SetBusinessClanConfirmTitle": "Warning!",
+    "MustOwnHouse": "You don't own this house!",
+    "MustOwnBusiness": "You don't own this business!",
+    "GaveHouseToClan": "You gave this house to your clan!",
+    "GaveBusinessToClan": "You gave this business to your clan!"
 }

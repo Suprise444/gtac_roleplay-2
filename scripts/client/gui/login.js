@@ -23,7 +23,7 @@ let login = {
 let loginHTML =
 `<html>
     <head>
-        <title>Connected RP: Login</title>
+        <title>Asshat Gaming Roleplay: Login</title>
         <style type="text/css" rel="stylesheet">
             .input-box
             {
@@ -64,7 +64,7 @@ function initLoginGUI() {
 	login.window.titleBarIconSize = toVector2(0,0);
 	login.window.titleBarHeight = 0;
 
-	login.logoImage = login.window.image(5, 20, 290, 100, mainLogoPath, {
+	login.logoImage = login.window.image(100, 20, 100, 100, mainLogoPath, {
 		focused: {
 			borderColour: toColour(0, 0, 0, 0),
 		},

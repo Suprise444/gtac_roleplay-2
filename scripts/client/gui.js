@@ -12,7 +12,7 @@ var app = {};
 let mainFont = "Roboto"; // "Arial"
 
 //let mainLogoPath = (typeof gta == "undefined") ? "files/images/mafiac-logo.png" : "files/images/gtac-logo.png";
-let mainLogoPath = "files/images/server-logo.png";
+let mainLogoPath = "files/images/asshat-logo.png";
 
 let primaryColour = [200, 200, 200];
 let secondaryColour = [16, 16, 16];

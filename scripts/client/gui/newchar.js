@@ -40,7 +40,7 @@ function initNewCharacterGUI() {
 	newCharacter.window.titleBarIconSize = toVector2(0,0);
 	newCharacter.window.titleBarHeight = 0;
 
-	newCharacter.mainLogoImage = newCharacter.window.image(5, 20, 290, 80, mainLogoPath, {
+	newCharacter.mainLogoImage = newCharacter.window.image(80, 20, 80, 80, mainLogoPath, {
 		focused: {
 			borderColour: toColour(0, 0, 0, 0),
 		},

@@ -325,7 +325,7 @@ function executeServerCodeCommand(command, params, client) {
 	messagePlayerSuccess(client, "Server code executed!");
 	messagePlayerNormal(client, `Code: ${params}`, COLOUR_YELLOW);
 	messagePlayerNormal(client, `Returns: ${returnValue}`, COLOUR_YELLOW);
-	console.log(returnValue);
+	logToConsole(LOG_INFO, `Server code executed by ${getPlayerDisplayForConsole(client)}: ${params}`);
 	return true;
 }
 
@@ -453,7 +453,14 @@ function saveServerDataCommand(command, params, client) {
 // ===========================================================================
 
 function testEmailCommand(command, params, client) {
-	sendEmail(params, "Player",  "Test email", "Just testing the SMTP module for the server!");
+	try {
+		messagePlayerAlert(client, `Sending test email to ${params}`);
+		sendEmail(params, "Player",  "Test email", "Just testing the SMTP module for the server!");
+	} catch(error) {
+		messagePlayerError(client, "The email could not be sent! Error: ${error}");
+		return false;
+	}
+
 	return true;
 }
 

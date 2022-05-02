@@ -427,6 +427,18 @@ function consolePrint(text) {
 
 // ===========================================================================
 
+function consoleWarn(text) {
+	console.warn(text);
+}
+
+// ===========================================================================
+
+function consoleError(text) {
+	console.error(text);
+}
+
+// ===========================================================================
+
 function getPlayerName(client) {
 	return client.name;
 }
@@ -749,7 +761,7 @@ function connectToDatabase() {
 			logToConsole(LOG_DEBUG, `[VRR.Database] Initializing database connection ...`);
 			persistentDatabaseConnection = module.mysql.connect(getDatabaseConfig().host, getDatabaseConfig().user, getDatabaseConfig().pass, getDatabaseConfig().name, getDatabaseConfig().port);
 			if(persistentDatabaseConnection.error) {
-				console.warn(`[VRR.Database] Database connection error: ${persistentDatabaseConnection.error}`);
+				logToConsole(LOG_ERROR, `[VRR.Database] Database connection error: ${persistentDatabaseConnection.error}`);
 				persistentDatabaseConnection = null;
 				return false;
 			}
@@ -763,7 +775,7 @@ function connectToDatabase() {
 	} else {
 		let databaseConnection = module.mysql.connect(getDatabaseConfig().host, getDatabaseConfig().user, getDatabaseConfig().pass, getDatabaseConfig().name, getDatabaseConfig().port);
 		if(databaseConnection.error) {
-			console.warn(`[VRR.Database] Database connection error: ${persistentDatabaseConnection.error}`);
+			logToConsole(LOG_ERROR, `[VRR.Database] Database connection error: ${persistentDatabaseConnection.error}`);
 			return false;
 		} else {
 			return databaseConnection;
